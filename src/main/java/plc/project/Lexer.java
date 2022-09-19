@@ -74,7 +74,11 @@ public final class Lexer {
     }
 
     public Token lexIdentifier() {
-        throw new UnsupportedOperationException(); //TODO
+        if(peek("[A-Za-z]"))            //Checks initial state (no digit, underscore, or hyphen)
+            match("[A-Za-z]");
+        while(peek("[A-Za-z0-9_-]"))    //Checks the rest of the token, including digits, underscores, and hyphens
+            match("[A-Za-z0-9_-]");
+        return chars.emit(Token.Type.IDENTIFIER);
     }
 
     public Token lexNumber() {

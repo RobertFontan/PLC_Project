@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="Added Params:5.8.2 to testImplementation dependencies">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/LexerTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/LexerTests.java" afterDir="false" />
-    </list>
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="Added LexIdentifier()" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -150,6 +146,7 @@
       <updated>1661556433976</updated>
       <workItem from="1663435050495" duration="11195000" />
       <workItem from="1663594605402" duration="374000" />
+      <workItem from="1663595023010" duration="413000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -165,7 +162,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663516491680</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added LexIdentifier()">
+      <created>1663595301962</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1663595301962</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -185,6 +189,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added the peek/match methods" />
     <MESSAGE value="Added Params:5.8.2 to testImplementation dependencies" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Params:5.8.2 to testImplementation dependencies" />
+    <MESSAGE value="Added LexIdentifier()" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added LexIdentifier()" />
   </component>
 </project>
