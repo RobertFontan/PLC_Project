@@ -1,5 +1,5 @@
 package plc.project;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +27,20 @@ public final class Lexer {
      * whitespace where appropriate.
      */
     public List<Token> lex() {
-        throw new UnsupportedOperationException(); //TODO
+        // empty list of tokens
+        List<Token> tokens = new ArrayList<Token>();
+        /* while there are things to lex */
+        while(chars.has(0)) {
+            // if white space skip
+            if (match("[ \b\n\r\t]")) {
+                chars.skip();
+            }
+            else {
+                tokens.add(lexToken());
+            }
+        }
+        return tokens;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -39,11 +52,32 @@ public final class Lexer {
      * by {@link #lex()}
      */
     public Token lexToken() {
-        throw new UnsupportedOperationException(); //TODO
+        // could maybe be a switch statement
+        if(peek("[A-Za-z0-9_-]")){
+            return lexIdentifier();
+        }
+        else if (peek("[0-9]")){ //number and decimal
+            return lexNumber();
+        }
+        else if(peek("'")){
+            return lexCharacter();
+        }
+        else if(peek("\"")){
+            return lexString();
+        }
+        // defined as any other character
+        else
+            return lexOperator();
+        //throw new UnsupportedOperationException(); //TODO
+
     }
 
     public Token lexIdentifier() {
-        throw new UnsupportedOperationException(); //TODO
+        if(peek("[A-Za-z]"))            //Checks initial state (no digit, underscore, or hyphen)
+            match("[A-Za-z]");
+        while(peek("[A-Za-z0-9_-]"))    //Checks the rest of the token, including digits, underscores, and hyphens
+            match("[A-Za-z0-9_-]");
+        return chars.emit(Token.Type.IDENTIFIER);
     }
 
     public Token lexNumber() {
