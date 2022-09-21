@@ -49,11 +49,17 @@ public class RegexTests {
                 Arguments.of("Alphanumeric", "thelegend27@gmail.com", true),
                 Arguments.of("UF Domain", "otherdomain@ufl.edu", true),
                 Arguments.of("Numbers", "7831239@gmail.com", true),
+                Arguments.of("Dot Characters", "sam.ple.sam.ple@gmail.com", true),
                 Arguments.of("Caps Lock", "SAMPLEDOMAIN@gmail.com", true),
                 Arguments.of("Caps Domain", "thestandard@GMAIL.com", true),
                 //non-matching
+                Arguments.of("Empty after the @", "sample@.com",false),
+                Arguments.of("Symbols", "!@#$%@sample.com", false),
+                Arguments.of("Empty", "@gmail.com", false),
                 Arguments.of("Number dot Com", "sample@gmail.co2", false),
                 Arguments.of("Typo dot Com", "sample@gmail.comm", false),
+                Arguments.of("Revenge of the Typo", "sample@gmail.c", false),
+                Arguments.of("Return of the Typo", "sample@gmail.co.m",false),
                 Arguments.of("No @", "lefraudgmail.com", false),
                 Arguments.of("Missing Domain Dot", "missingdot@gmailcom", false),
                 Arguments.of("Symbols", "symbols#$%@gmail.com", false)
@@ -126,17 +132,21 @@ public class RegexTests {
                 Arguments.of("Multiple Digit Decimal", "10100.001", true),
                 Arguments.of("Single Digit Decimal", "1.0", true),
                 Arguments.of("Single Zero to the Left", "0.4", true),
-                Arguments.of("Negative Number", "-6.0", true),
-                Arguments.of("Trailing Zero", "33.1000", true),
+                Arguments.of("Single Digit Negative Number", "-6.0", true),
+                Arguments.of("Trailing Zeroes", "33.1000", true),
                 Arguments.of("Large Negative Number","-123.456", true),
+                Arguments.of("Negative Decimal", "-0.12", true),
                 //non matching
                 Arguments.of("Leading Positive", "+1.0", false),
+                Arguments.of("Funky Zeroes", "00.0", false),
+                Arguments.of("Funky Zeroes Part II", "0", false),
                 Arguments.of("Leading Decimal", ".5", false),
+                Arguments.of("Dots Everywhere", "12.13.90", false),
                 Arguments.of("Leading Zeroes", "003.0", false),
                 Arguments.of("No Decimal", "90", false),
-                Arguments.of("Too many Decimal", "3..0", false),
+                Arguments.of("Too many Decimals", "3..0", false),
                 Arguments.of("Not a number", "d", false),
-                Arguments.of("Not a number pt 2", "!", false)
+                Arguments.of("The Non Number Strikes Back", "!", false)
 
         );
     }
