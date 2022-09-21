@@ -2,6 +2,7 @@ package plc.project;
 
 import sun.awt.PeerEvent;
 
+import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,17 +94,24 @@ public final class Lexer {
 
     // roberts section
     public Token lexString() {
+        System.out.println("made it to string");
+        // beginning quotes
         if(peek("\"")){
             match("\"");
-            while (peek("[^\"]"))
-                match(".");
-            if(peek("\\\\"))
-                lexEscape();
-            if(peek("\""))
-                match("\"");
-            else
-                throw new ParseException("Invalid", chars.index);
+            while (peek("[^\"]")) {
+                if(match("\\\\")) {
+                    System.out.println("escape char found");
+                    lexEscape();
+                }
+                else
+                    match(".");
+            }
         }
+        else
+            throw new ParseException("Invalid", chars.index);
+        // end quotes
+        if(peek("\""))
+            match("\"");
         else
             throw new ParseException("Invalid", chars.index);
 
@@ -111,8 +119,9 @@ public final class Lexer {
     }
 
     public void lexEscape() {
-        if (peek("\\"))
-            match("[bnrt'\"\\]");
+        System.out.println("made it to escape");
+        if (peek("[bnrt'\"\\\\]"))
+            match("[bnrt'\"\\\\]");
         else {
             match(".");
             throw new ParseException("Invalid", chars.index);
