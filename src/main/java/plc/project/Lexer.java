@@ -60,7 +60,7 @@ public final class Lexer {
         if(peek("(@|[A-Za-z])[A-Za-z0-9_-]*")){
             return lexIdentifier();
         }
-        else if (peek("[0-9]")){ //have to update it for number
+        else if (peek("[-]|[0-9]")){ //have to update it for number
             return lexNumber();
         }
         else if(peek("'")){
@@ -86,10 +86,17 @@ public final class Lexer {
 
     public Token lexNumber() {
         if (peek("[-]?"))   // MATCH IF NEGATIVE IS PRESENT
-            match("[-]?");
-        else if (peek("\\."))   // MATCH IF LEADING ZERO
-            match("\\.");
+            match("-");
 
+        if (peek("\\.")) {  // MATCH ON LEADING DECIMAL
+            match("\\.");
+            if(peek("[0-9]"))
+                while (match("[0-9]"));
+                return chars.emit(Token.Type.DECIMAL);
+        }
+        if(peek("0[0-9]+")) {  //INVALID LEADING ZERO FOLLOWED BY MORE INTEGERS
+            throw new ParseException("INVALID: LEADING ZERO", chars.index);
+        }
         if (peek("[0-9]")) {
             while (match("[0-9]"));
 
