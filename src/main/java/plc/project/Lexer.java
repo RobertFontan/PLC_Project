@@ -1,5 +1,8 @@
 package plc.project;
 
+import sun.awt.PeerEvent;
+
+import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,10 +57,10 @@ public final class Lexer {
      */
     public Token lexToken() {
         // could maybe be a switch statement
-        if(peek("[A-Za-z0-9_-]")){
+        if(peek("(@|[A-Za-z])[A-Za-z0-9_-]*")){
             return lexIdentifier();
         }
-        else if (peek("[0-9]")){ //number and decimal
+        else if (peek("[0-9]")){ //have to update it for number
             return lexNumber();
         }
         else if(peek("'")){
@@ -82,23 +85,84 @@ public final class Lexer {
     }
 
     public Token lexNumber() {
+        if (peek("[-]?"))   // MATCH IF NEGATIVE IS PRESENT
+            match("[-]?");
+        else if (peek("\\."))   // MATCH IF LEADING ZERO
+            match("\\.");
+
+        if (peek("[0-9]")) {
+            while (match("[0-9]"));
+
+            if (peek("\\.")) {
+                match("\\.");
+                if (peek("[0-9]+")) {
+                    while (match("[0-9]"));
+                    return chars.emit(Token.Type.DECIMAL);
+                }
+                else {
+                    throw new ParseException("Invalid: Trailing decimal", chars.index);
+                }
+            }
+            else
+                return chars.emit(Token.Type.INTEGER);
+        }
         throw new UnsupportedOperationException(); //TODO
     }
+
 
     public Token lexCharacter() {
         throw new UnsupportedOperationException(); //TODO
     }
 
+    // roberts section
     public Token lexString() {
-        throw new UnsupportedOperationException(); //TODO
+        System.out.println("made it to string");
+        // beginning quotes
+        if(peek("\"")){
+            match("\"");
+            while (peek("[^\"]")) {
+                if(match("\\\\")) {
+                    System.out.println("escape char found");
+                    lexEscape();
+                }
+                else
+                    match(".");
+            }
+        }
+        else
+            throw new ParseException("Invalid", chars.index);
+        // end quotes
+        if(peek("\""))
+            match("\"");
+        else
+            throw new ParseException("Invalid", chars.index);
+
+        return chars.emit(Token.Type.STRING);
     }
 
     public void lexEscape() {
-        throw new UnsupportedOperationException(); //TODO
+        System.out.println("made it to escape");
+        if (peek("[bnrt'\"\\\\]"))
+            match("[bnrt'\"\\\\]");
+        else {
+            match(".");
+            throw new ParseException("Invalid", chars.index);
+        }
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     public Token lexOperator() {
-        throw new UnsupportedOperationException(); //TODO
+        if (peek("[!=]","="))
+            match("[!=]","=");
+        else if(peek("&","&"))
+            match("&","&");
+        else if (peek("|","|"))
+            match("|","|");
+        else
+            match(".");
+
+        return chars.emit(Token.Type.OPERATOR);
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -111,7 +175,7 @@ public final class Lexer {
         for (int i = 0; i < patterns.length; i++) {
 
             if (!chars.has(i) ||
-                !String.valueOf(chars.get(i)).matches(patterns[i])) {
+                    !String.valueOf(chars.get(i)).matches(patterns[i])) {
 
                 return false;
             }
