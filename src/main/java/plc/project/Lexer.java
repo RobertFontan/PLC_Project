@@ -57,10 +57,10 @@ public final class Lexer {
      */
     public Token lexToken() {
         // could maybe be a switch statement
-        if(peek("[A-Za-z0-9_-]")){
+        if(peek("(@|[A-Za-z])[A-Za-z0-9_-]*")){
             return lexIdentifier();
         }
-        else if (peek("[0-9]")){ //number and decimal
+        else if (peek("[0-9]")){ //have to update it for number
             return lexNumber();
         }
         else if(peek("'")){
