@@ -1,5 +1,7 @@
 package plc.project;
 
+import sun.awt.PeerEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,16 +91,47 @@ public final class Lexer {
         throw new UnsupportedOperationException(); //TODO
     }
 
+    // roberts section
     public Token lexString() {
-        throw new UnsupportedOperationException(); //TODO
+        if(peek("\"")){
+            match("\"");
+            while (peek("[^\"]"))
+                match(".");
+            if(peek("\\\\"))
+                lexEscape();
+            if(peek("\""))
+                match("\"");
+            else
+                throw new ParseException("Invalid", chars.index);
+        }
+        else
+            throw new ParseException("Invalid", chars.index);
+
+        return chars.emit(Token.Type.STRING);
     }
 
     public void lexEscape() {
-        throw new UnsupportedOperationException(); //TODO
+        if (peek("\\"))
+            match("[bnrt'\"\\]");
+        else {
+            match(".");
+            throw new ParseException("Invalid", chars.index);
+        }
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     public Token lexOperator() {
-        throw new UnsupportedOperationException(); //TODO
+        if (peek("[!=]","="))
+            match("[!=]","=");
+        else if(peek("&","&"))
+            match("&","&");
+        else if (peek("|","|"))
+            match("|","|");
+        else
+            match(".");
+
+        return chars.emit(Token.Type.OPERATOR);
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
