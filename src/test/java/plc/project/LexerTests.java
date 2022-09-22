@@ -72,9 +72,14 @@ public class LexerTests {
     private static Stream<Arguments> testCharacter() {
         return Stream.of(
                 Arguments.of("Alphabetic", "\'c\'", true),
+                Arguments.of("Capital", "\'A\'", true),
                 Arguments.of("Newline Escape", "\'\\n\'", true),
+                Arguments.of("Backspace Escape", "\'\\b\'", true),
+                Arguments.of("return Escape", "\'\\r\'", true),
+                Arguments.of("Tab Escpae", "\'\\t\'", true),
                 Arguments.of("Empty", "\'\'", false),
-                Arguments.of("Multiple", "\'abc\'", false)
+                Arguments.of("Multiple", "\'abc\'", false),
+                Arguments.of("Single Quote", "\'\'\'", false)
         );
     }
 

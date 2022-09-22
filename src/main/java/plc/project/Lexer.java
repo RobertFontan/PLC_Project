@@ -118,7 +118,29 @@ public final class Lexer {
 
 
     public Token lexCharacter() {
-        throw new UnsupportedOperationException(); //TODO
+        if(peek("'")) {
+            match("'");
+
+            if(peek("'"))
+                throw new ParseException("Empty Char", chars.index);
+
+            if (peek("[^'\"\\\\]")) {   // CHECKS FOR ANY CHARACTER OTHER THAN
+                match("[^'\"\\\\]");
+                }
+            }
+            if (match("\\\\")) {
+                if(peek("[bnrt'\"\\\\]")) {
+                    lexEscape();
+                }
+            }
+        if(peek("'")) {
+            match("'");
+            return chars.emit(Token.Type.CHARACTER);
+        }
+            throw new ParseException("Missing Single Quote", chars.index);
+
+
+        //throw new UnsupportedOperationException();
     }
 
     // roberts section
