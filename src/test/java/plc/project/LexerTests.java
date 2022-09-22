@@ -22,8 +22,8 @@ public class LexerTests {
         return Stream.of(
                 Arguments.of("Alphabetic", "getName", true),
                 Arguments.of("Alphanumeric", "thelegend27", true),
-                Arguments.of("Leading Hyphen", "-five", false)               //COMMENTED OUT UNTIL LEXOPERATOR
-                //Arguments.of("Leading Digit", "1fish2fish3fishbluefish", false)   //COMMENTED OUT UNTIL LEXNUMBER
+                Arguments.of("Leading Hyphen", "-five", false)  ,             //COMMENTED OUT UNTIL LEXOPERATOR
+                Arguments.of("Leading Digit", "1fish2fish3fishbluefish", false)   //COMMENTED OUT UNTIL LEXNUMBER
         );
     }
 
@@ -76,10 +76,11 @@ public class LexerTests {
                 Arguments.of("Newline Escape", "\'\\n\'", true),
                 Arguments.of("Backspace Escape", "\'\\b\'", true),
                 Arguments.of("return Escape", "\'\\r\'", true),
-                Arguments.of("Tab Escpae", "\'\\t\'", true),
+                Arguments.of("Tab Escape", "\'\\t\'", true),
                 Arguments.of("Empty", "\'\'", false),
                 Arguments.of("Multiple", "\'abc\'", false),
-                Arguments.of("Single Quote", "\'\'\'", false)
+                Arguments.of("Single Quote", "\'\'\'", false),
+                Arguments.of("Newline", "\'\n\'", true) //is this suppose to be true or false?
         );
     }
 
@@ -94,6 +95,7 @@ public class LexerTests {
                 Arguments.of("Empty", "\"\"", true),
                 Arguments.of("Alphabetic", "\"abc\"", true),
                 Arguments.of("Newline Escape", "\"Hello,\\nWorld\"", true),
+                Arguments.of("Newline Unterminated", "\"unterminated\n", false), //mane
                 Arguments.of("Unterminated", "\"unterminated", false),
                 Arguments.of("Invalid Escape", "\"invalid\\escape\"", false)
         );

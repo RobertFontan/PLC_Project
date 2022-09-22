@@ -94,10 +94,13 @@ public final class Lexer {
                 while (match("[0-9]"));
                 return chars.emit(Token.Type.DECIMAL);
         }
+
         if(peek("0[0-9]+")) {  //INVALID LEADING ZERO FOLLOWED BY MORE INTEGERS
             throw new ParseException("INVALID: LEADING ZERO", chars.index);
         }
+
         if (peek("[0-9]")) {
+            //System.out.println("last number");
             while (match("[0-9]"));
 
             if (peek("\\.")) {
@@ -113,7 +116,9 @@ public final class Lexer {
             else
                 return chars.emit(Token.Type.INTEGER);
         }
-        throw new UnsupportedOperationException(); //TODO
+        else
+            throw new ParseException("Invalid Number", chars.index);
+        //throw new UnsupportedOperationException(); //TODO
     }
 
 
@@ -137,6 +142,7 @@ public final class Lexer {
             match("'");
             return chars.emit(Token.Type.CHARACTER);
         }
+
             throw new ParseException("Missing Single Quote", chars.index);
 
 
@@ -145,42 +151,42 @@ public final class Lexer {
 
     // roberts section
     public Token lexString() {
-        System.out.println("made it to string");
-        // beginning quotes
-        if(peek("\"")){
+        System.out.println("String Found");
+        if(peek("\"")) {
             match("\"");
-            while (peek("[^\"]")) {
-                if(match("\\\\")) {
-                    System.out.println("escape char found");
-                    lexEscape();
-                }
+            while (peek("[^\"|\n]")) {
+                if (match("\\\\")){
+                 lexEscape();
+            }
                 else
                     match(".");
             }
+            if (peek("\""))
+                match("\"");
+            else
+                throw new ParseException("Invalid Missing End Quotes", chars.index);
         }
         else
             throw new ParseException("Invalid", chars.index);
         // end quotes
-        if(peek("\""))
-            match("\"");
-        else
-            throw new ParseException("Invalid", chars.index);
 
         return chars.emit(Token.Type.STRING);
     }
 
     public void lexEscape() {
-        System.out.println("made it to escape");
+        System.out.println("Escape Found");
         if (peek("[bnrt'\"\\\\]"))
             match("[bnrt'\"\\\\]");
         else {
-            match(".");
+            peek(".");
+            System.out.println(chars.index);
             throw new ParseException("Invalid", chars.index);
         }
         //throw new UnsupportedOperationException(); //TODO
     }
 
     public Token lexOperator() {
+        System.out.println("Found Operator");
         if (peek("[!=]","="))
             match("[!=]","=");
         else if(peek("&","&"))
