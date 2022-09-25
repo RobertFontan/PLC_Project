@@ -142,7 +142,7 @@ public final class Lexer {
             match("'");
             return chars.emit(Token.Type.CHARACTER);
         }
-
+        else
             throw new ParseException("Missing Single Quote", chars.index);
 
 
