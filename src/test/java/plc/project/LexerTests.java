@@ -138,7 +138,13 @@ public class LexerTests {
                         new Token(Token.Type.STRING, "\"Hello, World!\"", 6),
                         new Token(Token.Type.OPERATOR, ")", 21),
                         new Token(Token.Type.OPERATOR, ";", 22)
+                )),
+                Arguments.of("Weird Quotes", "\'\"\'string\"\'\"", Arrays.asList(
+                        new Token(Token.Type.CHARACTER, "\'\"\'", 0),
+                        new Token(Token.Type.IDENTIFIER, "string",3),
+                        new Token(Token.Type.STRING,"\"\'\"", 9)
                 ))
+
         );
     }
 
