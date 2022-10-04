@@ -77,6 +77,7 @@ public final class Lexer {
     }
 
     public Token lexIdentifier() {
+        System.out.println("identifier found");
         if(peek("[A-Za-z]"))            //Checks initial state (no digit, underscore, or hyphen)
             match("[A-Za-z]");
         while(peek("[A-Za-z0-9_-]"))    //Checks the rest of the token, including digits, underscores, and hyphens
@@ -123,30 +124,29 @@ public final class Lexer {
 
 
     public Token lexCharacter() {
+        System.out.println("Character Found");
         if(peek("'")) {
             match("'");
 
             if(peek("'"))
                 throw new ParseException("Empty Char", chars.index);
 
-            if (peek("[^'\"\\\\]")) {   // CHECKS FOR ANY CHARACTER OTHER THAN
-                match("[^'\"\\\\]");
-                }
+            if (peek("[^'\\\\]")) {   // CHECKS FOR ANY CHARACTER OTHER THAN
+                match("[^'\\\\]");
             }
-            if (match("\\\\")) {
-                if(peek("[bnrt'\"\\\\]")) {
-                    lexEscape();
-                }
+        }
+        if (match("\\\\")) {
+            if(peek("[bnrt'\"\\\\]")) {
+                lexEscape();
             }
+        }
         if(peek("'")) {
             match("'");
             return chars.emit(Token.Type.CHARACTER);
         }
-
+        else
             throw new ParseException("Missing Single Quote", chars.index);
 
-
-        //throw new UnsupportedOperationException();
     }
 
     // roberts section
@@ -178,7 +178,7 @@ public final class Lexer {
         if (peek("[bnrt'\"\\\\]"))
             match("[bnrt'\"\\\\]");
         else {
-            peek(".");
+            peek(".?");
             System.out.println(chars.index);
             throw new ParseException("Invalid", chars.index);
         }

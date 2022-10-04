@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="Added lexCharacter() + Test Cases">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="possible fix to weird quotes test case">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/LexerTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/LexerTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,8 +59,7 @@
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
   }
 }</component>
   <component name="RunManager" selected="Gradle.LexerTests">
@@ -108,7 +109,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="LexerTests.testException" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="LexerTests.testExamples" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -121,7 +122,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;plc.project.LexerTests.testException&quot;" />
+            <option value="&quot;plc.project.LexerTests.testExamples&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -180,10 +181,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.LexerTests" />
+        <item itemvalue="Gradle.LexerTests.testExamples" />
         <item itemvalue="Gradle.LexerTests.testIdentifier" />
         <item itemvalue="Gradle.LexerTests.testString" />
         <item itemvalue="Gradle.LexerTests.testCharacter" />
-        <item itemvalue="Gradle.LexerTests.testException" />
       </list>
     </recent_temporary>
   </component>
@@ -202,7 +203,9 @@
       <workItem from="1663776914876" duration="3900000" />
       <workItem from="1663786529791" duration="2959000" />
       <workItem from="1663884468233" duration="2796000" />
-      <workItem from="1663887306722" duration="895000" />
+      <workItem from="1663887306722" duration="1202000" />
+      <workItem from="1664074665131" duration="1335000" />
+      <workItem from="1664231433038" duration="5886000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -239,7 +242,21 @@
       <option name="project" value="LOCAL" />
       <updated>1663781792307</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="fixed leading hyphen, newline unterminated, and invalid escape. added relevant test cases">
+      <created>1663888288350</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1663888288350</updated>
+    </task>
+    <task id="LOCAL-00007" summary="possible fix to weird quotes test case">
+      <created>1664075421979</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1664075421979</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -262,6 +279,9 @@
     <MESSAGE value="Added LexIdentifier()" />
     <MESSAGE value="added lexString, lexEscape, lexOperator" />
     <MESSAGE value="fixed lexString, lexEscape" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed lexString, lexEscape" />
+    <MESSAGE value="fixed leading hypen, newline unterminated, and invalid escape. added relevant test cases" />
+    <MESSAGE value="fixed leading hyphen, newline unterminated, and invalid escape. added relevant test cases" />
+    <MESSAGE value="possible fix to weird quotes test case" />
+    <option name="LAST_COMMIT_MESSAGE" value="possible fix to weird quotes test case" />
   </component>
 </project>
