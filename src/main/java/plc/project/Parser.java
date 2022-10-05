@@ -1,6 +1,9 @@
 package plc.project;
 
 import java.util.List;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Optional;
 
 /**
  * The parser takes the sequence of tokens emitted by the lexer and turns that
@@ -145,35 +148,40 @@ public final class Parser {
      * Parses the {@code expression} rule.
      */
     public Ast.Expression parseExpression() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        parseLogicalExpression();
+        throw new UnsupportedOperationException(); //TODO Write something to avoid this exception?
     }
 
     /**
      * Parses the {@code logical-expression} rule.
      */
     public Ast.Expression parseLogicalExpression() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression leftSide = parseComparisonExpression();
+        return leftSide;
     }
 
     /**
      * Parses the {@code equality-expression} rule.
      */
     public Ast.Expression parseComparisonExpression() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression leftSide = parseAdditiveExpression();
+        return leftSide;
     }
 
     /**
      * Parses the {@code additive-expression} rule.
      */
     public Ast.Expression parseAdditiveExpression() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression leftSide = parseMultiplicativeExpression();
+        return leftSide;
     }
 
     /**
      * Parses the {@code multiplicative-expression} rule.
      */
     public Ast.Expression parseMultiplicativeExpression() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression leftSide = parsePrimaryExpression();
+        return leftSide;
     }
 
     /**
@@ -183,7 +191,17 @@ public final class Parser {
      * not strictly necessary.
      */
     public Ast.Expression parsePrimaryExpression() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        if (match("NIL")) return new Ast.Expression.Literal(null);
+        else if (match("TRUE")) return new Ast.Expression.Literal(true);
+        else if (match("FALSE")) return new Ast.Expression.Literal(false);
+
+        else if (match(Token.Type.INTEGER)) return new Ast.Expression.Literal(new BigInteger(tokens.get(-1).getLiteral()));
+        else if (match(Token.Type.IDENTIFIER)) {
+            String name = tokens.get(-1).getLiteral();
+            match(Token.Type.IDENTIFIER);
+            return new Ast.Expression.Access(Optional.empty(), name);
+        }
+        throw new UnsupportedOperationException(); //TODO FINISH PRIMARY EXPRESSIONS AND ADD PARSE EXCEPTIONS
     }
 
     /**
