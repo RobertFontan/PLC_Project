@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="possible fix to weird quotes test case">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="fixed weird quotes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/LexerTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/LexerTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +61,7 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
   }
 }</component>
-  <component name="RunManager" selected="Gradle.LexerTests">
+  <component name="RunManager" selected="Gradle.ParserExpressionTests.testBinaryExpression">
     <configuration name="LexerTests" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -77,29 +76,6 @@
             <option value=":test" />
             <option value="--tests" />
             <option value="&quot;plc.project.LexerTests&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="LexerTests.testCharacter" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;plc.project.LexerTests.testCharacter&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -132,7 +108,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="LexerTests.testIdentifier" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="ParserExpressionTests" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -145,7 +121,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;plc.project.LexerTests.testIdentifier&quot;" />
+            <option value="&quot;plc.project.ParserExpressionTests&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -155,7 +131,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="LexerTests.testString" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="ParserExpressionTests.testBinaryExpression" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -168,7 +144,30 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;plc.project.LexerTests.testString&quot;" />
+            <option value="&quot;plc.project.ParserExpressionTests.testBinaryExpression&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="ParserExpressionTests.testLiteralExpression" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;plc.project.ParserExpressionTests.testLiteralExpression&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -180,11 +179,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.ParserExpressionTests.testBinaryExpression" />
+        <item itemvalue="Gradle.ParserExpressionTests.testLiteralExpression" />
+        <item itemvalue="Gradle.ParserExpressionTests" />
         <item itemvalue="Gradle.LexerTests" />
         <item itemvalue="Gradle.LexerTests.testExamples" />
-        <item itemvalue="Gradle.LexerTests.testIdentifier" />
-        <item itemvalue="Gradle.LexerTests.testString" />
-        <item itemvalue="Gradle.LexerTests.testCharacter" />
       </list>
     </recent_temporary>
   </component>
@@ -205,7 +204,14 @@
       <workItem from="1663884468233" duration="2796000" />
       <workItem from="1663887306722" duration="1202000" />
       <workItem from="1664074665131" duration="1335000" />
-      <workItem from="1664231433038" duration="5886000" />
+      <workItem from="1664231433038" duration="6042000" />
+      <workItem from="1664239190041" duration="36000" />
+      <workItem from="1664906085055" duration="6881000" />
+      <workItem from="1664975729431" duration="797000" />
+      <workItem from="1664980339452" duration="484000" />
+      <workItem from="1665010003605" duration="1256000" />
+      <workItem from="1665016238984" duration="2118000" />
+      <workItem from="1665022548609" duration="360000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -256,7 +262,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664075421979</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="fixed weird quotes">
+      <created>1664239061633</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1664239061633</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -282,6 +295,7 @@
     <MESSAGE value="fixed leading hypen, newline unterminated, and invalid escape. added relevant test cases" />
     <MESSAGE value="fixed leading hyphen, newline unterminated, and invalid escape. added relevant test cases" />
     <MESSAGE value="possible fix to weird quotes test case" />
-    <option name="LAST_COMMIT_MESSAGE" value="possible fix to weird quotes test case" />
+    <MESSAGE value="fixed weird quotes" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed weird quotes" />
   </component>
 </project>

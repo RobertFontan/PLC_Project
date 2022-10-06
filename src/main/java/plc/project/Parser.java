@@ -142,14 +142,20 @@ public final class Parser {
      */
     public Ast.Statement.Return parseReturnStatement() throws ParseException {
         throw new UnsupportedOperationException(); //TODO
+        //returns Ast.Expr
+        //begins by parsing the left operand
+        //while continuing on + or -
+
+
     }
 
     /**
      * Parses the {@code expression} rule.
      */
     public Ast.Expression parseExpression() throws ParseException {
-        parseLogicalExpression();
-        throw new UnsupportedOperationException(); //TODO Write something to avoid this exception?
+        //added return here
+        return parseLogicalExpression();
+        //throw new UnsupportedOperationException(); //TODO Write something to avoid this exception?
     }
 
     /**
@@ -173,6 +179,12 @@ public final class Parser {
      */
     public Ast.Expression parseAdditiveExpression() throws ParseException {
         Ast.Expression leftSide = parseMultiplicativeExpression();
+        //right hand side
+        while (match("+") || match("-")){
+            String op = tokens.get(-1).getLiteral();
+            Ast.Expression rightSide = parseMultiplicativeExpression();
+            leftSide = new Ast.Expression.Binary(op, leftSide, rightSide);
+        }
         return leftSide;
     }
 
@@ -181,6 +193,12 @@ public final class Parser {
      */
     public Ast.Expression parseMultiplicativeExpression() throws ParseException {
         Ast.Expression leftSide = parsePrimaryExpression();
+        //right
+        while(match("*") || match("/") || match("^")){
+            String op = tokens.get(-1).getLiteral();
+            Ast.Expression rightSide = parsePrimaryExpression();
+            leftSide = new Ast.Expression.Binary(op, leftSide, rightSide);
+        }
         return leftSide;
     }
 
@@ -214,6 +232,7 @@ public final class Parser {
      * In other words, {@code Token(IDENTIFIER, "literal")} is matched by both
      * {@code peek(Token.Type.IDENTIFIER)} and {@code peek("literal")}.
      */
+    //looks for tokens instead
     private boolean peek(Object... patterns) {
         // throw new UnsupportedOperationException(); //TODO (in lecture)
         for (int i = 0; i < patterns.length; i++) {
