@@ -228,7 +228,14 @@ public final class Parser {
         }
         else if (match(Token.Type.IDENTIFIER)) {
             String name = tokens.get(-1).getLiteral();
+            //TODO Add if statement for Access Expressions
             return new Ast.Expression.Access(Optional.empty(), name);
+        }
+        else if (match("(")) {
+            Ast.Expression expr = parseExpression();    //Inner Expression
+            if(match(")"))
+                return new Ast.Expression.Group(expr);
+                                                        //Throws Parse Error for Improper grouping
         }
         throw new UnsupportedOperationException(); //TODO FINISH PRIMARY EXPRESSIONS AND ADD PARSE EXCEPTIONS
     }
