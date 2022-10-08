@@ -246,7 +246,12 @@ public final class Parser {
                 }
                 return new Ast.Expression.Function(temp, expr);
             }
-            //TODO Add if statement for Access Expressions
+            else if(match("[")) {
+                Ast.Expression.Access offset = (Ast.Expression.Access) parseExpression();
+                Ast.Expression.Access access = new Ast.Expression.Access(Optional.of(new Ast.Expression.Access(Optional.empty(), offset.getName())), temp);
+                match("]");
+                return access;
+            }
             return new Ast.Expression.Access(Optional.empty(), temp);
         }
         else if(match(Token.Type.STRING)){
