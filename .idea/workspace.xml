@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="fixed weird quotes">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="some binary tests work, parsed add and multi expression">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
     </list>
@@ -61,7 +61,7 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
   }
 }</component>
-  <component name="RunManager" selected="Gradle.ParserExpressionTests.testBinaryExpression">
+  <component name="RunManager" selected="Gradle.ParserExpressionTests">
     <configuration name="LexerTests" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -179,9 +179,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.ParserExpressionTests.testBinaryExpression" />
-        <item itemvalue="Gradle.ParserExpressionTests.testLiteralExpression" />
         <item itemvalue="Gradle.ParserExpressionTests" />
+        <item itemvalue="Gradle.ParserExpressionTests.testLiteralExpression" />
+        <item itemvalue="Gradle.ParserExpressionTests.testBinaryExpression" />
         <item itemvalue="Gradle.LexerTests" />
         <item itemvalue="Gradle.LexerTests.testExamples" />
       </list>
@@ -211,7 +211,9 @@
       <workItem from="1664980339452" duration="484000" />
       <workItem from="1665010003605" duration="1256000" />
       <workItem from="1665016238984" duration="2118000" />
-      <workItem from="1665022548609" duration="360000" />
+      <workItem from="1665022548609" duration="1089000" />
+      <workItem from="1665083673495" duration="947000" />
+      <workItem from="1665258807349" duration="4590000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -269,7 +271,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664239061633</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="some binary tests work, parsed add and multi expression">
+      <created>1665023038369</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1665023038369</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -296,6 +305,7 @@
     <MESSAGE value="fixed leading hyphen, newline unterminated, and invalid escape. added relevant test cases" />
     <MESSAGE value="possible fix to weird quotes test case" />
     <MESSAGE value="fixed weird quotes" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed weird quotes" />
+    <MESSAGE value="some binary tests work, parsed add and multi expression" />
+    <option name="LAST_COMMIT_MESSAGE" value="some binary tests work, parsed add and multi expression" />
   </component>
 </project>

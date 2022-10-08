@@ -1,5 +1,6 @@
 package plc.project;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -46,6 +47,7 @@ public final class Parser {
      * next token declares a list, aka {@code LIST}.
      */
     public Ast.Global parseList() throws ParseException {
+        //list ::= 'LIST' identifier '=' '[' expression (',' expression)* ']'
         throw new UnsupportedOperationException(); //TODO
     }
 
@@ -87,7 +89,16 @@ public final class Parser {
      * statement, then it is an expression/assignment statement.
      */
     public Ast.Statement parseStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression expr = parseExpression();
+        //if(match(Token.Type.IDENTIFIER, '=')){
+            //String temp = tokens.get(-1).getLiteral();
+            // need access instead of temp
+            //return new Ast.Statement.Assignment(temp, expr);
+        //}
+        //else
+        return new Ast.Statement.Expression(expr);
+        //return parseExpression();
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -124,6 +135,7 @@ public final class Parser {
      */
     public Ast.Statement.Case parseCaseStatement() throws ParseException {
         throw new UnsupportedOperationException(); //TODO
+
     }
 
     /**
@@ -217,19 +229,35 @@ public final class Parser {
         if (match("NIL")) return new Ast.Expression.Literal(null);
         else if (match("TRUE")) return new Ast.Expression.Literal(true);
         else if (match("FALSE")) return new Ast.Expression.Literal(false);
-
         else if (match(Token.Type.INTEGER)) return new Ast.Expression.Literal(new BigInteger(tokens.get(-1).getLiteral()));
         else if (match(Token.Type.DECIMAL)) return new Ast.Expression.Literal(new BigDecimal(tokens.get(-1).getLiteral()));
-        else if (match(Token.Type.CHARACTER)) { // UNFINISHED
+        else if (match(Token.Type.CHARACTER)) {
             String temp = tokens.get(-1).getLiteral();
-            match(Token.Type.CHARACTER);
-            throw new UnsupportedOperationException();
-
+            return new Ast.Expression.Literal(temp.charAt(1));
         }
         else if (match(Token.Type.IDENTIFIER)) {
-            String name = tokens.get(-1).getLiteral();
+            String temp = tokens.get(-1).getLiteral();
+            //function call expression
+            List<Ast.Expression> expr = new ArrayList<Ast.Expression>();
+            if(match("(")){
+                //List<Ast.Expression> expr = new ArrayList<Ast.Expression>();
+                while(!match(")")){
+                    match(",");
+                    expr.add(parseExpression());
+                }
+                return new Ast.Expression.Function(temp, expr);
+            }
             //TODO Add if statement for Access Expressions
-            return new Ast.Expression.Access(Optional.empty(), name);
+            return new Ast.Expression.Access(Optional.empty(), temp);
+        }
+        else if(match(Token.Type.STRING)){
+            String temp = tokens.get(-1).getLiteral();
+            temp = temp.substring(1, temp.length()-1);
+            // needs all escape char
+            if(temp.contains("\\")){
+                temp = temp.replace("\\n", "\n");
+            }
+            return new Ast.Expression.Literal(temp);
         }
         else if (match("(")) {
             Ast.Expression expr = parseExpression();    //Inner Expression
