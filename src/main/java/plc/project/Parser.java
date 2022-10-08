@@ -16,7 +16,7 @@ import java.util.Optional;
  * #match(Object...)} are helpers to make the implementation easier.
  *
  * This type of parser is called <em>recursive descent</em>. Each rule in our
- * grammar will have it's own function, and reference to other rules correspond
+ * grammar will have its own function, and reference to other rules correspond
  * to calling that functions.
  */
 public final class Parser {
@@ -91,9 +91,9 @@ public final class Parser {
     public Ast.Statement parseStatement() throws ParseException {
         Ast.Expression expr = parseExpression();
         //if(match(Token.Type.IDENTIFIER, '=')){
-            //String temp = tokens.get(-1).getLiteral();
-            // need access instead of temp
-            //return new Ast.Statement.Assignment(temp, expr);
+        //String temp = tokens.get(-1).getLiteral();
+        // need access instead of temp
+        //return new Ast.Statement.Assignment(temp, expr);
         //}
         //else
         return new Ast.Statement.Expression(expr);
@@ -233,14 +233,13 @@ public final class Parser {
         else if (match(Token.Type.DECIMAL)) return new Ast.Expression.Literal(new BigDecimal(tokens.get(-1).getLiteral()));
         else if (match(Token.Type.CHARACTER)) {
             String temp = tokens.get(-1).getLiteral();
-            return new Ast.Expression.Literal(temp.charAt(1));
+            return new Ast.Expression.Literal(tokens.get(-1).getLiteral().charAt(1));
         }
         else if (match(Token.Type.IDENTIFIER)) {
             String temp = tokens.get(-1).getLiteral();
             //function call expression
             List<Ast.Expression> expr = new ArrayList<Ast.Expression>();
             if(match("(")){
-                //List<Ast.Expression> expr = new ArrayList<Ast.Expression>();
                 while(!match(")")){
                     match(",");
                     expr.add(parseExpression());
@@ -263,7 +262,7 @@ public final class Parser {
             Ast.Expression expr = parseExpression();    //Inner Expression
             if(match(")"))
                 return new Ast.Expression.Group(expr);
-                                                        //Throws Parse Error for Improper grouping
+            //Throws Parse Error for Improper grouping
         }
         throw new UnsupportedOperationException(); //TODO FINISH PRIMARY EXPRESSIONS AND ADD PARSE EXCEPTIONS
     }
