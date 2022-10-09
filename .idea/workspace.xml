@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="some binary tests work, parsed add and multi expression">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="finished function,expression statement,literal">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
     </list>
@@ -213,7 +213,9 @@
       <workItem from="1665016238984" duration="2118000" />
       <workItem from="1665022548609" duration="1089000" />
       <workItem from="1665083673495" duration="947000" />
-      <workItem from="1665258807349" duration="4590000" />
+      <workItem from="1665258807349" duration="5701000" />
+      <workItem from="1665266781013" duration="1439000" />
+      <workItem from="1665279787869" duration="3016000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -278,7 +280,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665023038369</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="finished function,expression statement,literal">
+      <created>1665263555838</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1665263555838</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -306,6 +315,7 @@
     <MESSAGE value="possible fix to weird quotes test case" />
     <MESSAGE value="fixed weird quotes" />
     <MESSAGE value="some binary tests work, parsed add and multi expression" />
-    <option name="LAST_COMMIT_MESSAGE" value="some binary tests work, parsed add and multi expression" />
+    <MESSAGE value="finished function,expression statement,literal" />
+    <option name="LAST_COMMIT_MESSAGE" value="finished function,expression statement,literal" />
   </component>
 </project>

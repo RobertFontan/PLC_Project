@@ -1,5 +1,6 @@
 package plc.project;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ import java.util.Optional;
  * #match(Object...)} are helpers to make the implementation easier.
  *
  * This type of parser is called <em>recursive descent</em>. Each rule in our
- * grammar will have its own function, and reference to other rules correspond
+ * grammar will have it's own function, and reference to other rules correspond
  * to calling that functions.
  */
 public final class Parser {
@@ -90,14 +91,17 @@ public final class Parser {
      */
     public Ast.Statement parseStatement() throws ParseException {
         Ast.Expression expr = parseExpression();
-        //if(match(Token.Type.IDENTIFIER, '=')){
-        //String temp = tokens.get(-1).getLiteral();
-        // need access instead of temp
-        //return new Ast.Statement.Assignment(temp, expr);
-        //}
-        //else
+        if(match("=")){
+            Ast.Expression val = parseExpression();
+            return new Ast.Statement.Assignment(expr, val);
+        }
+       // Ast.Expression val = parseExpression();
+
         return new Ast.Statement.Expression(expr);
-        //return parseExpression();
+
+
+        //return new Ast.Statement.Expression(expr);
+
         //throw new UnsupportedOperationException(); //TODO
     }
 
@@ -233,7 +237,7 @@ public final class Parser {
         else if (match(Token.Type.DECIMAL)) return new Ast.Expression.Literal(new BigDecimal(tokens.get(-1).getLiteral()));
         else if (match(Token.Type.CHARACTER)) {
             String temp = tokens.get(-1).getLiteral();
-            return new Ast.Expression.Literal(tokens.get(-1).getLiteral().charAt(1));
+            return new Ast.Expression.Literal(temp.charAt(1));
         }
         else if (match(Token.Type.IDENTIFIER)) {
             String temp = tokens.get(-1).getLiteral();
@@ -246,13 +250,15 @@ public final class Parser {
                 }
                 return new Ast.Expression.Function(temp, expr);
             }
-            else if(match("[")) {
-                Ast.Expression.Access offset = (Ast.Expression.Access) parseExpression();
-                Ast.Expression.Access access = new Ast.Expression.Access(Optional.of(new Ast.Expression.Access(Optional.empty(), offset.getName())), temp);
-                match("]");
-                return access;
+            else if (match("[")) {
+                Ast.Expression init = parsePrimaryExpression();
+                return new Ast.Expression.Access(Optional.of(init), temp);
             }
+
             return new Ast.Expression.Access(Optional.empty(), temp);
+
+            //TODO Add if statement for Access Expressions
+
         }
         else if(match(Token.Type.STRING)){
             String temp = tokens.get(-1).getLiteral();
@@ -267,7 +273,7 @@ public final class Parser {
             Ast.Expression expr = parseExpression();    //Inner Expression
             if(match(")"))
                 return new Ast.Expression.Group(expr);
-            //Throws Parse Error for Improper grouping
+                                                        //Throws Parse Error for Improper grouping
         }
         throw new UnsupportedOperationException(); //TODO FINISH PRIMARY EXPRESSIONS AND ADD PARSE EXCEPTIONS
     }
