@@ -270,7 +270,7 @@ public final class Parser {
             String temp = tokens.get(-1).getLiteral();
             throw new ParseException("No closing Parenthesis", temp.length()-1);
         }
-        throw new UnsupportedOperationException(); //TODO FINISH PRIMARY EXPRESSIONS AND ADD PARSE EXCEPTIONS
+        throw new UnsupportedOperationException();
     }
 
     /**
