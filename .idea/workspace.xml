@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="fixed missing semi">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="fixed missing value and operand">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/ParserExpressionTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/ParserExpressionTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,14 +61,14 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/rober/Documents/Code/Programming Language Concepts/PLC_Project/src/test/java/plc/project/LexerTests.java",
+    "last_opened_file_path": "C:/Users/rober/Documents/Code/Programming Language Concepts/PLC_Project/src/test/java/plc/project/ParserTests.java",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)"
   }
 }]]></component>
-  <component name="RunManager" selected="Gradle.ParserExpressionTests">
+  <component name="RunManager">
     <configuration name="LexerTests" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -224,6 +223,9 @@
       <workItem from="1665258807349" duration="5701000" />
       <workItem from="1665266781013" duration="1439000" />
       <workItem from="1665279787869" duration="3016000" />
+      <workItem from="1665546700637" duration="618000" />
+      <workItem from="1665582936187" duration="300000" />
+      <workItem from="1665583535669" duration="56000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -337,7 +339,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665543558966</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="fixed missing value and operand">
+      <created>1665544778974</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1665544778974</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -371,6 +380,7 @@
     <MESSAGE value="fixed closing parenthesis" />
     <MESSAGE value="fixed trailing commas" />
     <MESSAGE value="fixed missing semi" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed missing semi" />
+    <MESSAGE value="fixed missing value and operand" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed missing value and operand" />
   </component>
 </project>

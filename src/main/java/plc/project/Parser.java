@@ -90,12 +90,7 @@ public final class Parser {
      */
     public Ast.Statement parseStatement() throws ParseException {
         Ast.Expression expr = parseExpression();
-        //if(match(Token.Type.IDENTIFIER, '=')){
-        //String temp = tokens.get(-1).getLiteral();
-        // need access instead of temp
-        //return new Ast.Statement.Assignment(temp, expr);
-        //}
-        //else
+
         if(peek("=")) {
             match("=");
             Ast.Expression val = parseExpression();
