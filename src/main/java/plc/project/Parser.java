@@ -262,7 +262,12 @@ public final class Parser {
             List<Ast.Expression> expr = new ArrayList<Ast.Expression>();
             if(match("(")){
                 while(!match(")")){
-                    match(",");
+                    if(peek(",")) {
+                        match(",");
+                        if (peek(")")) {
+                            throw new ParseException("trailing comma", tokens.get(0).getIndex());
+                        }
+                    }
                     expr.add(parseExpression());
                 }
                 return new Ast.Expression.Function(temp, expr);
@@ -280,7 +285,8 @@ public final class Parser {
             temp = temp.substring(1, temp.length()-1);
             // needs all escape char
             if(temp.contains("\\")){
-                temp = temp.replace("\\n", "\n");
+                temp = temp.replace("\\n", "\n")
+                        .replace("\\b", "\b");
             }
             return new Ast.Expression.Literal(temp);
         }
