@@ -96,7 +96,28 @@ public final class Parser {
         //return new Ast.Statement.Assignment(temp, expr);
         //}
         //else
-        return new Ast.Statement.Expression(expr);
+        if(peek("=")) {
+            match("=");
+            Ast.Expression val = parseExpression();
+            if (peek(";")) {
+                match(";");
+                return new Ast.Statement.Assignment(expr, val);
+            } else {
+                System.out.println("missing semi");
+                throw new ParseException("Missing semicolon", tokens.get(0).getIndex());
+            }
+        }
+        else {
+            if (match(";")) {
+                return new Ast.Statement.Expression(expr);
+            } else {
+                System.out.println("missing semi");
+                throw new ParseException("Missing semicolon", tokens.get(0).getIndex());
+            }
+        }
+
+
+        //return new Ast.Statement.Expression(expr);
         //return parseExpression();
         //throw new UnsupportedOperationException(); //TODO
     }
@@ -267,8 +288,10 @@ public final class Parser {
             Ast.Expression expr = parseExpression();    //Inner Expression
             if(match(")"))
                 return new Ast.Expression.Group(expr);
-            String temp = tokens.get(-1).getLiteral();
-            throw new ParseException("No closing Parenthesis", temp.length()-1);
+            else {
+                String temp = tokens.get(-1).getLiteral();
+                throw new ParseException("No closing Parenthesis", temp.length() - 1);
+            }
         }
         throw new UnsupportedOperationException();
     }

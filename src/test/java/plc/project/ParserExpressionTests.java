@@ -42,7 +42,9 @@ final class ParserExpressionTests {
                 Arguments.of("Missing Semicolon",
                         Arrays.asList(
                                 new Token(Token.Type.IDENTIFIER, "f", 0)
-                        ))
+                        ),
+                        false
+                )
         );
     }
 
@@ -125,7 +127,9 @@ final class ParserExpressionTests {
                         Arrays.asList(
                                 new Token(Token.Type.OPERATOR, "(", 0),
                                 new Token(Token.Type.IDENTIFIER, "expr", 1)
-                        )
+                        ),
+                        new Ast.Expression.Group(new Ast.Expression.Access(Optional.empty(), "expr")),
+                        false
                 ),
                 Arguments.of("Grouped Variable",
                         Arrays.asList(
@@ -210,8 +214,11 @@ final class ParserExpressionTests {
                         )
                 ),
                 Arguments.of("Missing Operand",
+                        Arrays.asList(
                         new Token(Token.Type.IDENTIFIER, "expr", 0),
                         new Token(Token.Type.OPERATOR, "-", 5)
+                        ),
+                        false
                 )
         );
     }
@@ -282,7 +289,8 @@ final class ParserExpressionTests {
                                 new Token(Token.Type.OPERATOR, "(", 4),
                                 new Token(Token.Type.IDENTIFIER, "expr", 5),
                                 new Token(Token.Type.OPERATOR, ",", 9)
-                        ))
+                        ),
+                        false)
         );
     }
 
