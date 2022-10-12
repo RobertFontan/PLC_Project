@@ -103,16 +103,16 @@ public final class Parser {
                 match(";");
                 return new Ast.Statement.Assignment(expr, val);
             } else {
-                System.out.println("missing semi");
-                throw new ParseException("Missing semicolon", tokens.get(0).getIndex());
+                //System.out.println("missing semi");
+                throw new ParseException("Missing semicolon", tokens.get(-1).getIndex());
             }
         }
         else {
             if (match(";")) {
                 return new Ast.Statement.Expression(expr);
             } else {
-                System.out.println("missing semi");
-                throw new ParseException("Missing semicolon", tokens.get(0).getIndex());
+                //System.out.println("missing semi");
+                throw new ParseException("Missing semicolon", tokens.get(-1).getIndex());
             }
         }
 

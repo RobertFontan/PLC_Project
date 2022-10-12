@@ -42,7 +42,8 @@ final class ParserExpressionTests {
                 Arguments.of("Missing Semicolon",
                         Arrays.asList(
                                 new Token(Token.Type.IDENTIFIER, "f", 0)
-                        )
+                        ),
+                        new Ast.Statement.Expression(new Ast.Expression.Function("f", Arrays.asList()))
                 )
         );
     }
