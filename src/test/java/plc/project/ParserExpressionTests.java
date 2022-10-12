@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -37,7 +38,11 @@ final class ParserExpressionTests {
                                 new Token(Token.Type.OPERATOR, ";", 6)
                         ),
                         new Ast.Statement.Expression(new Ast.Expression.Function("name", Arrays.asList()))
-                )
+                ),
+                Arguments.of("Missing Semicolon",
+                        Arrays.asList(
+                                new Token(Token.Type.IDENTIFIER, "f", 0)
+                        ))
         );
     }
 
@@ -60,6 +65,14 @@ final class ParserExpressionTests {
                         new Ast.Statement.Assignment(
                                 new Ast.Expression.Access(Optional.empty(), "name"),
                                 new Ast.Expression.Access(Optional.empty(), "value")
+                        )
+                ),
+                Arguments.of("Missing Value",
+                        Arrays.asList(
+                                new Token(Token.Type.IDENTIFIER, "name", 0),
+                                new Token(Token.Type.OPERATOR, "=", 5),
+                                new Token(Token.Type.OPERATOR, ";", 7)
+
                         )
                 )
         );
@@ -108,6 +121,12 @@ final class ParserExpressionTests {
 
     private static Stream<Arguments> testGroupExpression() {
         return Stream.of(
+                Arguments.of("Missing Closing Parenthesis",
+                        Arrays.asList(
+                                new Token(Token.Type.OPERATOR, "(", 0),
+                                new Token(Token.Type.IDENTIFIER, "expr", 1)
+                        )
+                ),
                 Arguments.of("Grouped Variable",
                         Arrays.asList(
                                 //(expr)
@@ -189,6 +208,10 @@ final class ParserExpressionTests {
                                 new Ast.Expression.Access(Optional.empty(), "expr1"),
                                 new Ast.Expression.Access(Optional.empty(), "expr2")
                         )
+                ),
+                Arguments.of("Missing Operand",
+                        new Token(Token.Type.IDENTIFIER, "expr", 0),
+                        new Token(Token.Type.OPERATOR, "-", 5)
                 )
         );
     }
