@@ -299,7 +299,8 @@ public final class Parser {
                 throw new ParseException("No closing Parenthesis", temp.length() - 1);
             }
         }
-        throw new UnsupportedOperationException();
+        throw new ParseException("Missing Expression", tokens.get(-1).getIndex());
+        //throw new UnsupportedOperationException();
     }
 
     /**

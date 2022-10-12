@@ -74,7 +74,10 @@ final class ParserExpressionTests {
                                 new Token(Token.Type.IDENTIFIER, "name", 0),
                                 new Token(Token.Type.OPERATOR, "=", 5),
                                 new Token(Token.Type.OPERATOR, ";", 7)
-
+                        ),
+                        new Ast.Statement.Assignment(
+                                new Ast.Expression.Access(Optional.empty(), "name"),
+                                new Ast.Expression.Access(Optional.empty(), "")
                         )
                 )
         );
@@ -215,8 +218,12 @@ final class ParserExpressionTests {
                 ),
                 Arguments.of("Missing Operand",
                         Arrays.asList(
-                        new Token(Token.Type.IDENTIFIER, "expr", 0),
-                        new Token(Token.Type.OPERATOR, "-", 5)
+                                new Token(Token.Type.IDENTIFIER, "expr", 0),
+                                new Token(Token.Type.OPERATOR, "-", 5)
+                        ),
+                        new Ast.Expression.Binary("-",
+                                new Ast.Expression.Access(Optional.empty(), "expr"),
+                                new Ast.Expression.Access(Optional.empty(), "")
                         )
                 )
         );
