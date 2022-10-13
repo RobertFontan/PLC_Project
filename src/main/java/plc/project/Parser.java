@@ -168,11 +168,14 @@ public final class Parser {
      * preceding token indicates the opening a block.
      */
     public List<Ast.Statement> parseBlock() throws ParseException {
-        List<Ast.Statement> statements = new ArrayList<>();
-        while(!(match("END") || peek("ELSE"))){
-            statements.add(parseStatement());
-        }
-        return statements;
+
+            List<Ast.Statement> statements = new ArrayList<>();
+            while (!(match("END") || peek("ELSE"))) {
+                statements.add(parseStatement());
+            }
+            //statements.add()
+            return statements;
+
        // throw new UnsupportedOperationException(); //TODO
     }
 
@@ -187,7 +190,7 @@ public final class Parser {
             return parseDeclarationStatement();
         } else if (peek("SWITCH")) {
             match("SWITCH");
-            parseSwitchStatement();
+            return parseSwitchStatement();
         } else if (peek("IF")) {
             match("IF");
             return parseIfStatement();
@@ -216,7 +219,7 @@ public final class Parser {
                 }
             }
         }
-        throw new UnsupportedOperationException(); //TODO
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -286,7 +289,24 @@ public final class Parser {
      * {@code SWITCH}.
      */
     public Ast.Statement.Switch parseSwitchStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        //    'SWITCH' expression ('CASE' expression ':' block)* 'DEFAULT' block 'END' |
+        List<Ast.Statement.Case> cases = new ArrayList<>();
+        Ast.Expression expr = parseExpression();
+
+        while (peek("CASE") && !(peek("DEFAULT"))){
+            match("CASE");
+            while(!peek("DEFAULT"))
+                cases.add(parseCaseStatement());
+        }
+
+        if(match("DEFAULT")){
+            cases.add(parseCaseStatement());
+        }
+        else
+            throw new ParseException("Missing Default", tokens.get(-1).getIndex());
+
+        return new Ast.Statement.Switch(expr, cases);
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**

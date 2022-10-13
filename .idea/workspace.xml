@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="statement and block added">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="all statements done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
     </list>
@@ -256,7 +256,9 @@
       <workItem from="1665546700637" duration="618000" />
       <workItem from="1665582936187" duration="300000" />
       <workItem from="1665583535669" duration="109000" />
-      <workItem from="1665595494373" duration="14114000" />
+      <workItem from="1665595494373" duration="14707000" />
+      <workItem from="1665689635744" duration="849000" />
+      <workItem from="1665698925093" duration="1493000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -384,7 +386,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665583634997</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="all statements done">
+      <created>1665620766152</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1665620766152</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -421,6 +430,7 @@
     <MESSAGE value="fixed missing value and operand" />
     <MESSAGE value="added parserTests file" />
     <MESSAGE value="statement and block added" />
-    <option name="LAST_COMMIT_MESSAGE" value="statement and block added" />
+    <MESSAGE value="all statements done" />
+    <option name="LAST_COMMIT_MESSAGE" value="all statements done" />
   </component>
 </project>
