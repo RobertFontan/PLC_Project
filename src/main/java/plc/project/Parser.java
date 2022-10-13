@@ -32,7 +32,17 @@ public final class Parser {
      * Parses the {@code source} rule.
      */
     public Ast.Source parseSource() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+            List<Ast.Global> global = new ArrayList<>();
+            List<Ast.Function> function = new ArrayList<>();
+
+            while (peek("LIST") || peek("VAR") || peek("VAL")) {
+                    global.add(parseGlobal());
+            }
+            while (peek("FUN")) {
+                function.add(parseFunction());
+            }
+            return new Ast.Source(global, function);
+
     }
 
     /**
@@ -40,7 +50,23 @@ public final class Parser {
      * next tokens start a global, aka {@code LIST|VAL|VAR}.
      */
     public Ast.Global parseGlobal() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Global global;
+        if (match("LIST")) {
+            global = parseList();
+            if(match(";"))
+                return global;
+        }
+        else if (match("VAR")) {
+            global = parseMutable();
+            if(match(";"))
+                return global;
+        }
+        else if (match("VAL")) {
+            global = parseImmutable();
+            if(match(";"))
+                return global;
+        }
+        throw new ParseException("No semicolon: ", tokens.get(-1).getLiteral().length()-1);
     }
 
     /**
@@ -49,7 +75,28 @@ public final class Parser {
      */
     public Ast.Global parseList() throws ParseException {
         //list ::= 'LIST' identifier '=' '[' expression (',' expression)* ']'
-        throw new UnsupportedOperationException(); //TODO
+
+        match("LIST");
+        if(!match(Token.Type.IDENTIFIER))
+            throw new ParseException("Excpected Identifier", -1); // TODO: Handle the actual index (char index pos.)
+        String name = tokens.get(-1).getLiteral();
+
+        if(!match("=","["))
+            throw new ParseException("Expected '=' or '['", -1);
+
+        List<Ast.Expression> expr = new ArrayList<Ast.Expression>();
+        expr.add(parseExpression());
+        while(!peek("]")) {
+            if(match(",")) {
+                if(peek("]"))
+                    throw new ParseException("Trailing comma", -1); //TODO: Fix index
+                expr.add(parseExpression());
+            }
+        }
+        match("]");
+        //return new Ast.Global(name,false, );
+
+        throw new ParseException("Not a list", -1);
     }
 
     /**
@@ -57,6 +104,10 @@ public final class Parser {
      * next token declares a mutable global variable, aka {@code VAR}.
      */
     public Ast.Global parseMutable() throws ParseException {
+        //mutable ::= 'VAR' identifier ('=' expression)?
+        if(match("VAR")) {
+
+        }
         throw new UnsupportedOperationException(); //TODO
     }
 
@@ -65,7 +116,15 @@ public final class Parser {
      * next token declares an immutable global variable, aka {@code VAL}.
      */
     public Ast.Global parseImmutable() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        //immutable ::= 'VAL' identifier '=' expression
+        match("VAL");
+        if(!match(Token.Type.IDENTIFIER))
+            throw new ParseException("Expected Identifier", -1); //TODO: correct index
+        String name = tokens.get(-1).getLiteral();
+        if(!match("="))
+            throw new ParseException("Expected Operator '='", -1); //TODO: correct index
+        Ast.Expression expr = parseExpression();
+        return new Ast.Global(name, false, Optional.of(expr));
     }
 
     /**
@@ -73,7 +132,35 @@ public final class Parser {
      * next tokens start a method, aka {@code FUN}.
      */
     public Ast.Function parseFunction() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        // function ::= 'FUN' identifier '(' (identifier (',' identifier)* )? ')' 'DO' block 'END'
+        List<String> parameterList = new ArrayList<String>();
+        match("FUN");
+        if(!match(Token.Type.IDENTIFIER))
+            throw new ParseException("Expected Identifier", -1); //TODO: correct index
+        String functionName = tokens.get(-1).getLiteral();
+
+        if(!match("("))
+            throw new ParseException("Expected opening parenthesis", -1); //TODO: correct index
+
+        if(match(Token.Type.IDENTIFIER)) {
+            parameterList.add(tokens.get(-1).getLiteral());
+            while(match(",")) {
+                if(!match(Token.Type.IDENTIFIER))
+                    throw new ParseException("Trailing comma", -1); //TODO: correct index
+                else
+                    parameterList.add(tokens.get(-1).getLiteral());
+            }
+        }
+
+        if(!match(")"))
+            throw new ParseException("Expected closing parenthesis", -1); //TODO: correct index
+
+        if(!match("DO"))
+            throw new ParseException("Expected 'DO'", -1); //TODO: correct index
+
+        List<Ast.Statement> block = parseBlock();
+
+        return new Ast.Function(functionName, parameterList, block);
     }
 
     /**
