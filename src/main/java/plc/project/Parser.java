@@ -1,5 +1,6 @@
 package plc.project;
 
+import java.rmi.UnexpectedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
@@ -80,7 +81,12 @@ public final class Parser {
      * preceding token indicates the opening a block.
      */
     public List<Ast.Statement> parseBlock() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        List<Ast.Statement> statements = new ArrayList<>();
+        while(!(match("END") || peek("ELSE"))){
+            statements.add(parseStatement());
+        }
+        return statements;
+       // throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -89,32 +95,41 @@ public final class Parser {
      * statement, then it is an expression/assignment statement.
      */
     public Ast.Statement parseStatement() throws ParseException {
-        Ast.Expression expr = parseExpression();
-
-        if(peek("=")) {
-            match("=");
-            Ast.Expression val = parseExpression();
-            if (peek(";")) {
-                match(";");
-                return new Ast.Statement.Assignment(expr, val);
+        if (peek("LET")) {
+            match("LET");
+            return parseDeclarationStatement();
+        } else if (peek("SWITCH")) {
+            match("SWITCH");
+            parseSwitchStatement();
+        } else if (peek("IF")) {
+            match("IF");
+            return parseIfStatement();
+        } else if (peek("WHILE")) {
+            match("WHILE");
+            return parseWhileStatement();
+        } else if (peek("RETURN")) {
+            match("RETURN");
+            return parseReturnStatement();
+        } else {
+            Ast.Expression expr = parseExpression();
+            if (peek("=")) {
+                match("=");
+                Ast.Expression val = parseExpression();
+                if (peek(";")) {
+                    match(";");
+                    return new Ast.Statement.Assignment(expr, val);
+                } else {
+                    throw new ParseException("Missing semicolon", tokens.get(-1).getIndex());
+                }
             } else {
-                //System.out.println("missing semi");
-                throw new ParseException("Missing semicolon", tokens.get(-1).getIndex());
+                if (match(";")) {
+                    return new Ast.Statement.Expression(expr);
+                } else {
+                    throw new ParseException("Missing semicolon", tokens.get(-1).getIndex());
+                }
             }
         }
-        else {
-            if (match(";")) {
-                return new Ast.Statement.Expression(expr);
-            } else {
-                //System.out.println("missing semi");
-                throw new ParseException("Missing semicolon", tokens.get(-1).getIndex());
-            }
-        }
-
-
-        //return new Ast.Statement.Expression(expr);
-        //return parseExpression();
-        //throw new UnsupportedOperationException(); //TODO
+        throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -123,7 +138,30 @@ public final class Parser {
      * statement, aka {@code LET}.
      */
     public Ast.Statement.Declaration parseDeclarationStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        //LET name = expr;
+        // LET name;
+        //  'LET' identifier ('=' expression)? ';'
+        String name;
+        Ast.Expression expr;
+        if(peek(Token.Type.IDENTIFIER)){
+            match(Token.Type.IDENTIFIER);
+            name = tokens.get(-1).getLiteral();
+        }
+        else
+            throw new ParseException("Missing Identifier" , tokens.get(-1).getIndex());
+        if(peek("=")){
+            match("=");
+            expr = parseExpression();
+            if(!match(";"))
+                throw new ParseException("Missing Declarative Semicolon", tokens.get(-1).getIndex());
+            return new Ast.Statement.Declaration(name, Optional.of(expr));
+        }
+
+        if(!match(";"))
+            throw new ParseException("Missing Declarative Semicolon", tokens.get(-1).getIndex());
+
+        return new Ast.Statement.Declaration(name, Optional.empty());
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -132,7 +170,27 @@ public final class Parser {
      * {@code IF}.
      */
     public Ast.Statement.If parseIfStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        // 'IF' expression 'DO' block ('ELSE' block)? 'END' |
+        // IF expr DO stmt; END
+        List<Ast.Statement> thenStates = new ArrayList<>();
+        List<Ast.Statement> elseStates = new ArrayList<>();
+
+        Ast.Expression expr = parseExpression();
+
+        if(peek("DO")) {
+            match("DO");
+            thenStates = parseBlock();
+        }
+        else
+            throw new ParseException("Expected DO", tokens.get(-1).getIndex());
+
+        if(match("ELSE")){
+            elseStates = parseBlock();
+        }
+
+        return new Ast.Statement.If(expr, thenStates, elseStates);
+
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -160,7 +218,25 @@ public final class Parser {
      * {@code WHILE}.
      */
     public Ast.Statement.While parseWhileStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        // 'while' expression 'do' block 'end'
+        //WHILE expr DO stmt; END
+        System.out.println("Found While");
+        List<Ast.Statement> states = new ArrayList<>();
+
+        Ast.Expression expr = parseExpression();
+        if(peek("DO")){
+            match("DO");
+            System.out.println("Found Do");
+            states = parseBlock();
+        }
+        else
+            throw new ParseException("Expected DO", tokens.get(-1).getIndex());
+        //List<Ast.Statement> statements = new ArrayList<>();
+
+
+        System.out.println("Found end");
+        return new Ast.Statement.While(expr, states);
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -169,7 +245,17 @@ public final class Parser {
      * {@code RETURN}.
      */
     public Ast.Statement.Return parseReturnStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO:
+        //RETURN expr ;
+        // 'RETURN' expression ';' |expression ('=' expression)? ';'
+        System.out.println("Found return");
+        Ast.Expression expr = parseExpression();
+        //Ast.Expression extra = parseExpression();
+
+        if(!match(";"))
+            throw new ParseException("Missing Semicolon in return" , tokens.get(-1).getIndex());
+        //System.out.println(toString(Ast.Statement.Return(expr)));
+        return new Ast.Statement.Return(expr);
+        //throw new UnsupportedOperationException(); //TODO:
     }
 
     /**
@@ -295,7 +381,6 @@ public final class Parser {
             }
         }
         throw new ParseException("Missing Expression", tokens.get(-1).getIndex());
-        //throw new UnsupportedOperationException();
     }
 
     /**
