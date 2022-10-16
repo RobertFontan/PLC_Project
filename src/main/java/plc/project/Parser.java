@@ -176,7 +176,6 @@ public final class Parser {
             //statements.add()
             return statements;
 
-       // throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -219,7 +218,6 @@ public final class Parser {
                 }
             }
         }
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -238,20 +236,19 @@ public final class Parser {
             name = tokens.get(-1).getLiteral();
         }
         else
-            throw new ParseException("Missing Identifier" , tokens.get(-1).getIndex());
+            throw new ParseException("Missing Identifier" , tokens.get(0).getIndex());
         if(peek("=")){
             match("=");
             expr = parseExpression();
             if(!match(";"))
-                throw new ParseException("Missing Declarative Semicolon", tokens.get(-1).getIndex());
+                throw new ParseException("Missing Declarative Semicolon", tokens.get(0).getIndex());
             return new Ast.Statement.Declaration(name, Optional.of(expr));
         }
 
         if(!match(";"))
-            throw new ParseException("Missing Declarative Semicolon", tokens.get(-1).getIndex());
+            throw new ParseException("Missing Declarative Semicolon", tokens.get(0).getIndex());
 
         return new Ast.Statement.Declaration(name, Optional.empty());
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -272,7 +269,7 @@ public final class Parser {
             thenStates = parseBlock();
         }
         else
-            throw new ParseException("Expected DO", tokens.get(-1).getIndex());
+            throw new ParseException("Expected DO at: " + tokens.get(0).getIndex(), tokens.get(0).getIndex());
 
         if(match("ELSE")){
             elseStates = parseBlock();
@@ -280,7 +277,6 @@ public final class Parser {
 
         return new Ast.Statement.If(expr, thenStates, elseStates);
 
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -303,10 +299,9 @@ public final class Parser {
             cases.add(parseCaseStatement());
         }
         else
-            throw new ParseException("Missing Default", tokens.get(-1).getIndex());
+            throw new ParseException("Missing Default", tokens.get(0).getIndex());
 
         return new Ast.Statement.Switch(expr, cases);
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -337,13 +332,12 @@ public final class Parser {
             states = parseBlock();
         }
         else
-            throw new ParseException("Expected DO", tokens.get(-1).getIndex());
+            throw new ParseException("Expected DO at: " + tokens.get(0).getIndex(), tokens.get(0).getIndex());
         //List<Ast.Statement> statements = new ArrayList<>();
 
 
         System.out.println("Found end");
         return new Ast.Statement.While(expr, states);
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -359,10 +353,9 @@ public final class Parser {
         //Ast.Expression extra = parseExpression();
 
         if(!match(";"))
-            throw new ParseException("Missing Semicolon in return" , tokens.get(-1).getIndex());
+            throw new ParseException("Missing Semicolon in return" , tokens.get(0).getIndex());
         //System.out.println(toString(Ast.Statement.Return(expr)));
         return new Ast.Statement.Return(expr);
-        //throw new UnsupportedOperationException(); //TODO:
     }
 
     /**
@@ -453,7 +446,7 @@ public final class Parser {
                     if(peek(",")) {
                         match(",");
                         if (peek(")")) {
-                            throw new ParseException("trailing comma", tokens.get(0).getIndex());
+                            throw new ParseException("Trailing Comma at: " + (tokens.get(0).getIndex()), tokens.get(0).getIndex());
                         }
                     }
                     expr.add(parseExpression());
@@ -484,10 +477,10 @@ public final class Parser {
                 return new Ast.Expression.Group(expr);
             else {
                 String temp = tokens.get(-1).getLiteral();
-                throw new ParseException("No closing Parenthesis", temp.length() - 1);
+                throw new ParseException("No closing Parenthesis" + (tokens.get(temp.length() - 1).getIndex()), tokens.get(temp.length() - 1).getIndex());
             }
         }
-        throw new ParseException("Missing Expression", tokens.get(-1).getIndex());
+        throw new ParseException("Invalid Expression", tokens.get(0).getIndex());
     }
 
     /**
@@ -501,7 +494,6 @@ public final class Parser {
      * {@code peek(Token.Type.IDENTIFIER)} and {@code peek("literal")}.
      */
     private boolean peek(Object... patterns) {
-        // throw new UnsupportedOperationException(); //TODO (in lecture)
         for (int i = 0; i < patterns.length; i++) {
             if (!tokens.has(i)) {
                 return false;
@@ -525,8 +517,6 @@ public final class Parser {
      * and advances the token stream.
      */
     private boolean match(Object... patterns) {
-        // throw new UnsupportedOperationException(); //TODO (in lecture)
-
         boolean peek = peek(patterns);
 
         if (peek) {
