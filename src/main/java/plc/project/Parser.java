@@ -170,7 +170,7 @@ public final class Parser {
     public List<Ast.Statement> parseBlock() throws ParseException {
 
             List<Ast.Statement> statements = new ArrayList<>();
-            while (!(match("END") || peek("ELSE"))) {
+            while (!(match("END") || peek("ELSE") || peek("DEFAULT"))) {
                 statements.add(parseStatement());
             }
             //statements.add()
@@ -226,9 +226,9 @@ public final class Parser {
      * statement, aka {@code LET}.
      */
     public Ast.Statement.Declaration parseDeclarationStatement() throws ParseException {
-        //LET name = expr;
+        // LET name = expr;
         // LET name;
-        //  'LET' identifier ('=' expression)? ';'
+        // 'LET' identifier ('=' expression)? ';'
         String name;
         Ast.Expression expr;
         if(peek(Token.Type.IDENTIFIER)){
@@ -285,21 +285,19 @@ public final class Parser {
      * {@code SWITCH}.
      */
     public Ast.Statement.Switch parseSwitchStatement() throws ParseException {
-        //    'SWITCH' expression ('CASE' expression ':' block)* 'DEFAULT' block 'END' |
-        List<Ast.Statement.Case> cases = new ArrayList<>();
+        //    'SWITCH' expression ('CASE' expression ':' block)* 'DEFAULT' block 'END'
         Ast.Expression expr = parseExpression();
+        List<Ast.Statement.Case> cases = new ArrayList<>();
 
-        while (peek("CASE") && !(peek("DEFAULT"))){
-            match("CASE");
-            while(!peek("DEFAULT"))
-                cases.add(parseCaseStatement());
+        while (peek("CASE")){
+            cases.add(parseCaseStatement());
         }
-
-        if(match("DEFAULT")){
+        // default is a case statement without a value
+        if(peek("DEFAULT")){
             cases.add(parseCaseStatement());
         }
         else
-            throw new ParseException("Missing Default", tokens.get(0).getIndex());
+            throw new ParseException("Expected Default at: " + tokens.get(0).getIndex(), tokens.get(0).getIndex());
 
         return new Ast.Statement.Switch(expr, cases);
     }
@@ -310,8 +308,23 @@ public final class Parser {
      * default block of a switch statement, aka {@code CASE} or {@code DEFAULT}.
      */
     public Ast.Statement.Case parseCaseStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        //('CASE' expression  ':' block)* 'DEFAULT' block 'END'
+        List<Ast.Statement> statements = new ArrayList<>();
 
+        if(match("CASE")) {
+            Ast.Expression expr = parseExpression();
+            if (peek(":")) {
+                match(":");
+                statements = parseBlock();
+            } else
+                throw new ParseException("Missing colon at: " + tokens.get(-1).getIndex(), tokens.get(-1).getIndex());
+            return new Ast.Statement.Case(Optional.of(expr),statements);
+        }
+        else if(match("DEFAULT")){
+            statements = parseBlock();
+            return new Ast.Statement.Case(Optional.empty(), statements);
+        }
+        throw new ParseException("Could not find CASE or DEFAULT", tokens.get(0).getIndex());
     }
 
     /**
@@ -332,7 +345,7 @@ public final class Parser {
             states = parseBlock();
         }
         else
-            throw new ParseException("Expected DO at: " + tokens.get(0).getIndex(), tokens.get(0).getIndex());
+            throw new ParseException("Expected DO at: " + tokens.get(-1).getIndex(), tokens.get(-1).getIndex());
         //List<Ast.Statement> statements = new ArrayList<>();
 
 

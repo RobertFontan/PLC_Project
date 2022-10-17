@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.awt.event.MouseMotionAdapter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -65,9 +66,30 @@ final class ParserTests {
                                 )))
                         )
                 )
+                //LIST list = [expr];
+                /*
+                ,
+                Arguments.of("List",
+                        Arrays.asList(
+                                new Token(Token.Type.IDENTIFIER, "LIST", 0),
+                                new Token(Token.Type.IDENTIFIER, "list", 5),
+                                new Token(Token.Type.OPERATOR, "=", 10),
+                                new Token(Token.Type.OPERATOR, "[", 12),
+                                new Token(Token.Type.IDENTIFIER, "expr", 13),
+                                new Token(Token.Type.OPERATOR, "]", 17),
+                                new Token(Token.Type.OPERATOR, ";", 18)
+
+
+                                ),
+                        new Ast.Source(
+                                Arrays.asList(),
+                                Arrays.asList(new List))
+                        )
+                )
+                */
+
         );
     }
-
     @ParameterizedTest
     @MethodSource
     void testExpressionStatement(String test, List<Token> tokens, Ast.Statement.Expression expected) {
@@ -261,6 +283,34 @@ final class ParserTests {
                 )
         );
     }
+
+    @ParameterizedTest
+    @MethodSource
+    void testSwitchStatement(String test, List<Token> tokens, Ast.Statement.Switch expected) {
+        test(tokens, expected, Parser::parseStatement);
+
+    }
+
+    private static Stream<Arguments> testSwitchStatement(){
+        return Stream.of(
+                //SWITCH expr DEFAULT stmt; END
+                Arguments.of("Switch",
+                        Arrays.asList(
+                                new Token(Token.Type.IDENTIFIER, "SWITCH", 0),
+                                new Token(Token.Type.IDENTIFIER, "expr", 7),
+                                new Token(Token.Type.IDENTIFIER, "DEFAULT", 12),
+                                new Token(Token.Type.IDENTIFIER, "stmt", 20),
+                                new Token(Token.Type.OPERATOR, ";", 24),
+                                new Token(Token.Type.IDENTIFIER, "END", 26)
+                        ),
+                        new Ast.Statement.Switch(
+                            new Ast.Expression.Access(Optional.empty(), "expr"),
+                            Arrays.asList(new Ast.Statement.Case(Optional.empty(), Arrays.asList(new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "stmt")))))
+                        )
+                )
+        );
+    }
+
 
     @ParameterizedTest
     @MethodSource
