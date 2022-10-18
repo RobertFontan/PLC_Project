@@ -78,25 +78,26 @@ public final class Parser {
 
         match("LIST");
         if(!match(Token.Type.IDENTIFIER))
-            throw new ParseException("Excpected Identifier", -1); // TODO: Handle the actual index (char index pos.)
+            throw new ParseException("Excpected Identifier", tokens.get(-1).getIndex()); // TODO: Handle the actual index (char index pos.)
         String name = tokens.get(-1).getLiteral();
 
-        if(!match("=","["))
-            throw new ParseException("Expected '=' or '['", -1);
+        if(!match("="))
+            throw new ParseException("Expected '='", -1);
+        else if(!match("["))
+            throw new ParseException("Expected '['", -1);
 
         List<Ast.Expression> expr = new ArrayList<Ast.Expression>();
         expr.add(parseExpression());
+
         while(!peek("]")) {
             if(match(",")) {
                 if(peek("]"))
-                    throw new ParseException("Trailing comma", -1); //TODO: Fix index
+                    throw new ParseException("Trailing comma", tokens.get(-1).getIndex()); //TODO: Fix index
                 expr.add(parseExpression());
             }
         }
         match("]");
-        //return new Ast.Global(name,false, );
-
-        throw new ParseException("Not a list", -1);
+        return new Ast.Global(name,false, Optional.of(new Ast.Expression.PlcList(expr)));
     }
 
     /**
@@ -105,10 +106,18 @@ public final class Parser {
      */
     public Ast.Global parseMutable() throws ParseException {
         //mutable ::= 'VAR' identifier ('=' expression)?
-        if(match("VAR")) {
+        match("VAR");
 
+        if(!match(Token.Type.IDENTIFIER))
+            throw new ParseException("MISSING IDENTIFIER", tokens.get(-1).getIndex()); // TODO: FIX INDEX
+        String name = tokens.get(-1).getLiteral();
+
+        if(match("=")) {
+            Ast.Expression expr = parseExpression();
+            return new Ast.Global(name, true, Optional.of(expr));
         }
-        throw new UnsupportedOperationException(); //TODO
+
+        return new Ast.Global(name, true, Optional.empty());
     }
 
     /**
@@ -136,27 +145,27 @@ public final class Parser {
         List<String> parameterList = new ArrayList<String>();
         match("FUN");
         if(!match(Token.Type.IDENTIFIER))
-            throw new ParseException("Expected Identifier", -1); //TODO: correct index
+            throw new ParseException("Expected Identifier", tokens.get(0).getIndex()); //TODO: INDEX
         String functionName = tokens.get(-1).getLiteral();
 
         if(!match("("))
-            throw new ParseException("Expected opening parenthesis", -1); //TODO: correct index
+            throw new ParseException("Expected opening parenthesis", tokens.get(0).getIndex()); //TODO: correct index
 
-        if(match(Token.Type.IDENTIFIER)) {
+        if(!peek("DO") && match(Token.Type.IDENTIFIER)) {
             parameterList.add(tokens.get(-1).getLiteral());
             while(match(",")) {
                 if(!match(Token.Type.IDENTIFIER))
-                    throw new ParseException("Trailing comma", -1); //TODO: correct index
+                    throw new ParseException("Trailing comma", tokens.get(-1).toString().length() + tokens.get(-1).getIndex()); //TODO: correct index
                 else
                     parameterList.add(tokens.get(-1).getLiteral());
             }
         }
 
         if(!match(")"))
-            throw new ParseException("Expected closing parenthesis", -1); //TODO: correct index
+            throw new ParseException("Expected closing parenthesis", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
 
         if(!match("DO"))
-            throw new ParseException("Expected 'DO'", -1); //TODO: correct index
+            throw new ParseException("Expected 'DO'", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
 
         List<Ast.Statement> block = parseBlock();
 

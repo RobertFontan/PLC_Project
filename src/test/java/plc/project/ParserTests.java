@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.awt.event.MouseMotionAdapter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +48,30 @@ final class ParserTests {
                                 Arrays.asList()
                         )
                 ),
+                Arguments.of("Global - Mutable",
+                        Arrays.asList(
+                                new Token(Token.Type.IDENTIFIER, "VAR", 0),
+                                new Token(Token.Type.IDENTIFIER, "name", 4),
+                                new Token(Token.Type.OPERATOR, "=", 9),
+                                new Token(Token.Type.IDENTIFIER, "expr", 11),
+                                new Token(Token.Type.OPERATOR, ";", 15)
+                        ),
+                        new Ast.Source(
+                                Arrays.asList(new Ast.Global("name", true, Optional.of(new Ast.Expression.Access(Optional.empty(), "expr")))),
+                                Arrays.asList()
+                        )
+                ),
+                Arguments.of("Global - Mutable w/o Expression",
+                        Arrays.asList(
+                                new Token(Token.Type.IDENTIFIER, "VAR", 0),
+                                new Token(Token.Type.IDENTIFIER, "name", 4),
+                                new Token(Token.Type.OPERATOR, ";", 8)
+                        ),
+                        new Ast.Source(
+                                Arrays.asList(new Ast.Global("name", true, Optional.empty())),
+                                Arrays.asList()
+                        )
+                ),
                 Arguments.of("Function",
                         Arrays.asList(
                                 //FUN name() DO stmt; END
@@ -65,11 +90,63 @@ final class ParserTests {
                                         new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "stmt"))
                                 )))
                         )
+                ),
+                Arguments.of("Function - No function name",
+                        Arrays.asList(
+                                //FUN name() DO stmt; END
+                                new Token(Token.Type.IDENTIFIER, "FUN", 0),
+                                new Token(Token.Type.OPERATOR, "(", 4),
+                                new Token(Token.Type.OPERATOR, ")", 5),
+                                new Token(Token.Type.IDENTIFIER, "DO", 7),
+                                new Token(Token.Type.IDENTIFIER, "stmt", 10),
+                                new Token(Token.Type.OPERATOR, ";", 14),
+                                new Token(Token.Type.IDENTIFIER, "END", 16)
+                        ),
+                        new Ast.Source(
+                                Arrays.asList(),
+                                Arrays.asList(new Ast.Function("name", Arrays.asList(), Arrays.asList(
+                                        new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "stmt"))
+                                )))
+                        )
+                ),
+                Arguments.of("Function - No 'DO'",
+                        Arrays.asList(
+                                //FUN name() DO stmt; END
+                                new Token(Token.Type.IDENTIFIER, "FUN", 0),
+                                new Token(Token.Type.IDENTIFIER, "name", 4),
+                                new Token(Token.Type.OPERATOR, "(", 8),
+                                new Token(Token.Type.OPERATOR, ")", 9),
+                                new Token(Token.Type.IDENTIFIER, "stmt", 11),
+                                new Token(Token.Type.OPERATOR, ";", 15),
+                                new Token(Token.Type.IDENTIFIER, "END", 17)
+                        ),
+                        new Ast.Source(
+                                Arrays.asList(),
+                                Arrays.asList(new Ast.Function("name", Arrays.asList(), Arrays.asList(
+                                        new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "stmt"))
+                                )))
+                        )
+                ),
+                Arguments.of("Function - No closing parenthesis",
+                        Arrays.asList(
+                                //FUN name() DO stmt; END
+                                new Token(Token.Type.IDENTIFIER, "FUN", 0),
+                                new Token(Token.Type.IDENTIFIER, "name", 4),
+                                new Token(Token.Type.OPERATOR, "(", 8),
+                                //new Token(Token.Type.OPERATOR, ")", 9),
+                                new Token(Token.Type.IDENTIFIER, "DO", 9),
+                                new Token(Token.Type.IDENTIFIER, "stmt", 12),
+                                new Token(Token.Type.OPERATOR, ";", 16),
+                                new Token(Token.Type.IDENTIFIER, "END", 18)
+                        ),
+                        new Ast.Source(
+                                Arrays.asList(),
+                                Arrays.asList(new Ast.Function("name", Arrays.asList(), Arrays.asList(
+                                        new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "stmt"))
+                                )))
+                        )
                 )
-                //LIST list = [expr];
-                /*
-                ,
-                Arguments.of("List",
+                /*Arguments.of("List",
                         Arrays.asList(
                                 new Token(Token.Type.IDENTIFIER, "LIST", 0),
                                 new Token(Token.Type.IDENTIFIER, "list", 5),
@@ -80,14 +157,12 @@ final class ParserTests {
                                 new Token(Token.Type.OPERATOR, ";", 18)
 
 
-                                ),
+                        ),
                         new Ast.Source(
-                                Arrays.asList(),
-                                Arrays.asList(new List))
+                                Arrays.asList(new Ast.Global("list", false, Optional.of(new Ast.Expression.PlcList()))),
+                                Arrays.asList()
                         )
-                )
-                */
-
+                )*/
         );
     }
     @ParameterizedTest
