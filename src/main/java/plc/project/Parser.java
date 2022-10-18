@@ -66,7 +66,7 @@ public final class Parser {
             if(match(";"))
                 return global;
         }
-        throw new ParseException("No semicolon: ", tokens.get(-1).getLiteral().length()-1);
+        throw new ParseException("No semicolon: ", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
     }
 
     /**
@@ -78,13 +78,13 @@ public final class Parser {
 
         match("LIST");
         if(!match(Token.Type.IDENTIFIER))
-            throw new ParseException("Excpected Identifier", tokens.get(-1).getIndex()); // TODO: Handle the actual index (char index pos.)
+            throw new ParseException("Excpected Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
         String name = tokens.get(-1).getLiteral();
 
         if(!match("="))
-            throw new ParseException("Expected '='", -1);
+            throw new ParseException("Expected '='", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
         else if(!match("["))
-            throw new ParseException("Expected '['", -1);
+            throw new ParseException("Expected '['", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
 
         List<Ast.Expression> expr = new ArrayList<Ast.Expression>();
         expr.add(parseExpression());
@@ -92,7 +92,7 @@ public final class Parser {
         while(!peek("]")) {
             if(match(",")) {
                 if(peek("]"))
-                    throw new ParseException("Trailing comma", tokens.get(-1).getIndex()); //TODO: Fix index
+                    throw new ParseException("Trailing comma", tokens.get(-1).getIndex());
                 expr.add(parseExpression());
             }
         }
@@ -109,7 +109,7 @@ public final class Parser {
         match("VAR");
 
         if(!match(Token.Type.IDENTIFIER))
-            throw new ParseException("MISSING IDENTIFIER", tokens.get(-1).getIndex()); // TODO: FIX INDEX
+            throw new ParseException("MISSING IDENTIFIER", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
         String name = tokens.get(-1).getLiteral();
 
         if(match("=")) {
@@ -128,10 +128,10 @@ public final class Parser {
         //immutable ::= 'VAL' identifier '=' expression
         match("VAL");
         if(!match(Token.Type.IDENTIFIER))
-            throw new ParseException("Expected Identifier", -1); //TODO: correct index
+            throw new ParseException("Expected Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
         String name = tokens.get(-1).getLiteral();
         if(!match("="))
-            throw new ParseException("Expected Operator '='", -1); //TODO: correct index
+            throw new ParseException("Expected Operator '='", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
         Ast.Expression expr = parseExpression();
         return new Ast.Global(name, false, Optional.of(expr));
     }
@@ -145,17 +145,17 @@ public final class Parser {
         List<String> parameterList = new ArrayList<String>();
         match("FUN");
         if(!match(Token.Type.IDENTIFIER))
-            throw new ParseException("Expected Identifier", tokens.get(0).getIndex()); //TODO: INDEX
+            throw new ParseException("Expected Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
         String functionName = tokens.get(-1).getLiteral();
 
         if(!match("("))
-            throw new ParseException("Expected opening parenthesis", tokens.get(0).getIndex()); //TODO: correct index
+            throw new ParseException("Expected opening parenthesis", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
 
         if(!peek("DO") && match(Token.Type.IDENTIFIER)) {
             parameterList.add(tokens.get(-1).getLiteral());
             while(match(",")) {
                 if(!match(Token.Type.IDENTIFIER))
-                    throw new ParseException("Trailing comma", tokens.get(-1).toString().length() + tokens.get(-1).getIndex()); //TODO: correct index
+                    throw new ParseException("Trailing comma", tokens.get(-1).getIndex());
                 else
                     parameterList.add(tokens.get(-1).getLiteral());
             }
@@ -217,13 +217,13 @@ public final class Parser {
                     match(";");
                     return new Ast.Statement.Assignment(expr, val);
                 } else {
-                    throw new ParseException("Missing semicolon", tokens.get(-1).getIndex());
+                    throw new ParseException("Missing semicolon", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
                 }
             } else {
                 if (match(";")) {
                     return new Ast.Statement.Expression(expr);
                 } else {
-                    throw new ParseException("Missing semicolon", tokens.get(-1).getIndex());
+                    throw new ParseException("Missing semicolon", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
                 }
             }
         }
@@ -245,17 +245,17 @@ public final class Parser {
             name = tokens.get(-1).getLiteral();
         }
         else
-            throw new ParseException("Missing Identifier" , tokens.get(0).getIndex());
+            throw new ParseException("Missing Identifier" , tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
         if(peek("=")){
             match("=");
             expr = parseExpression();
             if(!match(";"))
-                throw new ParseException("Missing Declarative Semicolon", tokens.get(0).getIndex());
+                throw new ParseException("Missing Declarative Semicolon", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
             return new Ast.Statement.Declaration(name, Optional.of(expr));
         }
 
         if(!match(";"))
-            throw new ParseException("Missing Declarative Semicolon", tokens.get(0).getIndex());
+            throw new ParseException("Missing Declarative Semicolon", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
 
         return new Ast.Statement.Declaration(name, Optional.empty());
     }
@@ -306,7 +306,7 @@ public final class Parser {
             cases.add(parseCaseStatement());
         }
         else
-            throw new ParseException("Expected Default at: " + tokens.get(0).getIndex(), tokens.get(0).getIndex());
+            throw new ParseException("Expected Default at: " + tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1, tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
 
         return new Ast.Statement.Switch(expr, cases);
     }
@@ -326,7 +326,7 @@ public final class Parser {
                 match(":");
                 statements = parseBlock();
             } else
-                throw new ParseException("Missing colon at: " + tokens.get(-1).getIndex(), tokens.get(-1).getIndex());
+                throw new ParseException("Missing colon at: " + tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length(), tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
             return new Ast.Statement.Case(Optional.of(expr),statements);
         }
         else if(match("DEFAULT")){
@@ -468,7 +468,7 @@ public final class Parser {
                     if(peek(",")) {
                         match(",");
                         if (peek(")")) {
-                            throw new ParseException("Trailing Comma at: " + (tokens.get(0).getIndex()), tokens.get(0).getIndex());
+                            throw new ParseException("Trailing Comma at: " + (tokens.get(-1).getIndex()), tokens.get(-1).getIndex());
                         }
                     }
                     expr.add(parseExpression());
