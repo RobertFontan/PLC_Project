@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.awt.event.MouseMotionAdapter;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -238,6 +239,7 @@ final class ParserTests {
                                 new Ast.Expression.Access(Optional.empty(), "value")
                         )
                 )
+
         );
     }
 
@@ -298,6 +300,33 @@ final class ParserTests {
                                 Arrays.asList(new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "stmt"))),
                                 Arrays.asList(new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "")))
                         )
+                ),
+                Arguments.of("Invalid DO",
+                        //IF expr THEN
+                        Arrays.asList(
+                                new Token(Token.Type.IDENTIFIER, "IF", 0),
+                                new Token(Token.Type.IDENTIFIER, "expr", 3),
+                                new Token(Token.Type.IDENTIFIER, "THEN", 8)
+                               // new Token(Token.Type.OPERATOR, ";", 12)
+                        ),
+                        new Ast.Statement.If(
+                                new Ast.Expression.Access(Optional.empty(), "expr"),
+                                Arrays.asList(new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), ""))),
+                                Arrays.asList(new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "")))
+                        )
+                ),
+                Arguments.of("Missing DO Part 2",
+                        //IF expr
+                        Arrays.asList(
+                                new Token(Token.Type.IDENTIFIER, "IF", 0),
+                                new Token(Token.Type.IDENTIFIER, "expr", 3)
+
+                        ),
+                        new Ast.Statement.If(
+                                new Ast.Expression.Access(Optional.empty(), "expr"),
+                                Arrays.asList(new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), ""))),
+                                Arrays.asList(new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "")))
+                        )
                 )
         );
     }
@@ -355,6 +384,20 @@ final class ParserTests {
                                 new Ast.Expression.Access(Optional.empty(), "expr"),
                                 Arrays.asList(new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "stmt")))
                         )
+                ),
+                Arguments.of("Missing End",
+                        //WHILE expr DO stmt;
+                        Arrays.asList(
+                                new Token(Token.Type.IDENTIFIER, "WHILE", 0),
+                                new Token(Token.Type.IDENTIFIER, "expr", 6),
+                                new Token(Token.Type.IDENTIFIER, "DO", 11),
+                                new Token(Token.Type.IDENTIFIER, "stmt", 14),
+                                new Token(Token.Type.OPERATOR, ";", 18)
+                        ),
+                        new Ast.Statement.While(
+                                new Ast.Expression.Access(Optional.empty(), "expr"),
+                                Arrays.asList(new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "stmt")))
+                        )
                 )
         );
     }
@@ -383,6 +426,37 @@ final class ParserTests {
                             Arrays.asList(new Ast.Statement.Case(Optional.empty(), Arrays.asList(new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "stmt")))))
                         )
                 )
+                /*
+
+
+                //SWITCH expr1 CASE expr2 : stmt1; DEFAULT stmt2; END
+                Arguments.of("Case Switch",
+                        Arrays.asList(
+                                new Token(Token.Type.IDENTIFIER, "SWITCH", 0),
+                                new Token(Token.Type.IDENTIFIER, "expr1", 7),
+                                new Token(Token.Type.IDENTIFIER, "CASE", 13),
+                                new Token(Token.Type.IDENTIFIER, "expr2", 18),
+                                new Token(Token.Type.OPERATOR, ":", 24),
+                                new Token(Token.Type.IDENTIFIER, "stmt1", 26),
+                                new Token(Token.Type.IDENTIFIER, ";", 18),
+                                new Token(Token.Type.OPERATOR, "DEFAULT", 24),
+                                new Token(Token.Type.IDENTIFIER, "stmt2", 32),
+                                new Token(Token.Type.OPERATOR, ";", 33),
+                                new Token(Token.Type.IDENTIFIER, "END", 35)
+                        ),
+                        new Ast.Statement.Switch(
+                                new Ast.Expression.Access(Optional.empty(), "expr1"),
+                                Arrays.asList(new Ast.Statement.Case(Optional.empty(), Arrays.asList(new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "stmt2")))))
+                        ),
+                        new Ast.Statement.Case(
+                                new Ast.Expression.Access(Optional.empty(), "expr2"),
+                                Arrays.asList(new Ast.Statement.Case(Optional.of(new Ast.Expression.Access(Optional.empty(), "expr2")), Arrays.asList(new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "stmt1" )))))
+
+                        )
+
+                )
+
+                 */
         );
     }
 

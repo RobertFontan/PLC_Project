@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="Attempt to fix the parseExpression index for different statements">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="fixed switch statement and added test case accordingly">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java" afterDir="false" />
@@ -69,7 +69,7 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
   }
 }</component>
-  <component name="RunManager" selected="Gradle.ParserTests.testSwitchStatement">
+  <component name="RunManager" selected="Gradle.ParserTests.testIfStatement">
     <configuration name="LexerTests" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -107,29 +107,6 @@
             <option value=":test" />
             <option value="--tests" />
             <option value="&quot;plc.project.ParserExpressionTests.testFunctionExpression&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="ParserExpressionTests.testGroupExpression" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;plc.project.ParserExpressionTests.testGroupExpression&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -231,22 +208,45 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="ParserTests.testWhileStatement" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;plc.project.ParserTests.testWhileStatement&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Gradle.LexerTests" />
       <item itemvalue="Gradle.ParserTests" />
+      <item itemvalue="Gradle.ParserTests.testWhileStatement" />
       <item itemvalue="Gradle.ParserTests.testFunctionExpression" />
       <item itemvalue="Gradle.ParserTests.testSwitchStatement" />
       <item itemvalue="Gradle.ParserExpressionTests.testFunctionExpression" />
-      <item itemvalue="Gradle.ParserExpressionTests.testGroupExpression" />
       <item itemvalue="Gradle.ParserTests.testIfStatement" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.ParserTests.testIfStatement" />
+        <item itemvalue="Gradle.ParserTests.testWhileStatement" />
         <item itemvalue="Gradle.ParserTests.testSwitchStatement" />
         <item itemvalue="Gradle.ParserTests.testFunctionExpression" />
         <item itemvalue="Gradle.ParserExpressionTests.testFunctionExpression" />
-        <item itemvalue="Gradle.ParserTests.testIfStatement" />
-        <item itemvalue="Gradle.ParserExpressionTests.testGroupExpression" />
       </list>
     </recent_temporary>
   </component>
@@ -292,6 +292,10 @@
       <workItem from="1665940618312" duration="1803000" />
       <workItem from="1666008318294" duration="2477000" />
       <workItem from="1666015021554" duration="648000" />
+      <workItem from="1666016917346" duration="661000" />
+      <workItem from="1666031347159" duration="2974000" />
+      <workItem from="1666052355033" duration="2848000" />
+      <workItem from="1666133078238" duration="5031000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -440,7 +444,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665885618619</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="fixed switch statement and added test case accordingly">
+      <created>1666017591382</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1666017591382</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -480,6 +491,7 @@
     <MESSAGE value="all statements done" />
     <MESSAGE value="switch statement finished" />
     <MESSAGE value="Attempt to fix the parseExpression index for different statements" />
-    <option name="LAST_COMMIT_MESSAGE" value="Attempt to fix the parseExpression index for different statements" />
+    <MESSAGE value="fixed switch statement and added test case accordingly" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed switch statement and added test case accordingly" />
   </component>
 </project>

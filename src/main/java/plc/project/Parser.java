@@ -1,7 +1,9 @@
 package plc.project;
 
+import java.awt.print.PrinterAbortException;
 import java.rmi.UnexpectedException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -179,9 +181,11 @@ public final class Parser {
     public List<Ast.Statement> parseBlock() throws ParseException {
 
             List<Ast.Statement> statements = new ArrayList<>();
-            while (!(match("END") || peek("ELSE") || peek("DEFAULT"))) {
-                statements.add(parseStatement());
-            }
+                while (!(match("END") || peek("ELSE") || peek("DEFAULT"))) {
+                    statements.add(parseStatement());
+                }
+
+
             //statements.add()
             return statements;
 
@@ -272,13 +276,20 @@ public final class Parser {
         List<Ast.Statement> elseStates = new ArrayList<>();
 
         Ast.Expression expr = parseExpression();
-
-        if(peek("DO")) {
-            match("DO");
-            thenStates = parseBlock();
+        int stringLeng = expr.getClass().toString().length() - 34;
+        //tokens.get(0).getLiteral().length();
+        try {
+            if (!match("DO")) {
+                throw new ParseException("Expected DO at: " + tokens.get(0).getIndex(), tokens.get(0).getIndex());
+            } else {
+                //match("DO");
+                thenStates = parseBlock();
+            }
         }
-        else
-            throw new ParseException("Expected DO at: " + tokens.get(0).getIndex(), tokens.get(0).getIndex());
+        catch (ArrayIndexOutOfBoundsException e){
+            //System.out.print(stringLeng);
+            throw new ParseException("Expected Do at: " + (tokens.get(-1).getIndex() + stringLeng), tokens.get(-1).getIndex() + stringLeng);
+        }
 
         if(match("ELSE")){
             elseStates = parseBlock();
@@ -348,13 +359,17 @@ public final class Parser {
         List<Ast.Statement> states = new ArrayList<>();
 
         Ast.Expression expr = parseExpression();
-        if(peek("DO")){
-            match("DO");
-            System.out.println("Found Do");
-            states = parseBlock();
+        try {
+            if (peek("DO")) {
+                match("DO");
+                System.out.println("Found Do");
+                states = parseBlock();
+            } else
+                throw new ParseException("Expected DO at: " + tokens.get(-1).getIndex(), tokens.get(-1).getIndex());
         }
-        else
-            throw new ParseException("Expected DO at: " + tokens.get(-1).getIndex(), tokens.get(-1).getIndex());
+        catch(ArrayIndexOutOfBoundsException e){
+            throw new ParseException("Expected End at: " + (tokens.get(-1).getIndex() + 1), (tokens.get(-1).getIndex() + 1));
+        }
         //List<Ast.Statement> statements = new ArrayList<>();
 
 
