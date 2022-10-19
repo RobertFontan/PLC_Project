@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="fixed switch statement and added test case accordingly">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="added fixes to array out of bounds exceptions">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +67,7 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
   }
 }</component>
-  <component name="RunManager" selected="Gradle.ParserTests.testIfStatement">
+  <component name="RunManager" selected="Gradle.ParserTests">
     <configuration name="LexerTests" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -295,7 +293,7 @@
       <workItem from="1666016917346" duration="661000" />
       <workItem from="1666031347159" duration="2974000" />
       <workItem from="1666052355033" duration="2848000" />
-      <workItem from="1666133078238" duration="5031000" />
+      <workItem from="1666133078238" duration="6245000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -451,7 +449,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666017591382</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="added fixes to array out of bounds exceptions">
+      <created>1666141807447</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1666141807447</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -492,6 +497,7 @@
     <MESSAGE value="switch statement finished" />
     <MESSAGE value="Attempt to fix the parseExpression index for different statements" />
     <MESSAGE value="fixed switch statement and added test case accordingly" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed switch statement and added test case accordingly" />
+    <MESSAGE value="added fixes to array out of bounds exceptions" />
+    <option name="LAST_COMMIT_MESSAGE" value="added fixes to array out of bounds exceptions" />
   </component>
 </project>
