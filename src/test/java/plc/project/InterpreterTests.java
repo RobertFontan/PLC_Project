@@ -440,7 +440,7 @@ final class InterpreterTests {
     }
 
     private static Scope test(Ast ast, Object expected, Scope scope) {
-        AdminInterpreter interpreter = new AdminInterpreter(scope);
+        Interpreter interpreter = new Interpreter(scope);
         if (expected != null) {
             Assertions.assertEquals(expected, interpreter.visit(ast).getValue());
         } else {
