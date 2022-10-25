@@ -439,6 +439,31 @@ final class InterpreterTests {
         test(ast, expected, new Scope(null));
     }
 
+    @Test
+    void testLogarithmExpressionStatement() {   //FROM LECTURE
+        Scope scope = new Scope(null);
+
+        test(new Ast.Expression.Function(
+                "logarithm",
+                Arrays.asList(new Ast.Expression.Literal(BigDecimal.valueOf(Math.E)))
+                    ),
+                BigDecimal.valueOf(1.0),
+                scope
+        );
+
+    }
+    @Test
+    void testLogarithmExpressionError() {
+        Scope scope = new Scope(null);
+        test(new Ast.Expression.Function(
+                        "logarithm",
+                        Arrays.asList(new Ast.Expression.Literal(BigInteger.valueOf(3)))
+                ),
+                null,
+                scope
+        );
+    }
+
     private static Scope test(Ast ast, Object expected, Scope scope) {
         Interpreter interpreter = new Interpreter(scope);
         if (expected != null) {

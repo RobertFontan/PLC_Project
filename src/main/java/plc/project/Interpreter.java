@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
@@ -16,6 +17,23 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
         scope.defineFunction("print", 1, args -> {
             System.out.println(args.get(0).getValue());
             return Environment.NIL;
+        });
+
+        scope.defineFunction("logarithm", 1, args -> {
+            if( !( args.get(0).getValue() instanceof BigDecimal ) ) {
+                throw new RuntimeException("Expected a BigDecimal, received " +
+                        args.get(0).getValue().getClass().getName() + ".");
+            }
+
+            BigDecimal bd1 = (BigDecimal) args.get(0).getValue();
+
+            BigDecimal bd2 = requireType(BigDecimal.class, Environment.create(args.get(0).getValue()));
+
+            BigDecimal result = BigDecimal.valueOf(Math.log(bd2.doubleValue()));
+
+            return Environment.create(result);
+
+
         });
     }
 
@@ -45,7 +63,17 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Declaration ast) {
-        throw new UnsupportedOperationException(); //TODO (in lecture)
+        Optional optional = ast.getValue();
+        Boolean present = optional.isPresent();
+        if( present ) {
+            Ast.Expression expr = (Ast.Expression) optional.get();
+
+            scope.defineVariable(ast.getName(), true, visit(expr));
+        }
+        else {
+            scope.defineVariable(ast.getName(), true, Environment.NIL);
+        }
+        throw new UnsupportedOperationException(); //TODO (in lecture) DID HE FINISH THIS METHOD???
     }
 
     @Override
