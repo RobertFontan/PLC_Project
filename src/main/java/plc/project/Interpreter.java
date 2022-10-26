@@ -73,7 +73,7 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
         else {
             scope.defineVariable(ast.getName(), true, Environment.NIL);
         }
-        throw new UnsupportedOperationException(); //TODO (in lecture) DID HE FINISH THIS METHOD???
+        return scope.lookupVariable(ast.getName()).getValue();
     }
 
     @Override
