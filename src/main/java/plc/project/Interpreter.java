@@ -74,7 +74,7 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             scope.defineVariable(ast.getName(), true, Environment.NIL);
         }
         return scope.lookupVariable(ast.getName()).getValue();
-    }
+    } //TODO
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Assignment ast) {
@@ -125,11 +125,32 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Access ast) {
-        throw new UnsupportedOperationException(); //TODO
+        Environment.PlcObject temp;
+        if (ast.getOffset().isPresent())
+            return visit(ast.getOffset().get());
+
+        return scope.lookupVariable(ast.getName()).getValue();
+
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Function ast) {
+        /*
+        List<Environment.PlcObject> argList = new ArrayList<>();
+        scope = new Scope(scope);
+        for (Ast.Expression argument : ast.getArguments()){
+            argList.add(visit(argument));
+        }
+        if(ast){
+            Environment.PlcObject rec = visit()
+        }
+        else {
+            Environment.PlcObject temp = scope.lookupFunction(ast.getName(),argList.size()).invoke(argList);
+            return temp;
+        }
+        */
+
         throw new UnsupportedOperationException(); //TODO
     }
 

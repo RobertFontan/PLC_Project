@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="added fixes to array out of bounds exceptions">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,19 +56,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/rober/Documents/Code/Programming Language Concepts/PLC_Project/src/test/java/plc/project/ParserExpressionTests.java&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/rober/Documents/Code/Programming Language Concepts/PLC_Project/src/main/java/plc/project/Ast.java",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)"
   }
-}</component>
-  <component name="RunManager" selected="Gradle.ParserTests">
+}]]></component>
+  <component name="RunManager" selected="Gradle.InterpreterTests">
+    <configuration name="InterpreterTests" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;plc.project.InterpreterTests&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="LexerTests" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -82,29 +106,6 @@
             <option value=":test" />
             <option value="--tests" />
             <option value="&quot;plc.project.LexerTests&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="ParserExpressionTests.testFunctionExpression" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;plc.project.ParserExpressionTests.testFunctionExpression&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -232,19 +233,19 @@
     <list>
       <item itemvalue="Gradle.LexerTests" />
       <item itemvalue="Gradle.ParserTests" />
+      <item itemvalue="Gradle.InterpreterTests" />
       <item itemvalue="Gradle.ParserTests.testWhileStatement" />
       <item itemvalue="Gradle.ParserTests.testFunctionExpression" />
       <item itemvalue="Gradle.ParserTests.testSwitchStatement" />
-      <item itemvalue="Gradle.ParserExpressionTests.testFunctionExpression" />
       <item itemvalue="Gradle.ParserTests.testIfStatement" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.InterpreterTests" />
         <item itemvalue="Gradle.ParserTests.testIfStatement" />
         <item itemvalue="Gradle.ParserTests.testWhileStatement" />
         <item itemvalue="Gradle.ParserTests.testSwitchStatement" />
         <item itemvalue="Gradle.ParserTests.testFunctionExpression" />
-        <item itemvalue="Gradle.ParserExpressionTests.testFunctionExpression" />
       </list>
     </recent_temporary>
   </component>
@@ -294,6 +295,8 @@
       <workItem from="1666031347159" duration="2974000" />
       <workItem from="1666052355033" duration="2848000" />
       <workItem from="1666133078238" duration="6245000" />
+      <workItem from="1666744396873" duration="2411000" />
+      <workItem from="1666810456926" duration="3787000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
