@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -136,31 +137,39 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Function ast) {
-        /*
-        List<Environment.PlcObject> argList = new ArrayList<>();
-        scope = new Scope(scope);
-        for (Ast.Expression argument : ast.getArguments()){
-            argList.add(visit(argument));
-        }
-        if(ast){
-            Environment.PlcObject rec = visit()
-        }
-        else {
-            Environment.PlcObject temp = scope.lookupFunction(ast.getName(),argList.size()).invoke(argList);
-            return temp;
-        }
-        */
 
-        throw new UnsupportedOperationException(); //TODO
+        List<Environment.PlcObject> arguments = new ArrayList<>();
+        scope = new Scope(scope);
+        for(int i = 0; i < ast.getArguments().size() ;i++){
+            arguments.add(visit(ast.getArguments().get(i)));
+        }
+
+        Environment.Function function = scope.lookupFunction(ast.getName(), ast.getArguments().size());
+        return function.invoke(arguments);
+
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.PlcList ast) {
-        throw new UnsupportedOperationException(); //TODO
+        //returns the list as a plcObject
+       // List<Environment.PlcObject> list = new ArrayList<>();
+        List<Ast.Expression> plcList = ast.getValues();
+        for(int i = 0; i < ast.getValues().size() ;i++){
+           plcList.add(ast.getValues().get(i));
+        }
+/*
+        Environment.PlcObject list
+        return list;
+*/
+
+
+       throw new UnsupportedOperationException(); //TODO
+
     }
 
-    /**
-     * Helper function to ensure an object is of the appropriate type.
+    /*
+      Helper function to ensure an object is of the appropriate type.
      */
     private static <T> T requireType(Class<T> type, Environment.PlcObject object) {
         if (type.isInstance(object.getValue())) {

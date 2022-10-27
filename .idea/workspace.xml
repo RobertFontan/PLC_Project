@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="added fixes to array out of bounds exceptions">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="access expression passing test case">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" afterDir="false" />
     </list>
@@ -61,7 +61,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/rober/Documents/Code/Programming Language Concepts/PLC_Project/src/main/java/plc/project/Ast.java",
+    "last_opened_file_path": "C:/Users/rober/Documents/Code/Programming Language Concepts/PLC_Project/src/main/java/plc/project/Scope.java",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -296,7 +296,8 @@
       <workItem from="1666052355033" duration="2848000" />
       <workItem from="1666133078238" duration="6245000" />
       <workItem from="1666744396873" duration="2411000" />
-      <workItem from="1666810456926" duration="3787000" />
+      <workItem from="1666810456926" duration="4549000" />
+      <workItem from="1666827158147" duration="2294000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -459,7 +460,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666141807447</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="access expression passing test case">
+      <created>1666814415719</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1666814415719</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -501,6 +509,7 @@
     <MESSAGE value="Attempt to fix the parseExpression index for different statements" />
     <MESSAGE value="fixed switch statement and added test case accordingly" />
     <MESSAGE value="added fixes to array out of bounds exceptions" />
-    <option name="LAST_COMMIT_MESSAGE" value="added fixes to array out of bounds exceptions" />
+    <MESSAGE value="access expression passing test case" />
+    <option name="LAST_COMMIT_MESSAGE" value="access expression passing test case" />
   </component>
 </project>
