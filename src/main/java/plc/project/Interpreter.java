@@ -2,10 +2,12 @@ package plc.project;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -121,7 +123,119 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Binary ast) {
-        throw new UnsupportedOperationException(); //TODO
+        Environment.PlcObject left = visit(ast.getLeft());
+        Environment.PlcObject right = visit(ast.getRight());
+
+        if(Objects.equals(ast.getOperator(), "&&")) return Environment.create(left.getValue().equals(right.getValue())); //TODO: INCORRECT IMPLEMENTATION OF &&
+
+        if(Objects.equals(ast.getOperator(),"||")) {    //TODO: IMPLEMENT ||
+            throw new UnsupportedOperationException();
+        }
+
+        if(Objects.equals(ast.getOperator(), "<") || Objects.equals(ast.getOperator(), ">") || Objects.equals(ast.getOperator(), "<=") || Objects.equals(ast.getOperator(), ">=")) {
+            if(left.getValue() instanceof BigInteger) {
+                if(!(right.getValue() instanceof BigInteger))
+                    throw new ArithmeticException("Non matching types");
+
+                BigInteger one = (BigInteger) left.getValue();
+                BigInteger two = (BigInteger) right.getValue();
+
+                switch (ast.getOperator()) {
+                    case "<":
+                        if (one.compareTo(two) == -1) return Environment.create(true);
+                        else return Environment.create(false);
+                    case ">":
+                        if (one.compareTo(two) == 1) return Environment.create(true);
+                        else return Environment.create(false);
+                    case "<=":
+                        if (one.compareTo(two) == 0 || one.compareTo(two) == -1) return Environment.create(true);
+                        else return Environment.create(false);
+                    case">=":
+                        System.out.println(one.compareTo(two));
+                        System.out.println(one + "\t" + two);
+                        if (one.compareTo(two) == 0 || one.compareTo(two) == 1) return Environment.create(true);
+                        else return Environment.create(false);
+                }
+            }
+            else if(left.getValue() instanceof BigDecimal) {
+                if(!(right.getValue() instanceof BigDecimal))
+                    throw new ArithmeticException("Non matching types");
+
+                BigDecimal one = (BigDecimal) left.getValue();
+                BigDecimal two = (BigDecimal) right.getValue();
+
+                if (one.compareTo(two) == -1) return Environment.create(true);
+                else return Environment.create(false);
+            }
+            throw new ArithmeticException("Non valid types");
+        }
+
+        if(Objects.equals(ast.getOperator(), "+")) {
+            if(left.getValue() instanceof String) {
+                if(!(right.getValue() instanceof String))
+                    throw new ArithmeticException("Not matching types");
+
+                String one = (String) left.getValue();
+                String two = (String) right.getValue();
+
+                return Environment.create(one + two);
+            }
+            else if(left.getValue() instanceof BigInteger) {
+                if(!(right.getValue() instanceof BigInteger))
+                    throw new ArithmeticException("Not matching types");
+
+                BigInteger one = (BigInteger) left.getValue();
+                BigInteger two = (BigInteger) right.getValue();
+
+                return Environment.create(one.add(two));
+            }
+            else if(left.getValue() instanceof BigDecimal) {
+                if(!(right.getValue() instanceof BigDecimal))
+                    throw new ArithmeticException("Not matching types");
+
+                BigDecimal one = (BigDecimal) left.getValue();
+                BigDecimal two = (BigDecimal) right.getValue();
+
+                return Environment.create(one.add(two));
+            }
+            throw new ArithmeticException("Not using valid types");
+        }
+
+        if(Objects.equals(ast.getOperator(), "/")) {
+            if(left.getValue() instanceof BigDecimal) {
+                if(!(right.getValue() instanceof BigDecimal))
+                    throw new ArithmeticException("Divisor and Dividend types don't match.");
+
+                BigDecimal one = (BigDecimal) left.getValue();  // Converting each object to bigDecimal for division
+                BigDecimal two = (BigDecimal) right.getValue();
+
+                return Environment.create(one.divide(two, RoundingMode.HALF_EVEN)); // Returning division of both sides with rounding
+            }
+            else {
+                if(!(right.getValue() instanceof BigInteger))
+                    throw new ArithmeticException("Divisor and Dividend types don't match.");
+
+                BigInteger one = (BigInteger) left.getValue();  // Converting each object to bigInteger for division
+                BigInteger two = (BigInteger) right.getValue();
+
+                if(two.equals(BigInteger.ZERO))
+                    throw new ArithmeticException("Error: Division by zero.");
+
+                return Environment.create(one.divide(two)); // Returning division of both sides with rounding
+            }
+
+
+        }
+
+        if(Objects.equals(ast.getOperator(), "==")) {
+            return Environment.create(left.getValue().equals(right.getValue()));
+        }
+
+        if(Objects.equals(ast.getOperator(), "!=")) {
+            return Environment.create(!(left.getValue().equals(right.getValue())));
+        }
+
+        throw new UnsupportedOperationException();
     }
 
     @Override

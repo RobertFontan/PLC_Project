@@ -323,6 +323,14 @@ final class InterpreterTests {
                         ),
                         false
                 ),
+                // TRUE && TRUE
+                Arguments.of("And",
+                        new Ast.Expression.Binary("&&",
+                                new Ast.Expression.Literal(true),
+                                new Ast.Expression.Literal(true)
+                        ),
+                        true
+                ),
                 // TRUE || undefined
                 Arguments.of("Or (Short Circuit)",
                         new Ast.Expression.Binary("||",
@@ -339,6 +347,30 @@ final class InterpreterTests {
                         ),
                         true
                 ),
+                // 1 > 10
+                Arguments.of("Greater Than",
+                        new Ast.Expression.Binary(">",
+                                new Ast.Expression.Literal(BigInteger.ONE),
+                                new Ast.Expression.Literal(BigInteger.TEN)
+                        ),
+                        false
+                ),
+                // 9 <= 10
+                Arguments.of("Less Than/Equal to",
+                        new Ast.Expression.Binary("<=",
+                                new Ast.Expression.Literal(BigInteger.valueOf(9)),
+                                new Ast.Expression.Literal(BigInteger.TEN)
+                        ),
+                        true
+                ),
+                // 10 >= 10
+                Arguments.of("Greater Than/Equal to",
+                        new Ast.Expression.Binary(">=",
+                                new Ast.Expression.Literal(BigInteger.TEN),
+                                new Ast.Expression.Literal(BigInteger.TEN)
+                        ),
+                        true
+                ),
                 // 1 == 10
                 Arguments.of("Equal",
                         new Ast.Expression.Binary("==",
@@ -346,6 +378,12 @@ final class InterpreterTests {
                                 new Ast.Expression.Literal(BigInteger.TEN)
                         ),
                         false
+                ),
+                Arguments.of("Not Equals",
+                        new Ast.Expression.Binary("!=",
+                                new Ast.Expression.Literal(BigInteger.ONE),
+                                new Ast.Expression.Literal(BigInteger.TEN)),
+                        true
                 ),
                 // "a" + "b"
                 Arguments.of("Concatenation",
@@ -364,6 +402,22 @@ final class InterpreterTests {
                         BigInteger.valueOf(11)
                 ),
                 // 1.2 / 3.4
+                Arguments.of("Division",
+                        new Ast.Expression.Binary("/",
+                                new Ast.Expression.Literal(new BigDecimal("1.2")),
+                                new Ast.Expression.Literal(new BigDecimal("3.4"))
+                        ),
+                        new BigDecimal("0.4")
+                ),
+                // 6 / 2
+                Arguments.of("Division",
+                        new Ast.Expression.Binary("/",
+                                new Ast.Expression.Literal(new BigInteger("6")),
+                                new Ast.Expression.Literal(new BigInteger("2"))
+                        ),
+                        new BigInteger("3")
+                ),
+                // 1.2 / 2
                 Arguments.of("Division",
                         new Ast.Expression.Binary("/",
                                 new Ast.Expression.Literal(new BigDecimal("1.2")),
