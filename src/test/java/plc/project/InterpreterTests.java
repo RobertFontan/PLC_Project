@@ -323,6 +323,14 @@ final class InterpreterTests {
                         ),
                         false
                 ),
+                // FALSE && FALSE
+                Arguments.of("And",
+                        new Ast.Expression.Binary("&&",
+                                new Ast.Expression.Literal(false),
+                                new Ast.Expression.Literal(false)
+                        ),
+                        true
+                ),
                 // TRUE && TRUE
                 Arguments.of("And",
                         new Ast.Expression.Binary("&&",
@@ -336,6 +344,14 @@ final class InterpreterTests {
                         new Ast.Expression.Binary("||",
                                 new Ast.Expression.Literal(true),
                                 new Ast.Expression.Access(Optional.empty(), "undefined")
+                        ),
+                        true
+                ),
+                // TRUE || FALSE
+                Arguments.of("Or",
+                        new Ast.Expression.Binary("||",
+                                new Ast.Expression.Literal(true),
+                                new Ast.Expression.Literal(false)
                         ),
                         true
                 ),

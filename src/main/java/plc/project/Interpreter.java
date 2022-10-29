@@ -81,7 +81,14 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Assignment ast) {
-        throw new UnsupportedOperationException(); //TODO
+        if(ast.getReceiver() instanceof Ast.Expression.Access) {    //TODO Still need to handle an offset: list[5]
+           String name = ((Ast.Expression.Access)ast.getReceiver()).getName();
+
+           scope.lookupVariable(name).setValue(visit(ast.getValue()));
+           return Environment.NIL;
+        }
+        else
+            throw new ArithmeticException("Receiver is not of type: Ast.Expression.Access");
     }
 
     @Override
@@ -118,7 +125,7 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Group ast) {
-        throw new UnsupportedOperationException(); //TODO
+        return visit(ast.getExpression());
     }
 
     @Override
@@ -126,9 +133,28 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
         Environment.PlcObject left = visit(ast.getLeft());
         Environment.PlcObject right = visit(ast.getRight());
 
-        if(Objects.equals(ast.getOperator(), "&&")) return Environment.create(left.getValue().equals(right.getValue())); //TODO: INCORRECT IMPLEMENTATION OF &&
+        if(Objects.equals(ast.getOperator(), "&&")) {
+            if(left.getValue() instanceof Boolean) {
+                if(!(right.getValue() instanceof Boolean)) {
+                    throw new ArithmeticException("Both types must be boolean");
+                }
 
-        if(Objects.equals(ast.getOperator(),"||")) {    //TODO: IMPLEMENT ||
+                if((Boolean)left.getValue() == (Boolean)right.getValue()) {
+                    return Environment.create(true);
+                }
+                else return Environment.create(false);
+            }
+            throw new ArithmeticException("Left is not a boolean");
+        }
+
+        if(Objects.equals(ast.getOperator(),"||")) {    //TODO FIX UNDEFINED CASE
+            if(left.getValue() instanceof Boolean) {
+                if((Boolean) left.getValue())
+                    return Environment.create((Boolean) left.getValue());
+                else if (right.getValue() instanceof Boolean) {
+                    return Environment.create((Boolean) right.getValue());
+                }
+            }
             throw new UnsupportedOperationException();
         }
 
