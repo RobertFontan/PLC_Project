@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="access expression passing test case">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="expression.function passed test case">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" afterDir="false" />
     </list>
@@ -56,18 +56,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/rober/Documents/Code/Programming Language Concepts/PLC_Project/src/main/java/plc/project/Scope.java",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/rober/Documents/Code/Programming Language Concepts/PLC_Project/src/main/java/plc/project/Ast.java&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Gradle.InterpreterTests">
     <configuration name="InterpreterTests" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
@@ -297,7 +297,12 @@
       <workItem from="1666133078238" duration="6245000" />
       <workItem from="1666744396873" duration="2411000" />
       <workItem from="1666810456926" duration="4549000" />
-      <workItem from="1666827158147" duration="2294000" />
+      <workItem from="1666827158147" duration="2441000" />
+      <workItem from="1666840411859" duration="52000" />
+      <workItem from="1666897335840" duration="2366000" />
+      <workItem from="1666900308660" duration="108000" />
+      <workItem from="1666906537402" duration="1194000" />
+      <workItem from="1667074512165" duration="924000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -467,7 +472,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666814415719</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="expression.function passed test case">
+      <created>1666829505255</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1666829505255</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -485,7 +497,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added the peek/match methods" />
     <MESSAGE value="Added Params:5.8.2 to testImplementation dependencies" />
     <MESSAGE value="Added LexIdentifier()" />
     <MESSAGE value="added lexString, lexEscape, lexOperator" />
@@ -510,6 +521,7 @@
     <MESSAGE value="fixed switch statement and added test case accordingly" />
     <MESSAGE value="added fixes to array out of bounds exceptions" />
     <MESSAGE value="access expression passing test case" />
-    <option name="LAST_COMMIT_MESSAGE" value="access expression passing test case" />
+    <MESSAGE value="expression.function passed test case" />
+    <option name="LAST_COMMIT_MESSAGE" value="expression.function passed test case" />
   </component>
 </project>

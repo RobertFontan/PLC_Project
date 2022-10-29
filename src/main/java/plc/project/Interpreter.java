@@ -1,5 +1,6 @@
 package plc.project;
 
+import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -61,7 +62,9 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Expression ast) {
-        throw new UnsupportedOperationException(); //TODO
+        visit(ast.getExpression());
+        return Environment.NIL;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
@@ -113,7 +116,9 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Return ast) {
-        throw new UnsupportedOperationException(); //TODO
+        throw new Return(visit(ast.getValue()));
+
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
@@ -266,11 +271,18 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Access ast) {
-        Environment.PlcObject temp;
+        Environment.PlcObject temp = visit(ast.getOffset().get());
         if (ast.getOffset().isPresent())
             return visit(ast.getOffset().get());
 
         return scope.lookupVariable(ast.getName()).getValue();
+
+
+        // update the access expressions
+
+
+        //return scope.defineVariable();
+
 
         //throw new UnsupportedOperationException(); //TODO
     }
@@ -293,7 +305,7 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
     @Override
     public Environment.PlcObject visit(Ast.Expression.PlcList ast) {
         //returns the list as a plcObject
-       // List<Environment.PlcObject> list = new ArrayList<>();
+
         List<Ast.Expression> plcList = ast.getValues();
         for(int i = 0; i < ast.getValues().size() ;i++){
            plcList.add(ast.getValues().get(i));
