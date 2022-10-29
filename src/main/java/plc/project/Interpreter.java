@@ -277,13 +277,6 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
         return scope.lookupVariable(ast.getName()).getValue();
 
-
-        // update the access expressions
-
-
-        //return scope.defineVariable();
-
-
         //throw new UnsupportedOperationException(); //TODO
     }
 
@@ -306,17 +299,20 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
     public Environment.PlcObject visit(Ast.Expression.PlcList ast) {
         //returns the list as a plcObject
 
-        List<Ast.Expression> plcList = ast.getValues();
-        for(int i = 0; i < ast.getValues().size() ;i++){
-           plcList.add(ast.getValues().get(i));
+        List<Object> list = new ArrayList<>();
+
+        for(int i =0; i < ast.getValues().size();i++){
+            list.add(visit(ast.getValues().get(i)).getValue());
         }
 /*
-        Environment.PlcObject list
-        return list;
-*/
+for(Ast.Expression x: ast.getValues()){
+            list.add(visit(x).getValue());
+        }
+ */
 
 
-       throw new UnsupportedOperationException(); //TODO
+        return Environment.create(list);
+      // throw new UnsupportedOperationException(); //TODO
 
     }
 

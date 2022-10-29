@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="expression.function passed test case">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="return and expression statement">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" afterDir="false" />
     </list>
@@ -302,7 +302,7 @@
       <workItem from="1666897335840" duration="2366000" />
       <workItem from="1666900308660" duration="108000" />
       <workItem from="1666906537402" duration="1194000" />
-      <workItem from="1667074512165" duration="924000" />
+      <workItem from="1667074512165" duration="5261000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -479,7 +479,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666829505255</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="return and expression statement">
+      <created>1667075498180</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1667075498180</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -497,7 +504,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added Params:5.8.2 to testImplementation dependencies" />
     <MESSAGE value="Added LexIdentifier()" />
     <MESSAGE value="added lexString, lexEscape, lexOperator" />
     <MESSAGE value="fixed lexString, lexEscape" />
@@ -522,6 +528,7 @@
     <MESSAGE value="added fixes to array out of bounds exceptions" />
     <MESSAGE value="access expression passing test case" />
     <MESSAGE value="expression.function passed test case" />
-    <option name="LAST_COMMIT_MESSAGE" value="expression.function passed test case" />
+    <MESSAGE value="return and expression statement" />
+    <option name="LAST_COMMIT_MESSAGE" value="return and expression statement" />
   </component>
 </project>
