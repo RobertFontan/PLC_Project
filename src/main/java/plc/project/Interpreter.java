@@ -1,5 +1,6 @@
 package plc.project;
 
+import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -61,7 +62,9 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Expression ast) {
-        throw new UnsupportedOperationException(); //TODO
+        visit(ast.getExpression());
+        return Environment.NIL;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
@@ -132,7 +135,9 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Return ast) {
-        throw new UnsupportedOperationException(); //TODO
+        throw new Return(visit(ast.getValue()));
+
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
@@ -285,7 +290,7 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Access ast) {
-        Environment.PlcObject temp;
+        Environment.PlcObject temp = visit(ast.getOffset().get());
         if (ast.getOffset().isPresent())
             return visit(ast.getOffset().get());
 
@@ -312,18 +317,21 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
     @Override
     public Environment.PlcObject visit(Ast.Expression.PlcList ast) {
         //returns the list as a plcObject
-       // List<Environment.PlcObject> list = new ArrayList<>();
-        List<Ast.Expression> plcList = ast.getValues();
-        for(int i = 0; i < ast.getValues().size() ;i++){
-           plcList.add(ast.getValues().get(i));
+
+        List<Object> list = new ArrayList<>();
+
+        for(int i =0; i < ast.getValues().size();i++){
+            list.add(visit(ast.getValues().get(i)).getValue());
         }
 /*
-        Environment.PlcObject list
-        return list;
-*/
+for(Ast.Expression x: ast.getValues()){
+            list.add(visit(x).getValue());
+        }
+ */
 
 
-       throw new UnsupportedOperationException(); //TODO
+        return Environment.create(list);
+      // throw new UnsupportedOperationException(); //TODO
 
     }
 
