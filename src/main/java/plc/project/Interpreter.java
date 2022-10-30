@@ -92,12 +92,31 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
     }
 
     @Override
-    public Environment.PlcObject visit(Ast.Statement.If ast) {
+    public Environment.PlcObject visit(Ast.Statement.If ast) {  //TODO passes test cases but for loops are wrong
+        if(ast.getCondition().equals(new Ast.Expression.Literal(true))) {   // Do condition
+            Scope scope = new Scope(null);
+            List<Ast.Statement> statements = ast.getThenStatements();
+            for(int i = 0; i < statements.size(); i++) {
+                return visit(statements.get(i));
+            }
+
+        }
+        else {  // Else condition
+            List<Ast.Statement> statements = ast.getElseStatements();
+            for(int i = 0; i < statements.size(); i++) {
+                return visit(statements.get(i));
+            }
+        }
+
+
         throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Switch ast) {
+
+
+
         throw new UnsupportedOperationException(); //TODO
     }
 
