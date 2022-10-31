@@ -95,31 +95,12 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
     }
 
     @Override
-    public Environment.PlcObject visit(Ast.Statement.If ast) {  //TODO passes test cases but for loops are wrong
-        if(ast.getCondition().equals(new Ast.Expression.Literal(true))) {   // Do condition
-            Scope scope = new Scope(null);
-            List<Ast.Statement> statements = ast.getThenStatements();
-            for(int i = 0; i < statements.size(); i++) {
-                return visit(statements.get(i));
-            }
-
-        }
-        else {  // Else condition
-            List<Ast.Statement> statements = ast.getElseStatements();
-            for(int i = 0; i < statements.size(); i++) {
-                return visit(statements.get(i));
-            }
-        }
-
-
+    public Environment.PlcObject visit(Ast.Statement.If ast) {
         throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Switch ast) {
-
-
-
         throw new UnsupportedOperationException(); //TODO
     }
 
@@ -290,12 +271,23 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Access ast) {
-        Environment.PlcObject temp = visit(ast.getOffset().get());
-        if (ast.getOffset().isPresent())
-            return visit(ast.getOffset().get());
-
-        return scope.lookupVariable(ast.getName()).getValue();
-
+        Environment.Variable current = scope.lookupVariable(ast.getName());
+        Environment.PlcObject result;
+        if (ast.getOffset().isPresent()) { // list has an offset present
+            Object offset = ast.getOffset();
+            if(offset.getClass().equals(BigInteger.class)) {
+                Object currentValue = current.getValue().getValue();
+                result = Environment.create(((List<Environment.PlcObject>) currentValue).get(Integer.parseInt(offset.toString())));
+                return result;
+            }
+            else
+                throw new RuntimeException("Not in BigInteger");
+            //wtf do i do here :<
+        }
+        else { //regular variable
+            result = Environment.create(current.getValue().getValue());
+            return result;
+        }
         //throw new UnsupportedOperationException(); //TODO
     }
 
