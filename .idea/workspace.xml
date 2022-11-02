@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="expression access done">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="source, global, function (not done)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" afterDir="false" />
     </list>
@@ -304,7 +304,8 @@
       <workItem from="1666906537402" duration="1194000" />
       <workItem from="1667074512165" duration="17436000" />
       <workItem from="1667255949494" duration="3171000" />
-      <workItem from="1667348213257" duration="3939000" />
+      <workItem from="1667348213257" duration="4214000" />
+      <workItem from="1667415076140" duration="717000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -502,7 +503,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667258812529</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="source, global, function (not done)">
+      <created>1667353041099</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1667353041100</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -520,7 +528,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixed lexString, lexEscape" />
     <MESSAGE value="fixed leading hypen, newline unterminated, and invalid escape. added relevant test cases" />
     <MESSAGE value="fixed leading hyphen, newline unterminated, and invalid escape. added relevant test cases" />
     <MESSAGE value="possible fix to weird quotes test case" />
@@ -545,6 +552,7 @@
     <MESSAGE value="return and expression statement" />
     <MESSAGE value="plcList" />
     <MESSAGE value="expression access done" />
-    <option name="LAST_COMMIT_MESSAGE" value="expression access done" />
+    <MESSAGE value="source, global, function (not done)" />
+    <option name="LAST_COMMIT_MESSAGE" value="source, global, function (not done)" />
   </component>
 </project>
