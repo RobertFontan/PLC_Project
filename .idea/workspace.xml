@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="source, global, function (not done)">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="while statement">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" afterDir="false" />
     </list>
@@ -161,6 +161,29 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="InterpreterTests.testListAssignmentStatement" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;plc.project.InterpreterTests.testListAssignmentStatement&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="LexerTests" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -207,45 +230,22 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="ParserTests.testIfStatement" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;plc.project.ParserTests.testIfStatement&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Gradle.LexerTests" />
       <item itemvalue="Gradle.ParserTests" />
+      <item itemvalue="Gradle.InterpreterTests.testListAssignmentStatement" />
       <item itemvalue="Gradle.InterpreterTests.testAccessExpression" />
       <item itemvalue="Gradle.InterpreterTests.testListAccessExpression" />
       <item itemvalue="Gradle.InterpreterTests.testBinaryExpression" />
       <item itemvalue="Gradle.InterpreterTests" />
-      <item itemvalue="Gradle.ParserTests.testIfStatement" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.InterpreterTests" />
         <item itemvalue="Gradle.InterpreterTests.testListAccessExpression" />
+        <item itemvalue="Gradle.InterpreterTests.testListAssignmentStatement" />
         <item itemvalue="Gradle.InterpreterTests.testAccessExpression" />
         <item itemvalue="Gradle.InterpreterTests.testBinaryExpression" />
-        <item itemvalue="Gradle.ParserTests.testIfStatement" />
       </list>
     </recent_temporary>
   </component>
@@ -305,7 +305,7 @@
       <workItem from="1667074512165" duration="17436000" />
       <workItem from="1667255949494" duration="3171000" />
       <workItem from="1667348213257" duration="4214000" />
-      <workItem from="1667415076140" duration="717000" />
+      <workItem from="1667415076140" duration="5088000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -510,7 +510,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667353041100</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="while statement">
+      <created>1667415827901</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1667415827901</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -528,7 +535,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixed leading hypen, newline unterminated, and invalid escape. added relevant test cases" />
     <MESSAGE value="fixed leading hyphen, newline unterminated, and invalid escape. added relevant test cases" />
     <MESSAGE value="possible fix to weird quotes test case" />
     <MESSAGE value="fixed weird quotes" />
@@ -553,6 +559,7 @@
     <MESSAGE value="plcList" />
     <MESSAGE value="expression access done" />
     <MESSAGE value="source, global, function (not done)" />
-    <option name="LAST_COMMIT_MESSAGE" value="source, global, function (not done)" />
+    <MESSAGE value="while statement" />
+    <option name="LAST_COMMIT_MESSAGE" value="while statement" />
   </component>
 </project>

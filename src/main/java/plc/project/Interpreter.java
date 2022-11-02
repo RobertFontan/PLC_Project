@@ -1,5 +1,6 @@
 package plc.project;
 
+import javax.swing.*;
 import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -123,13 +124,24 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
     @Override
     public Environment.PlcObject visit(Ast.Statement.Assignment ast) {
         if(ast.getReceiver() instanceof Ast.Expression.Access) {    //TODO Still need to handle an offset: list[5]
-           String name = ((Ast.Expression.Access)ast.getReceiver()).getName();
 
-           scope.lookupVariable(name).setValue(visit(ast.getValue()));
-           return Environment.NIL;
+            Ast.Expression.Access acc = (Ast.Expression.Access) ast.getReceiver();
+            String name = acc.getName();
+
+            if(!(acc.getOffset().isPresent()))
+                scope.lookupVariable(name).setValue(visit(ast.getValue()));
+            else {
+                requireType(List.class, scope.lookupVariable(name).getValue());
+                int offset = ((BigInteger) visit(acc.getOffset().get()).getValue()).intValue();
+                ((List<Object>) scope.lookupVariable(name).getValue().getValue()).set(offset, visit(ast.getValue()).getValue());
+            }
+
+            return Environment.NIL;
         }
         else
             throw new ArithmeticException("Receiver is not of type: Ast.Expression.Access");
+
+
     }
 
     @Override
@@ -139,12 +151,37 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Switch ast) {
-        throw new UnsupportedOperationException(); //TODO
+        scope = new Scope(scope);
+        List<Ast.Statement.Case> caseStatement = ast.getCases();
+
+        try{
+            Environment.PlcObject expr = visit(ast.getCondition());
+            for(int i =0; i < caseStatement.size(); i++){
+                if(caseStatement.get(i).getValue().isPresent()){
+                    Environment.PlcObject caseValue = visit(caseStatement.get(i).getValue().get());
+                    if(expr.getValue().equals(caseValue.getValue())){
+                        visit(caseStatement.get(i));
+                        break;
+                    }
+                }
+                else
+                    visit(caseStatement.get(i));
+            }
+        }
+        finally {
+            scope = scope.getParent();
+
+        }
+        return Environment.NIL;
+
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Case ast) {
-        throw new UnsupportedOperationException(); //TODO
+        ast.getStatements().forEach(this::visit);
+        return Environment.NIL;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
@@ -331,9 +368,11 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
                 result = Environment.create(((List<Environment.PlcObject>) currentValue).get(Integer.parseInt(offset.toString())));
                 return result;
             }
-            else
+            else {
+                //wtf do i do here :<
                 throw new RuntimeException("Not in BigInteger");
-            //wtf do i do here :<
+
+            }
         }
         else { //regular variable
             result = Environment.create(current.getValue().getValue());
