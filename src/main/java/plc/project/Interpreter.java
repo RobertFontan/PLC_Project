@@ -47,17 +47,55 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Source ast) {
-        throw new UnsupportedOperationException(); //TODO
+        List<Ast.Global> globList = ast.getGlobals();
+        List<Ast.Function> funcList = ast.getFunctions();
+
+        for(int i =0; i < globList.size(); i++)
+            visit(ast.getGlobals().get(i));
+
+
+        for(int i = 0; i < funcList.size(); i++)
+            visit(ast.getFunctions().get(i));
+
+
+        return scope.lookupFunction("main", 0).invoke(new ArrayList<>());
+
+
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Global ast) {
-        throw new UnsupportedOperationException(); //TODO
+        if(!ast.getValue().isPresent())
+            scope.defineVariable(ast.getName(), ast.getMutable(), Environment.NIL);
+        else
+            scope.defineVariable(ast.getName(), ast.getMutable(), visit(ast.getValue().get()));
+
+        return Environment.NIL;
+       // throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Function ast) {
-        throw new UnsupportedOperationException(); //TODO
+        scope.defineFunction(ast.getName(), ast.getParameters().size(), args ->{
+            scope = new Scope(scope);
+            for(int i = 0; i < ast.getParameters().size(); i++)
+                scope.defineVariable(ast.getParameters().get(i), true, args.get(i));
+            try {
+                for (int i = 0; i < ast.getStatements().size(); i++)
+                    visit(ast.getStatements().get(i));
+            }
+            catch (Return val) {
+                return val.value;
+            }
+
+            return Environment.NIL;
+
+        });
+
+        return Environment.NIL;
+
+//        throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
