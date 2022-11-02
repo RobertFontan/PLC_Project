@@ -134,7 +134,6 @@ final class InterpreterTests {
         Scope scope = test(ast, Environment.NIL.getValue(), new Scope(null));
         Assertions.assertEquals(expected, scope.lookupVariable(ast.getName()).getValue().getValue());
     }
-
     private static Stream<Arguments> testDeclarationStatement() {
         return Stream.of(
                 // LET name;
@@ -144,7 +143,8 @@ final class InterpreterTests {
                 ),
                 // LET name = 1;
                 Arguments.of("Initialization",
-                        new Ast.Statement.Declaration("name", Optional.of(new Ast.Expression.Literal(BigInteger.ONE))),
+                        new Ast.Statement.Declaration("name", Optional.of(new
+                                Ast.Expression.Literal(BigInteger.ONE))),
                         BigInteger.ONE
                 )
         );
@@ -440,6 +440,34 @@ final class InterpreterTests {
                                 new Ast.Expression.Literal(new BigDecimal("3.4"))
                         ),
                         new BigDecimal("0.4")
+                ),
+                Arguments.of("Multiplication",
+                        new Ast.Expression.Binary("*",
+                                new Ast.Expression.Literal(new BigInteger("6")),
+                                new Ast.Expression.Literal(new BigInteger("2"))
+                        ),
+                        new BigInteger("12")
+                ),
+                Arguments.of("Multiplication",
+                        new Ast.Expression.Binary("*",
+                                new Ast.Expression.Literal(new BigDecimal("2.2")),
+                                new Ast.Expression.Literal(new BigDecimal("5"))
+                        ),
+                        new BigDecimal("11.0")
+                ),
+                Arguments.of("Subtraction",
+                        new Ast.Expression.Binary("-",
+                                new Ast.Expression.Literal(new BigInteger("6")),
+                                new Ast.Expression.Literal(new BigInteger("2"))
+                        ),
+                        new BigInteger("4")
+                ),
+                Arguments.of("Subtraction",
+                        new Ast.Expression.Binary("-",
+                                new Ast.Expression.Literal(new BigDecimal("6.2")),
+                                new Ast.Expression.Literal(new BigDecimal("2"))
+                        ),
+                        new BigDecimal("4.2")
                 )
         );
     }

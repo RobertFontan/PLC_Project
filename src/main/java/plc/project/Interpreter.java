@@ -40,6 +40,34 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
 
         });
+        /*scope.defineFunction("converter", 2, args -> {
+            String number = new String();
+            int i, n = 0;
+            ArrayList<BigInteger> quotients = new ArrayList<BigInteger>();
+            ArrayList<BigInteger> remainders = new ArrayList<BigInteger>();
+
+            BigInteger base10 = requireType(
+                                        BigInteger.class,
+                                        Environment.create(args.get(0).getValue())
+            );
+
+            BigInteger base = requireType(
+                                    BigInteger.class,
+                                    Environment.create(args.get(1).getValue())
+            );
+
+            quotients.add(base10);
+
+            do {
+                quotients.add(quotients.get(n).divide(base));
+                remainders.add(quotients.get(n).subtract((quotients.get(n+1).multiply(base))));
+                n++;
+            } while ( quotients.get( n ).compareTo( BigInteger.ZERO ) > 0);
+
+            for(i = 0; i < remainders.size(); i++) {
+                number = remainders.get(i).toString() + number;
+            }
+        });*/ //FROM LECTURE, NOT FINISHED?
     }
 
     public Scope getScope() {
@@ -320,15 +348,21 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             throw new ArithmeticException("Not using valid types");
         }
 
-        if(Objects.equals(ast.getOperator(), "/")) {
+        if(Objects.equals(ast.getOperator(), "/") || Objects.equals(ast.getOperator(), "-") || Objects.equals(ast.getOperator(), "*")) {
             if(left.getValue() instanceof BigDecimal) {
                 if(!(right.getValue() instanceof BigDecimal))
                     throw new ArithmeticException("Divisor and Dividend types don't match.");
 
                 BigDecimal one = (BigDecimal) left.getValue();  // Converting each object to bigDecimal for division
                 BigDecimal two = (BigDecimal) right.getValue();
-
-                return Environment.create(one.divide(two, RoundingMode.HALF_EVEN)); // Returning division of both sides with rounding
+                switch (ast.getOperator()) {
+                    case "/":
+                        return Environment.create(one.divide(two, RoundingMode.HALF_EVEN)); // Returning division of both sides with rounding
+                    case "-":
+                        return Environment.create(one.subtract(two));
+                    case "*":
+                        return Environment.create(one.multiply(two));
+                }
             }
             else {
                 if(!(right.getValue() instanceof BigInteger))
@@ -340,7 +374,14 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
                 if(two.equals(BigInteger.ZERO))
                     throw new ArithmeticException("Error: Division by zero.");
 
-                return Environment.create(one.divide(two)); // Returning division of both sides with rounding
+                switch (ast.getOperator()) {
+                    case "/":
+                        return Environment.create(one.divide(two)); // Returning division of both sides with rounding
+                    case "-":
+                        return Environment.create(one.subtract(two)); // Returning subtraction of both sides
+                    case "*":
+                        return Environment.create(one.multiply(two)); // Returning multiplication of both sides
+                }
             }
 
 
