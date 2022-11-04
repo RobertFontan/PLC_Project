@@ -40,7 +40,7 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
 
         });
-        /*scope.defineFunction("converter", 2, args -> {
+        scope.defineFunction("converter", 2, args -> {
             String number = new String();
             int i, n = 0;
             ArrayList<BigInteger> quotients = new ArrayList<BigInteger>();
@@ -67,7 +67,8 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             for(i = 0; i < remainders.size(); i++) {
                 number = remainders.get(i).toString() + number;
             }
-        });*/ //FROM LECTURE, NOT FINISHED?
+            return Environment.create(number);
+        });
     }
 
     public Scope getScope() {
@@ -139,7 +140,7 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
         else {
             scope.defineVariable(ast.getName(), true, Environment.NIL);
         }
-        return scope.lookupVariable(ast.getName()).getValue();
+        return Environment.NIL;
     }
 
     @Override
