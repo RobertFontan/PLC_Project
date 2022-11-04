@@ -250,9 +250,9 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Literal ast) {
-        if(ast.getLiteral() == null) {
+        if(ast.getLiteral() == null)
             return Environment.NIL;
-        } return Environment.create(ast.getLiteral());
+        return Environment.create(ast.getLiteral());
     }
 
     @Override
@@ -415,15 +415,20 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
         Environment.PlcObject result;
         if (ast.getOffset().isPresent()) { // list has an offset present
             Object offset = ast.getOffset();
+
+            Object currentValue = current.getValue().getValue();
             if(offset.getClass().equals(BigInteger.class)) {
-                Object currentValue = current.getValue().getValue();
                 result = Environment.create(((List<Environment.PlcObject>) currentValue).get(Integer.parseInt(offset.toString())));
                 return result;
             }
             else {
-                //wtf do i do here :<
-                throw new RuntimeException("Not in BigInteger");
-
+                if(currentValue instanceof List){
+                    result = Environment.create(((List<Environment.PlcObject>) current.getValue().getValue()).get(((BigInteger) visit(ast.getOffset().get()).getValue()).intValue()));
+                    return result;
+                }
+                else {
+                    throw new RuntimeException("Not in BigInteger");
+                }
             }
         }
         else { //regular variable
