@@ -284,7 +284,9 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
                 if((Boolean) left.getValue())
                     return Environment.create((Boolean) left.getValue());
                 else if (right.getValue() instanceof Boolean) {
+
                     return Environment.create((Boolean) right.getValue());
+
                 }
             }
             throw new UnsupportedOperationException();
@@ -411,10 +413,14 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Access ast) {
-        Environment.Variable current = scope.lookupVariable(ast.getName());
-        Environment.PlcObject result;
+        Environment.PlcObject result = null;
+        //Environment.Variable current = scope.lookupVariable(ast.getName());
+
         if (ast.getOffset().isPresent()) { // list has an offset present
+
             Object offset = ast.getOffset();
+            Environment.Variable current = scope.lookupVariable(ast.getName());
+
 
             Object currentValue = current.getValue().getValue();
             if(offset.getClass().equals(BigInteger.class)) {
@@ -423,6 +429,7 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             }
             else {
                 if(currentValue instanceof List){
+
                     result = Environment.create(((List<Environment.PlcObject>) current.getValue().getValue()).get(((BigInteger) visit(ast.getOffset().get()).getValue()).intValue()));
                     return result;
                 }
@@ -431,9 +438,13 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
                 }
             }
         }
-        else { //regular variable
-            result = Environment.create(current.getValue().getValue());
-            return result;
+        else {
+            //how to fix :<
+
+            return scope.lookupVariable(ast.getName()).getValue();
+
+
+
         }
     }
 
