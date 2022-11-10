@@ -1,5 +1,6 @@
 package plc.project;
 
+import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -41,7 +42,14 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.Expression ast) {
-        throw new UnsupportedOperationException();  // TODO
+
+        if(!(ast.getExpression() instanceof Ast.Expression.Function))
+            throw new RuntimeException("FUNCTION");
+
+        visit(ast.getExpression());
+
+        return null;
+        //throw new UnsupportedOperationException();// TODO
     }
 
     @Override
@@ -86,7 +94,15 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Expression.Group ast) {
-        throw new UnsupportedOperationException();  // TODO
+
+        if(!(ast.getExpression() instanceof Ast.Expression.Binary))
+            throw new RuntimeException("NOT BINARY");
+
+        visit(ast.getExpression());
+        ast.setType(ast.getExpression().getType());
+
+        return null;
+        //throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
@@ -96,16 +112,46 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Expression.Access ast) {
-        throw new UnsupportedOperationException();  // TODO
+
+        Environment.PlcObject result = null;
+
+        if(ast.getOffset().isPresent()) {
+            Ast.Expression offset = ast.getOffset().get();
+            visit(offset);
+            if (!offset.getType().equals(Environment.Type.INTEGER))
+                throw new RuntimeException("Not INT");
+
+        }
+
+        ast.setVariable(scope.lookupVariable(ast.getName()));
+
+        return null;
+        //throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
     public Void visit(Ast.Expression.Function ast) {
+
+        //Environment.PlcObject result = null;
+
+
+
+
         throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
     public Void visit(Ast.Expression.PlcList ast) {
+
+        /*
+        List <Ast.Expression> list = ast.getValues();
+
+        for(int i = 0; ){
+            visit(Ast.Expression.get
+        }
+
+         */
+
         throw new UnsupportedOperationException();  // TODO
     }
 
