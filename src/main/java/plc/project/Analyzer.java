@@ -96,14 +96,19 @@ public final class Analyzer implements Ast.Visitor<Void> {
             ast.setType(Environment.Type.STRING);
             return null;
         } else if (ast.getLiteral() instanceof BigInteger) {
+            if(((BigInteger) ast.getLiteral()).bitCount() > 32)
+                throw new RuntimeException("BigInteger too large (>32 bits)");
             ast.setType(Environment.Type.INTEGER);
             return null;
         } else if (ast.getLiteral() instanceof BigDecimal) {
+            if(((BigDecimal) ast.getLiteral()).doubleValue() == Double.POSITIVE_INFINITY || ((BigDecimal) ast.getLiteral()).doubleValue() == Double.NEGATIVE_INFINITY)
+                throw new RuntimeException("BigDecimal is too large (>64 bits)");
             ast.setType(Environment.Type.DECIMAL);
             return null;
+        } else {
+            ast.setType(Environment.Type.NIL);
+            return null;
         }
-
-        throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
