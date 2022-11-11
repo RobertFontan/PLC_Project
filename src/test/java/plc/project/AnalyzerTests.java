@@ -430,6 +430,28 @@ public final class AnalyzerTests {
                                 init(new Ast.Expression.Literal(Boolean.FALSE), ast -> ast.setType(Environment.Type.BOOLEAN))
                         ), ast -> ast.setType(Environment.Type.BOOLEAN))
                 ),
+                Arguments.of("Comparable valid",
+                        // 10 == 10
+                        new Ast.Expression.Binary("==",
+                                new Ast.Expression.Literal(BigInteger.TEN),
+                                new Ast.Expression.Literal(BigInteger.TEN)
+                        ),
+                        init(new Ast.Expression.Binary("==",
+                                init(new Ast.Expression.Literal(BigInteger.TEN), ast -> ast.setType(Environment.Type.INTEGER)),
+                                init(new Ast.Expression.Literal(BigInteger.TEN), ast -> ast.setType(Environment.Type.INTEGER))
+                        ), ast -> ast.setType(Environment.Type.COMPARABLE))
+                ),
+                Arguments.of("Carot",
+                        // 10 ^ 0
+                        new Ast.Expression.Binary("^",
+                                new Ast.Expression.Literal(BigInteger.TEN),
+                                new Ast.Expression.Literal(BigInteger.ZERO)
+                        ),
+                        init(new Ast.Expression.Binary("^",
+                                init(new Ast.Expression.Literal(BigInteger.TEN), ast -> ast.setType(Environment.Type.INTEGER)),
+                                init(new Ast.Expression.Literal(BigInteger.ZERO), ast -> ast.setType(Environment.Type.INTEGER))
+                        ), ast -> ast.setType(Environment.Type.INTEGER))
+                ),
                 Arguments.of("Logical AND Invalid",
                         // TRUE && "FALSE"
                         new Ast.Expression.Binary("&&",

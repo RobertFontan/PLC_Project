@@ -89,6 +89,20 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Expression.Literal ast) {
+        if(ast.getLiteral() instanceof Boolean) {
+            ast.setType(Environment.Type.BOOLEAN);
+            return null;
+        } else if (ast.getLiteral() instanceof String) {
+            ast.setType(Environment.Type.STRING);
+            return null;
+        } else if (ast.getLiteral() instanceof BigInteger) {
+            ast.setType(Environment.Type.INTEGER);
+            return null;
+        } else if (ast.getLiteral() instanceof BigDecimal) {
+            ast.setType(Environment.Type.DECIMAL);
+            return null;
+        }
+
         throw new UnsupportedOperationException();  // TODO
     }
 
@@ -107,7 +121,64 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Expression.Binary ast) {
-        throw new UnsupportedOperationException();  // TODO
+        String operator = ast.getOperator().toString();
+        Environment.Type leftType = ast.getLeft().getType();
+        Environment.Type rightType = ast.getRight().getType();
+        visit(ast.getLeft());
+        visit(ast.getRight());
+
+        if(operator.toString().equals("&&") || operator.toString().equals("||")) {
+            if(leftType.equals(rightType) && leftType.equals(Environment.Type.BOOLEAN)) {
+                ast.setType(Environment.Type.BOOLEAN);
+                return null;
+            }
+            throw new RuntimeException("Mismatched types");
+        }
+
+        else if (operator.equals("<") || operator.equals(">") || operator.equals("==") || operator.equals("!=")) {
+            if(leftType.equals(rightType) && (leftType.equals(Environment.Type.INTEGER) || leftType.equals(Environment.Type.DECIMAL)
+                    || leftType.equals(Environment.Type.CHARACTER) || leftType.equals(Environment.Type.STRING))) {
+                ast.setType(Environment.Type.COMPARABLE);
+                return null;
+            }
+                throw new RuntimeException("Mismatched types");
+        }
+
+        else if (operator.equals("+")) {
+
+            if(leftType.equals(Environment.Type.STRING) || rightType.equals(Environment.Type.STRING)) {
+                ast.setType(Environment.Type.STRING);
+            }
+            else if (leftType.equals(Environment.Type.INTEGER)) {
+                if(!(rightType.equals(Environment.Type.INTEGER)))
+                    throw new RuntimeException("Mismatched types");
+                ast.setType(Environment.Type.INTEGER);
+            }
+            else if (ast.getLeft().getType().equals(Environment.Type.DECIMAL)) {
+                if(!(ast.getRight().getType().equals(Environment.Type.DECIMAL)))
+                    throw new RuntimeException("Mismatched types");
+                ast.setType(Environment.Type.DECIMAL);
+            }
+
+            return null;
+        }
+
+        else if (operator.equals("-") || operator.equals("*") || operator.equals("/")) {
+            if(!(leftType.equals(rightType)))
+                throw new RuntimeException("Mismatched types");
+            ast.setType(leftType);
+            return null;
+        }
+
+        else if (operator.equals("^")) {
+            if(leftType.equals(rightType) && leftType.equals(Environment.Type.INTEGER)) {
+                ast.setType(Environment.Type.INTEGER);
+                return null;
+            }
+            throw new RuntimeException("Mismatched types");
+        }
+
+        throw new UnsupportedOperationException();
     }
 
     @Override
