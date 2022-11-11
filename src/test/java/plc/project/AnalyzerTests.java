@@ -441,7 +441,7 @@ public final class AnalyzerTests {
                                 init(new Ast.Expression.Literal(BigInteger.TEN), ast -> ast.setType(Environment.Type.INTEGER))
                         ), ast -> ast.setType(Environment.Type.COMPARABLE))
                 ),
-                Arguments.of("Carot",
+                Arguments.of("Carrot",
                         // 10 ^ 0
                         new Ast.Expression.Binary("^",
                                 new Ast.Expression.Literal(BigInteger.TEN),
