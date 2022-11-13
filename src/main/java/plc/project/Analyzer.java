@@ -210,26 +210,39 @@ public final class Analyzer implements Ast.Visitor<Void> {
     public Void visit(Ast.Expression.Function ast) {
 
         //Environment.PlcObject result = null;
+        String name = ast.getName();
+        List <Ast.Expression> arguments = ast.getArguments();
+        //scope.lookupVariable(name, arguments.size());
+        ast.setFunction(scope.lookupFunction(name, arguments.size()));
+        for(int i =0; i < arguments.size(); i++){
+            visit(arguments.get(i));
+            // List<Environment.Type> parametersType = ast.getFunction().getParameterTypes();
+            requireAssignable(ast.getFunction().getParameterTypes().get(i), arguments.get(i).getType());
+        }
+        return null;
 
 
 
-
-        throw new UnsupportedOperationException();  // TODO
+        //throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
     public Void visit(Ast.Expression.PlcList ast) {
 
-        /*
-        List <Ast.Expression> list = ast.getValues();
 
-        for(int i = 0; ){
-            visit(Ast.Expression.get
+        List <Ast.Expression> valueList = ast.getValues();
+
+
+        for(int i = 0; i < valueList.size(); i++){
+            visit(valueList.get(i));
+            requireAssignable(ast.getType(), valueList.get(i).getType());
         }
 
-         */
+        return null;
 
-        throw new UnsupportedOperationException();  // TODO
+
+
+        //throw new UnsupportedOperationException();  // TODO
     }
 
     public static void requireAssignable(Environment.Type target, Environment.Type type) {

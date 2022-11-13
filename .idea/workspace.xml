@@ -7,9 +7,6 @@
     <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="added files for p4">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Ast.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Ast.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Environment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Scope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Scope.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -239,6 +236,7 @@
       <workItem from="1667754475706" duration="202000" />
       <workItem from="1667754775315" duration="298000" />
       <workItem from="1668044858262" duration="2186000" />
+      <workItem from="1668292842490" duration="5016000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
