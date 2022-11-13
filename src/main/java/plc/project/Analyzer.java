@@ -63,12 +63,36 @@ public final class Analyzer implements Ast.Visitor<Void> {
     }
 
     @Override
-    public Void visit(Ast.Statement.If ast) {
-        throw new UnsupportedOperationException();  // TODO
+    public Void visit(Ast.Statement.If ast) { //TODO: Add Scoping
+        List<Ast.Statement> elseStmts = ast.getElseStatements();
+        List<Ast.Statement> thenStmts = ast.getThenStatements();
+        Ast.Expression condition = ast.getCondition();
+
+        if(!(condition.getType().equals(Environment.Type.BOOLEAN)))
+            throw new RuntimeException("Condition does not evaluate to type boolean");
+        else if (thenStmts.isEmpty())
+            throw new RuntimeException("Empty statement");
+        for(Ast.Statement stmt : thenStmts) {
+            visit(stmt);
+        }
+        if(!elseStmts.isEmpty()) {
+            for (Ast.Statement stmt : elseStmts)
+                visit(stmt);
+        }
+
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.Switch ast) {
+        Ast.Expression condition = ast.getCondition();
+        List<Ast.Statement.Case> cases = ast.getCases();
+
+        for(Ast.Statement.Case cases_ : cases) {
+
+        }
+
+
         throw new UnsupportedOperationException();  // TODO
     }
 
@@ -79,7 +103,17 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.While ast) {
-        throw new UnsupportedOperationException();  // TODO
+        visit(ast.getCondition());
+
+        if(!(ast.getCondition().getType().equals(Environment.Type.BOOLEAN)))
+            throw new RuntimeException("Condition does not evaluate to boolean");
+
+        List<Ast.Statement> statements = ast.getStatements();
+        for(Ast.Statement stmt : statements) {
+            scope = new Scope(scope);   //TODO: REALLY NOT SURE IF THIS LINE IS RIGHT
+            visit(stmt);
+        }
+        return null;
     }
 
     @Override
@@ -89,26 +123,21 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Expression.Literal ast) {
-        if(ast.getLiteral() instanceof Boolean) {
-            ast.setType(Environment.Type.BOOLEAN);
-            return null;
-        } else if (ast.getLiteral() instanceof String) {
-            ast.setType(Environment.Type.STRING);
-            return null;
-        } else if (ast.getLiteral() instanceof BigInteger) {
+        if(ast.getLiteral() instanceof Boolean) ast.setType(Environment.Type.BOOLEAN);
+        else if (ast.getLiteral() instanceof String) ast.setType(Environment.Type.STRING);
+        else if (ast.getLiteral() instanceof BigInteger) {
             if(((BigInteger) ast.getLiteral()).bitCount() > 32)
                 throw new RuntimeException("BigInteger too large (>32 bits)");
             ast.setType(Environment.Type.INTEGER);
-            return null;
-        } else if (ast.getLiteral() instanceof BigDecimal) {
+        }
+        else if (ast.getLiteral() instanceof BigDecimal) {
             if(((BigDecimal) ast.getLiteral()).doubleValue() == Double.POSITIVE_INFINITY || ((BigDecimal) ast.getLiteral()).doubleValue() == Double.NEGATIVE_INFINITY)
                 throw new RuntimeException("BigDecimal is too large (>64 bits)");
             ast.setType(Environment.Type.DECIMAL);
-            return null;
-        } else {
-            ast.setType(Environment.Type.NIL);
-            return null;
         }
+        else if (ast.getLiteral() == null) ast.setType(Environment.Type.NIL);
+
+        return null;
     }
 
     @Override
@@ -122,7 +151,6 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
         return null;
         //throw new UnsupportedOperationException();  // TODO
-        //its being weird
     }
 
     @Override
@@ -208,8 +236,6 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Expression.Function ast) {
-
-        //Environment.PlcObject result = null;
         String name = ast.getName();
         List <Ast.Expression> arguments = ast.getArguments();
         //scope.lookupVariable(name, arguments.size());
@@ -220,7 +246,7 @@ public final class Analyzer implements Ast.Visitor<Void> {
             requireAssignable(ast.getFunction().getParameterTypes().get(i), arguments.get(i).getType());
         }
         return null;
-
+        //scope.defineFunction(name, name, args, )
 
 
         //throw new UnsupportedOperationException();  // TODO
