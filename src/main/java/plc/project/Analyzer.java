@@ -54,9 +54,34 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.Declaration ast) {
+        //throw new UnsupportedOperationException();  // TODO
 
+        if(!ast.getTypeName().isPresent() && !ast.getValue().isPresent()) {
+            throw new RuntimeException("Declaration statement must have a type or value.");
+        }
 
-        throw new UnsupportedOperationException();  // TODO
+        Environment.Type type = null;
+
+        if(ast.getTypeName().isPresent()) {
+            type = Environment.getType(ast.getTypeName().get());
+        }
+
+        if(ast.getValue().isPresent()) {
+            visit(ast.getValue().get());
+
+            if(type == null)
+                type = ast.getValue().get().getType();
+
+            requireAssignable(type, ast.getValue().get().getType());
+        }
+        ast.setVariable(scope.defineVariable(ast.getName(),
+                                             ast.getName(),
+                                             type,
+                                             true,
+                                             Environment.NIL)
+                );
+
+        return null;
     }
 
     @Override
@@ -295,10 +320,10 @@ public final class Analyzer implements Ast.Visitor<Void> {
         if(!target.equals(Environment.Type.ANY)) {  // IF TYPE IS ANY, IT WILL MATCH ON ANY TYPE, SO THIS ONLY CHECKS FOR OTHER TYPES
 
             if(target.equals(Environment.Type.COMPARABLE)) { //Integer, Decimal, Character, and String
-                if(!(type.equals(Environment.Type.INTEGER) || type.equals(Environment.Type.DECIMAL) || type.equals(Environment.Type.CHARACTER) || type.equals(Environment.Type.STRING)))
-                    throw new RuntimeException("Type is not Comparable");
+                if(!(type.equals(Environment.Type.INTEGER) || type.equals(Environment.Type.DECIMAL)
+                        || type.equals(Environment.Type.CHARACTER) || type.equals(Environment.Type.STRING)))
+                            throw new RuntimeException("Type is not Comparable");
             }
-
             else if(!(target.equals(type))) //EVERY OTHER TYPE SHOULD MATCH, OTHERWISE EXCEPTION IS THROWN
                 throw new RuntimeException("Mismatched Types");
         }
