@@ -54,12 +54,29 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.Declaration ast) {
+
+
         throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
     public Void visit(Ast.Statement.Assignment ast) {
-        throw new UnsupportedOperationException();  // TODO
+        Ast.Expression receiver = ast.getReceiver();
+        Ast.Expression value = ast.getValue();
+
+        if(!(receiver instanceof Ast.Expression.Access))
+            throw new RuntimeException("Not an access expression");
+        else {
+            visit(receiver);
+            visit(value);
+
+            if(!(receiver.getType().equals(value.getType())))
+                throw new RuntimeException("Assigning incorrect type");
+                //TODO: IN PROGRESS, CONTINUE ONCE REQUIREASSIGNABLE() IS FINISHED.
+                // THIS IS NEEDED TO ENSURE THAT THE VALUE IS A SUBTYPE OF THE RECEIVER.
+
+        }
+        return null;
     }
 
     @Override
@@ -67,17 +84,21 @@ public final class Analyzer implements Ast.Visitor<Void> {
         List<Ast.Statement> elseStmts = ast.getElseStatements();
         List<Ast.Statement> thenStmts = ast.getThenStatements();
         Ast.Expression condition = ast.getCondition();
+        visit(condition);
 
         if(!(condition.getType().equals(Environment.Type.BOOLEAN)))
             throw new RuntimeException("Condition does not evaluate to type boolean");
         else if (thenStmts.isEmpty())
             throw new RuntimeException("Empty statement");
         for(Ast.Statement stmt : thenStmts) {
+            System.out.println(".");
             visit(stmt);
         }
         if(!elseStmts.isEmpty()) {
-            for (Ast.Statement stmt : elseStmts)
+            for (Ast.Statement stmt : elseStmts) {
+                scope = new Scope(scope.getParent());
                 visit(stmt);
+            }
         }
 
         return null;
@@ -156,12 +177,12 @@ public final class Analyzer implements Ast.Visitor<Void> {
     @Override
     public Void visit(Ast.Expression.Binary ast) {
         String operator = ast.getOperator().toString();
-        Environment.Type leftType = ast.getLeft().getType();
-        Environment.Type rightType = ast.getRight().getType();
         visit(ast.getLeft());
         visit(ast.getRight());
+        Environment.Type leftType = ast.getLeft().getType();
+        Environment.Type rightType = ast.getRight().getType();
 
-        if(operator.toString().equals("&&") || operator.toString().equals("||")) {
+        if(operator.equals("&&") || operator.equals("||")) {
             if(leftType.equals(rightType) && leftType.equals(Environment.Type.BOOLEAN)) {
                 ast.setType(Environment.Type.BOOLEAN);
                 return null;
@@ -229,7 +250,6 @@ public final class Analyzer implements Ast.Visitor<Void> {
         }
 
         ast.setVariable(scope.lookupVariable(ast.getName()));
-
         return null;
         //throw new UnsupportedOperationException();  // TODO
     }
@@ -272,7 +292,17 @@ public final class Analyzer implements Ast.Visitor<Void> {
     }
 
     public static void requireAssignable(Environment.Type target, Environment.Type type) {
-        throw new UnsupportedOperationException();  // TODO
+        if(!target.equals(Environment.Type.ANY)) {  // IF TYPE IS ANY, IT WILL MATCH ON ANY TYPE, SO THIS ONLY CHECKS FOR OTHER TYPES
+
+            if(target.equals(Environment.Type.COMPARABLE)) { //Integer, Decimal, Character, and String
+                if(!(type.equals(Environment.Type.INTEGER) || type.equals(Environment.Type.DECIMAL) || type.equals(Environment.Type.CHARACTER) || type.equals(Environment.Type.STRING)))
+                    throw new RuntimeException("Type is not Comparable");
+            }
+
+            else if(!(target.equals(type))) //EVERY OTHER TYPE SHOULD MATCH, OTHERWISE EXCEPTION IS THROWN
+                throw new RuntimeException("Mismatched Types");
+        }
+
     }
 
 }
