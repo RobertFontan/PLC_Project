@@ -3,6 +3,7 @@ package plc.project;
 import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,17 +28,67 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Source ast) {
-        throw new UnsupportedOperationException();  // TODO
+        ast.getGlobals().forEach(this::visit);
+        ast.getFunctions().forEach(this::visit);
+
+        if(!scope.lookupFunction("main", 0).getReturnType().equals(Environment.Type.INTEGER))
+            throw new RuntimeException("not int");
+
+        return null;
+        //throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
     public Void visit(Ast.Global ast) {
-        throw new UnsupportedOperationException();  // TODO
+        String name = ast.getName();
+        if(ast.getValue().isPresent()){
+            Ast.Expression value = ast.getValue().get();
+            if(value instanceof Ast.Expression.PlcList)
+                ((Ast.Expression.PlcList) value).setType(Environment.getType(ast.getTypeName()));
+            visit(value);
+            requireAssignable(Environment.getType(ast.getTypeName()), value.getType());
+        }
+
+        scope.defineVariable(name, name, Environment.getType(ast.getTypeName()), ast.getMutable(), Environment.NIL);
+        ast.setVariable(scope.lookupVariable(name));
+        return null;
+        //throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
     public Void visit(Ast.Function ast) {
-        throw new UnsupportedOperationException();  // TODO
+        List<Environment.Type> TypeList = new ArrayList<>();
+        String name = ast.getName();
+
+        for(int i = 0; i < ast.getParameterTypeNames().size(); i++){
+            TypeList.add(Environment.getType(ast.getParameterTypeNames().get(i)));
+        }
+
+
+        scope.defineFunction(name, name, TypeList, Environment.getType(ast.getReturnTypeName().orElse("NIL")), args -> Environment.NIL);
+        ast.setFunction(scope.lookupFunction(ast.getName(), ast.getParameters().size()));
+
+        scope = new Scope(scope);
+
+        for (int j= 0; j < ast.getParameters().size(); j++){
+            scope.defineVariable(ast.getParameters().get(j), ast.getParameters().get(j), Environment.getType(ast.getParameterTypeNames().get(j)), true, Environment.NIL);
+        }
+
+        //function = Environment.getType(ast.getReturnTypeName().orElse("NIL"));
+        //Environment.Type functionType = ast.getFunction().getReturnType();
+        //functionType = Environment.getType(ast.getReturnTypeName().orElse("NIL"));
+        //ast.getStatements().forEach(this::visit);
+        //functionType = null;
+        //Environment.Type functionType = Environment.getType(ast.getReturnTypeName().orElse("NIL"));
+        ast.getStatements().forEach(this::visit);
+
+        //function = null;
+
+
+        scope = scope.getParent();
+        return null;
+
+       // throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
@@ -164,7 +215,14 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.Return ast) {
-        throw new UnsupportedOperationException();  // TODO
+        visit(ast.getValue());
+
+        //Environment.Type functionType = ast.getValue().getType();
+
+        requireAssignable(function.getFunction().getReturnType(), ast.getValue().getType());
+
+        return null;
+        //throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
