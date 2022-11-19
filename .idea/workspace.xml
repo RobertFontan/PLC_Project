@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="expression function and plcList?">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="source, global, return, function mostly done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" afterDir="false" />
     </list>
@@ -237,7 +237,8 @@
       <workItem from="1667754775315" duration="298000" />
       <workItem from="1668044858262" duration="2186000" />
       <workItem from="1668292842490" duration="5632000" />
-      <workItem from="1668634099330" duration="7739000" />
+      <workItem from="1668634099330" duration="8756000" />
+      <workItem from="1668882643192" duration="1138000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -484,7 +485,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668301682251</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="source, global, return, function mostly done">
+      <created>1668649111702</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1668649111702</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -502,7 +510,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added trailing commas test case" />
     <MESSAGE value="added majority of the test cases" />
     <MESSAGE value="fixed closing parenthesis" />
     <MESSAGE value="fixed trailing commas" />
@@ -527,6 +534,7 @@
     <MESSAGE value="interpreter final" />
     <MESSAGE value="added files for p4" />
     <MESSAGE value="expression function and plcList?" />
-    <option name="LAST_COMMIT_MESSAGE" value="expression function and plcList?" />
+    <MESSAGE value="source, global, return, function mostly done" />
+    <option name="LAST_COMMIT_MESSAGE" value="source, global, return, function mostly done" />
   </component>
 </project>
