@@ -182,25 +182,26 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.Switch ast) {
-        Ast.Expression condition = ast.getCondition();
+        // Visit the condition:
+        visit(ast.getCondition());
+        // Loop through each case statement, checking for exception conditions, visiting the value, and then visiting the case itself:
         List<Ast.Statement.Case> cases = ast.getCases();
-        visit(condition);
-
-        for(int i =0; i < cases.size(); i++){
-            if(cases.get(i).getValue().isPresent()) {
+        for (int i = 0; i < cases.size(); i++) {
+            if (cases.get(i).getValue().isPresent()) {
                 if (i == cases.size() - 1) {
-                    throw new RuntimeException("no values");
+                    throw new RuntimeException("Default case cannot specify a value.");
                 }
+                visit(cases.get(i).getValue().get());
+               // requireAssignable(ast.getCondition().getType(), ast.getCases().get(i).getValue().get().getType());
             }
-            visit(cases.get(i).getValue().get());
-            if(!cases.get(i).getValue().get().getType().equals(condition.getType()))
-                throw new RuntimeException("values must match");
+
+            scope = new Scope(scope);
+            visit(ast.getCases().get(i));
+
+            //visit(cases.get(i));
         }
 
-
         return null;
-
-        //throw new UnsupportedOperationException();  // TODO
     }
 
     @Override

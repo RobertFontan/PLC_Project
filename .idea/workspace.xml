@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="source, global, return, function mostly done">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="switch and case finished">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" afterDir="false" />
     </list>
@@ -238,7 +238,8 @@
       <workItem from="1668044858262" duration="2186000" />
       <workItem from="1668292842490" duration="5632000" />
       <workItem from="1668634099330" duration="8756000" />
-      <workItem from="1668882643192" duration="1138000" />
+      <workItem from="1668882643192" duration="1796000" />
+      <workItem from="1668913646682" duration="2535000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -492,7 +493,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668649111702</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="switch and case finished">
+      <created>1668883824561</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1668883824561</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -510,7 +518,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added majority of the test cases" />
     <MESSAGE value="fixed closing parenthesis" />
     <MESSAGE value="fixed trailing commas" />
     <MESSAGE value="fixed missing semi" />
@@ -535,6 +542,7 @@
     <MESSAGE value="added files for p4" />
     <MESSAGE value="expression function and plcList?" />
     <MESSAGE value="source, global, return, function mostly done" />
-    <option name="LAST_COMMIT_MESSAGE" value="source, global, return, function mostly done" />
+    <MESSAGE value="switch and case finished" />
+    <option name="LAST_COMMIT_MESSAGE" value="switch and case finished" />
   </component>
 </project>
