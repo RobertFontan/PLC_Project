@@ -52,7 +52,6 @@ public final class Analyzer implements Ast.Visitor<Void> {
         scope.defineVariable(name, name, Environment.getType(ast.getTypeName()), ast.getMutable(), Environment.NIL);
         ast.setVariable(scope.lookupVariable(name));
         return null;
-        //throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
@@ -139,19 +138,14 @@ public final class Analyzer implements Ast.Visitor<Void> {
     public Void visit(Ast.Statement.Assignment ast) {
         Ast.Expression receiver = ast.getReceiver();
         Ast.Expression value = ast.getValue();
+        visit(receiver);
+        visit(value);
 
         if(!(receiver instanceof Ast.Expression.Access))
             throw new RuntimeException("Not an access expression");
-        else {
-            visit(receiver);
-            visit(value);
 
-            if(!(receiver.getType().equals(value.getType())))
-                throw new RuntimeException("Assigning incorrect type");
-                //TODO: IN PROGRESS, CONTINUE ONCE REQUIREASSIGNABLE() IS FINISHED.
-                // THIS IS NEEDED TO ENSURE THAT THE VALUE IS A SUBTYPE OF THE RECEIVER.
+        requireAssignable(receiver.getType(), value.getType());
 
-        }
         return null;
     }
 
@@ -182,25 +176,24 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.Switch ast) {
-        // Visit the condition:
-        visit(ast.getCondition());
-        // Loop through each case statement, checking for exception conditions, visiting the value, and then visiting the case itself:
+        Ast.Expression condition = ast.getCondition();
         List<Ast.Statement.Case> cases = ast.getCases();
-        for (int i = 0; i < cases.size(); i++) {
-            if (cases.get(i).getValue().isPresent()) {
-                if (i == cases.size() - 1) {
-                    throw new RuntimeException("Default case cannot specify a value.");
-                }
-                visit(cases.get(i).getValue().get());
-               // requireAssignable(ast.getCondition().getType(), ast.getCases().get(i).getValue().get().getType());
+        visit(condition);
+
+        if(cases.get(cases.size() - 1).getValue().isPresent())
+            throw new RuntimeException("Default case has a value");
+
+        // Loop through each case statement, checking for exception conditions,
+        // visiting the value, and then visiting the case itself:
+        for(Ast.Statement.Case cases_ : cases) {
+            if(cases_.getValue().isPresent()) {
+                visit(cases_.getValue().get());
+                requireAssignable(condition.getType(), cases_.getValue().get().getType());
             }
 
             scope = new Scope(scope);
-            visit(ast.getCases().get(i));
-
-            //visit(cases.get(i));
+            visit(cases_);
         }
-
         return null;
     }
 
@@ -212,8 +205,9 @@ public final class Analyzer implements Ast.Visitor<Void> {
         scope = scope.getParent();
 
         return null;
-        //throw new UnsupportedOperationException();  // TODO
+
     }
+
 
     @Override
     public Void visit(Ast.Statement.While ast) {
@@ -223,29 +217,27 @@ public final class Analyzer implements Ast.Visitor<Void> {
             throw new RuntimeException("Condition does not evaluate to boolean");
 
         List<Ast.Statement> statements = ast.getStatements();
+        scope = new Scope(scope);
         for(Ast.Statement stmt : statements) {
-            scope = new Scope(scope);   //TODO: REALLY NOT SURE IF THIS LINE IS RIGHT
             visit(stmt);
         }
+        scope = scope.getParent();
         return null;
     }
 
     @Override
     public Void visit(Ast.Statement.Return ast) {
         visit(ast.getValue());
-
-        //Environment.Type functionType = ast.getValue().getType();
-
         requireAssignable(function.getFunction().getReturnType(), ast.getValue().getType());
 
         return null;
-        //throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
     public Void visit(Ast.Expression.Literal ast) {
         if(ast.getLiteral() instanceof Boolean) ast.setType(Environment.Type.BOOLEAN);
         else if (ast.getLiteral() instanceof String) ast.setType(Environment.Type.STRING);
+        else if (ast.getLiteral() instanceof Character) ast.setType(Environment.Type.CHARACTER);
         else if (ast.getLiteral() instanceof BigInteger) {
             if(((BigInteger) ast.getLiteral()).bitCount() > 32)
                 throw new RuntimeException("BigInteger too large (>32 bits)");
@@ -271,7 +263,6 @@ public final class Analyzer implements Ast.Visitor<Void> {
         ast.setType(ast.getExpression().getType());
 
         return null;
-        //throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
@@ -282,55 +273,52 @@ public final class Analyzer implements Ast.Visitor<Void> {
         Environment.Type leftType = ast.getLeft().getType();
         Environment.Type rightType = ast.getRight().getType();
 
-        if(operator.equals("&&") || operator.equals("||")) {
-            if(leftType.equals(rightType) && leftType.equals(Environment.Type.BOOLEAN)) {
-                ast.setType(Environment.Type.BOOLEAN);
-                return null;
-            }
-            throw new RuntimeException("Mismatched types");
-        }
-
-        else if (operator.equals("<") || operator.equals(">") || operator.equals("==") || operator.equals("!=")) {
-            if(leftType.equals(rightType) && (leftType.equals(Environment.Type.INTEGER) || leftType.equals(Environment.Type.DECIMAL)
-                    || leftType.equals(Environment.Type.CHARACTER) || leftType.equals(Environment.Type.STRING))) {
-                ast.setType(Environment.Type.COMPARABLE);
-                return null;
-            }
+        switch (operator) {
+            case "&&":
+            case "||":
+                if (leftType.equals(rightType) && leftType.equals(Environment.Type.BOOLEAN)) {
+                    ast.setType(Environment.Type.BOOLEAN);
+                    return null;
+                }
                 throw new RuntimeException("Mismatched types");
-        }
-
-        else if (operator.equals("+")) {
-
-            if(leftType.equals(Environment.Type.STRING) || rightType.equals(Environment.Type.STRING)) {
-                ast.setType(Environment.Type.STRING);
-            }
-            else if (leftType.equals(Environment.Type.INTEGER)) {
-                if(!(rightType.equals(Environment.Type.INTEGER)))
-                    throw new RuntimeException("Mismatched types");
-                ast.setType(Environment.Type.INTEGER);
-            }
-            else if (ast.getLeft().getType().equals(Environment.Type.DECIMAL)) {
-                if(!(ast.getRight().getType().equals(Environment.Type.DECIMAL)))
-                    throw new RuntimeException("Mismatched types");
-                ast.setType(Environment.Type.DECIMAL);
-            }
-
-            return null;
-        }
-
-        else if (operator.equals("-") || operator.equals("*") || operator.equals("/")) {
-            if(!(leftType.equals(rightType)))
+            case "<":
+            case ">":
+            case "==":
+            case "!=":
+                if (leftType.equals(rightType) && (leftType.equals(Environment.Type.INTEGER) || leftType.equals(Environment.Type.DECIMAL)
+                        || leftType.equals(Environment.Type.CHARACTER) || leftType.equals(Environment.Type.STRING))) {
+                    ast.setType(Environment.Type.COMPARABLE);
+                    return null;
+                }
                 throw new RuntimeException("Mismatched types");
-            ast.setType(leftType);
-            return null;
-        }
+            case "+":
 
-        else if (operator.equals("^")) {
-            if(leftType.equals(rightType) && leftType.equals(Environment.Type.INTEGER)) {
-                ast.setType(Environment.Type.INTEGER);
+                if (leftType.equals(Environment.Type.STRING) || rightType.equals(Environment.Type.STRING)) {
+                    ast.setType(Environment.Type.STRING);
+                } else if (leftType.equals(Environment.Type.INTEGER)) {
+                    if (!(rightType.equals(Environment.Type.INTEGER)))
+                        throw new RuntimeException("Mismatched types");
+                    ast.setType(Environment.Type.INTEGER);
+                } else if (ast.getLeft().getType().equals(Environment.Type.DECIMAL)) {
+                    if (!(ast.getRight().getType().equals(Environment.Type.DECIMAL)))
+                        throw new RuntimeException("Mismatched types");
+                    ast.setType(Environment.Type.DECIMAL);
+                }
+
                 return null;
-            }
-            throw new RuntimeException("Mismatched types");
+            case "-":
+            case "*":
+            case "/":
+                if (!(leftType.equals(rightType)))
+                    throw new RuntimeException("Mismatched types");
+                ast.setType(leftType);
+                return null;
+            case "^":
+                if (leftType.equals(rightType) && leftType.equals(Environment.Type.INTEGER)) {
+                    ast.setType(Environment.Type.INTEGER);
+                    return null;
+                }
+                throw new RuntimeException("Mismatched types");
         }
 
         throw new UnsupportedOperationException();
@@ -338,8 +326,6 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Expression.Access ast) {
-
-        Environment.PlcObject result = null;
 
         if(ast.getOffset().isPresent()) {
             Ast.Expression offset = ast.getOffset().get();
@@ -351,7 +337,6 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
         ast.setVariable(scope.lookupVariable(ast.getName()));
         return null;
-        //throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
@@ -379,16 +364,12 @@ public final class Analyzer implements Ast.Visitor<Void> {
         List <Ast.Expression> valueList = ast.getValues();
 
 
-        for(int i = 0; i < valueList.size(); i++){
-            visit(valueList.get(i));
-            requireAssignable(ast.getType(), valueList.get(i).getType());
+        for (Ast.Expression expression : valueList) {
+            visit(expression);
+            requireAssignable(ast.getType(), expression.getType());
         }
 
         return null;
-
-
-
-        //throw new UnsupportedOperationException();  // TODO
     }
 
     public static void requireAssignable(Environment.Type target, Environment.Type type) {
