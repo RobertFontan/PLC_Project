@@ -87,7 +87,7 @@ public final class Analyzer implements Ast.Visitor<Void> {
         scope = scope.getParent();
         return null;
 
-       // throw new UnsupportedOperationException();  // TODO
+        // throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
@@ -125,11 +125,11 @@ public final class Analyzer implements Ast.Visitor<Void> {
             requireAssignable(type, ast.getValue().get().getType());
         }
         ast.setVariable(scope.defineVariable(ast.getName(),
-                                             ast.getName(),
-                                             type,
-                                             true,
-                                             Environment.NIL)
-                );
+                ast.getName(),
+                type,
+                true,
+                Environment.NIL)
+        );
 
         return null;
     }
@@ -378,7 +378,7 @@ public final class Analyzer implements Ast.Visitor<Void> {
             if(target.equals(Environment.Type.COMPARABLE)) { //Integer, Decimal, Character, and String
                 if(!(type.equals(Environment.Type.INTEGER) || type.equals(Environment.Type.DECIMAL)
                         || type.equals(Environment.Type.CHARACTER) || type.equals(Environment.Type.STRING)))
-                            throw new RuntimeException("Type is not Comparable");
+                    throw new RuntimeException("Type is not Comparable");
             }
             else if(!(target.equals(type))) //EVERY OTHER TYPE SHOULD MATCH, OTHERWISE EXCEPTION IS THROWN
                 throw new RuntimeException("Mismatched Types");
