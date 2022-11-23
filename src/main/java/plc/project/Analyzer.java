@@ -57,34 +57,35 @@ public final class Analyzer implements Ast.Visitor<Void> {
     @Override
     public Void visit(Ast.Function ast) {
         List<Environment.Type> TypeList = new ArrayList<>();
-        String name = ast.getName();
+        //String name = ast.getName();
 
         for(int i = 0; i < ast.getParameterTypeNames().size(); i++){
             TypeList.add(Environment.getType(ast.getParameterTypeNames().get(i)));
         }
+        Environment.Type func = Environment.NIL.getType();
 
 
-        scope.defineFunction(name, name, TypeList, Environment.getType(ast.getReturnTypeName().orElse("NIL")), args -> Environment.NIL);
-        ast.setFunction(scope.lookupFunction(ast.getName(), ast.getParameters().size()));
+        if(ast.getReturnTypeName().isPresent()){
+            func = Environment.getType(ast.getReturnTypeName().get());
+        }
+
+        scope.defineVariable("func","func", func, true, Environment.NIL);
+
+        scope.defineFunction(ast.getName(), ast.getName(), TypeList, Environment.getType(ast.getReturnTypeName().orElse("NIL")), args -> Environment.NIL);
 
         scope = new Scope(scope);
 
-        for (int j= 0; j < ast.getParameters().size(); j++){
+        for (int j = 0; j < ast.getParameters().size(); j++) {
             scope.defineVariable(ast.getParameters().get(j), ast.getParameters().get(j), Environment.getType(ast.getParameterTypeNames().get(j)), true, Environment.NIL);
         }
 
-        //function = Environment.getType(ast.getReturnTypeName().orElse("NIL"));
-        //Environment.Type functionType = ast.getFunction().getReturnType();
-        //functionType = Environment.getType(ast.getReturnTypeName().orElse("NIL"));
-        //ast.getStatements().forEach(this::visit);
-        //functionType = null;
-        //Environment.Type functionType = Environment.getType(ast.getReturnTypeName().orElse("NIL"));
         ast.getStatements().forEach(this::visit);
+        ast.setFunction(scope.lookupFunction(ast.getName(), ast.getParameters().size()));
+        scope = scope.getParent();
+
 
         //function = null;
 
-
-        scope = scope.getParent();
         return null;
 
         // throw new UnsupportedOperationException();  // TODO
@@ -181,7 +182,7 @@ public final class Analyzer implements Ast.Visitor<Void> {
         visit(condition);
 
         if(cases.get(cases.size() - 1).getValue().isPresent())
-            throw new RuntimeException("Default case has a value");
+            throw new RuntimeException("Default case Error");
 
         // Loop through each case statement, checking for exception conditions,
         // visiting the value, and then visiting the case itself:
@@ -190,7 +191,6 @@ public final class Analyzer implements Ast.Visitor<Void> {
                 visit(cases_.getValue().get());
                 requireAssignable(condition.getType(), cases_.getValue().get().getType());
             }
-
             scope = new Scope(scope);
             visit(cases_);
         }
@@ -228,8 +228,8 @@ public final class Analyzer implements Ast.Visitor<Void> {
     @Override
     public Void visit(Ast.Statement.Return ast) {
         visit(ast.getValue());
-        requireAssignable(function.getFunction().getReturnType(), ast.getValue().getType());
-
+        Environment.Variable ret = scope.lookupVariable("func");
+        requireAssignable(ast.getValue().getType(), ret.getType());
         return null;
     }
 

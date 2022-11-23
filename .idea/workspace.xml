@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="switch and case finished">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="switch fixed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" afterDir="false" />
     </list>
@@ -243,7 +243,7 @@
       <workItem from="1669070521619" duration="1286000" />
       <workItem from="1669140429029" duration="1066000" />
       <workItem from="1669157181239" duration="115000" />
-      <workItem from="1669157331161" duration="903000" />
+      <workItem from="1669157331161" duration="5602000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -504,7 +504,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668883824561</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="switch fixed">
+      <created>1669158315031</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1669158315031</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -522,7 +529,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixed closing parenthesis" />
     <MESSAGE value="fixed trailing commas" />
     <MESSAGE value="fixed missing semi" />
     <MESSAGE value="fixed missing value and operand" />
@@ -547,6 +553,7 @@
     <MESSAGE value="expression function and plcList?" />
     <MESSAGE value="source, global, return, function mostly done" />
     <MESSAGE value="switch and case finished" />
-    <option name="LAST_COMMIT_MESSAGE" value="switch and case finished" />
+    <MESSAGE value="switch fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="switch fixed" />
   </component>
 </project>
