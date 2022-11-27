@@ -76,12 +76,18 @@ public final class Parser {
      * next token declares a list, aka {@code LIST}.
      */
     public Ast.Global parseList() throws ParseException {
-        //list ::= 'LIST' identifier '=' '[' expression (',' expression)* ']'
+        //TODO, in progress
+        //list ::= 'LIST' identifier         ':' identifier         '=' '[' expression (',' expression)* ']'
 
         match("LIST");
         if(!match(Token.Type.IDENTIFIER))
-            throw new ParseException("Excpected Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
+            throw new ParseException("Expected Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
         String name = tokens.get(-1).getLiteral();
+
+        if(!match(":"))
+            throw new ParseException("Expected ':'", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
+        else if(!match(Token.Type.IDENTIFIER))
+            throw new ParseException("Expected Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
 
         if(!match("="))
             throw new ParseException("Expected '='", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
@@ -107,19 +113,29 @@ public final class Parser {
      * next token declares a mutable global variable, aka {@code VAR}.
      */
     public Ast.Global parseMutable() throws ParseException {
-        //mutable ::= 'VAR' identifier ('=' expression)?
+        //TODO, in progress
+        //mutable ::= 'VAR'  identifier           ':' identifier        ('=' expression)?
+
+        String typeName = null;
         match("VAR");
 
         if(!match(Token.Type.IDENTIFIER))
             throw new ParseException("MISSING IDENTIFIER", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
         String name = tokens.get(-1).getLiteral();
 
+        if (!match(":"))
+            throw new ParseException("Expected colon", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
+        else if (!match(Token.Type.IDENTIFIER))
+            throw new ParseException("Expected Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
+
+        typeName = tokens.get(-1).getLiteral();
+
         if(match("=")) {
             Ast.Expression expr = parseExpression();
-            return new Ast.Global(name, true, Optional.of(expr));
+            return new Ast.Global(name, typeName, true, Optional.of(expr));
         }
 
-        return new Ast.Global(name, true, Optional.empty());
+        return new Ast.Global(name, typeName, true, Optional.empty());
     }
 
     /**
@@ -127,15 +143,28 @@ public final class Parser {
      * next token declares an immutable global variable, aka {@code VAL}.
      */
     public Ast.Global parseImmutable() throws ParseException {
-        //immutable ::= 'VAL' identifier '=' expression
+        //TODO, in progress
+        //immutable ::= 'VAL' identifier       ':' identifier        '=' expression
+
+        String typeName = null;
+
         match("VAL");
         if(!match(Token.Type.IDENTIFIER))
             throw new ParseException("Expected Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
         String name = tokens.get(-1).getLiteral();
+
+        if (!match(":"))
+            throw new ParseException("Expected colon", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
+        else if (!match(Token.Type.IDENTIFIER))
+            throw new ParseException("Expected Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
+
+        typeName = tokens.get(-1).getLiteral();
+
         if(!match("="))
             throw new ParseException("Expected Operator '='", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
         Ast.Expression expr = parseExpression();
-        return new Ast.Global(name, false, Optional.of(expr));
+
+        return new Ast.Global(name, typeName, false, Optional.of(expr));
     }
 
     /**
@@ -143,8 +172,12 @@ public final class Parser {
      * next tokens start a method, aka {@code FUN}.
      */
     public Ast.Function parseFunction() throws ParseException {
-        // function ::= 'FUN' identifier '(' (identifier (',' identifier)* )? ')' 'DO' block 'END'
+        //TODO, in progress
+        //function ::= 'FUN' identifier '(' (identifier       ':' identifier        (',' identifier       ':' identifier        )* )? ')' (        ':' identifier)?        'DO'
         List<String> parameterList = new ArrayList<String>();
+        List<String> parameterTypeNames = new ArrayList<String>();
+        Optional<String> returnTypeName = Optional.empty();
+
         match("FUN");
         if(!match(Token.Type.IDENTIFIER))
             throw new ParseException("Expected Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
@@ -153,25 +186,45 @@ public final class Parser {
         if(!match("("))
             throw new ParseException("Expected opening parenthesis", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
 
-        if(!peek("DO") && match(Token.Type.IDENTIFIER)) {
+        if(match(Token.Type.IDENTIFIER)) {
             parameterList.add(tokens.get(-1).getLiteral());
-            while(match(",")) {
-                if(!match(Token.Type.IDENTIFIER))
-                    throw new ParseException("Trailing comma", tokens.get(-1).getIndex());
-                else
-                    parameterList.add(tokens.get(-1).getLiteral());
+
+            if (!match(":"))
+                throw new ParseException("Expected colon", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
+            else if (!match(Token.Type.IDENTIFIER))
+                throw new ParseException("Expected Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
+
+            parameterTypeNames.add(tokens.get(-1).getLiteral());
+            while (match(",")) {
+                if (!match(Token.Type.IDENTIFIER))
+                    throw new ParseException("Expected Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
+
+                parameterList.add(tokens.get(-1).getLiteral());
+
+                if (!match(":"))
+                    throw new ParseException("Expected colon", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
+                else if (!match(Token.Type.IDENTIFIER))
+                    throw new ParseException("Expected Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
+
+                parameterTypeNames.add(tokens.get(-1).getLiteral());
             }
         }
+            if(!match(")"))
+                throw new ParseException("Expected ')'", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
 
-        if(!match(")"))
-            throw new ParseException("Expected closing parenthesis", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
+            else if(match(":")) {
+                if(!match(Token.Type.IDENTIFIER))
+                    throw new ParseException("Expected Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
+
+                returnTypeName = Optional.ofNullable(tokens.get(-1).getLiteral());
+            }
 
         if(!match("DO"))
             throw new ParseException("Expected 'DO'", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
 
         List<Ast.Statement> block = parseBlock();
 
-        return new Ast.Function(functionName, parameterList, block);
+        return new Ast.Function(functionName, parameterList, parameterTypeNames, returnTypeName, block);
     }
 
     /**
@@ -239,29 +292,38 @@ public final class Parser {
      * statement, aka {@code LET}.
      */
     public Ast.Statement.Declaration parseDeclarationStatement() throws ParseException {
+        //TODO, in progress
+        //'LET' identifier        (':' identifier)?             ('=' expression)? ';'
         // LET name = expr;
         // LET name;
         // 'LET' identifier ('=' expression)? ';'
-        String name;
-        Ast.Expression expr;
-        if(peek(Token.Type.IDENTIFIER)){
-            match(Token.Type.IDENTIFIER);
-            name = tokens.get(-1).getLiteral();
+        Ast.Expression expr = null;
+        Optional<String> typeName = Optional.empty();
+
+        if(!match(Token.Type.IDENTIFIER))
+            throw new ParseException("Missing Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
+
+        String name = tokens.get(-1).getLiteral();
+
+        //MODIFIED PARSER =============================
+        if(match(":"))  {
+            if(!match(Token.Type.IDENTIFIER))
+                throw new ParseException("Missing Identifier", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
+            typeName = Optional.ofNullable(tokens.get(-1).getLiteral());
         }
-        else
-            throw new ParseException("Missing Identifier" , tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length() + 1);
-        if(peek("=")){
-            match("=");
+        //=============================================
+
+        if(match("=")){
             expr = parseExpression();
             if(!match(";"))
                 throw new ParseException("Missing Declarative Semicolon", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
             return new Ast.Statement.Declaration(name, Optional.of(expr));
         }
 
-        if(!match(";"))
+        else if(!match(";"))
             throw new ParseException("Missing Declarative Semicolon", tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
 
-        return new Ast.Statement.Declaration(name, Optional.empty());
+        return new Ast.Statement.Declaration(name, typeName, Optional.empty());
     }
 
     /**
