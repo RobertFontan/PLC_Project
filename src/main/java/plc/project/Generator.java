@@ -45,7 +45,9 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.Expression ast) {
-        throw new UnsupportedOperationException(); //TODO
+        visit(ast.getExpression());
+        print(";");
+        return null;
     }
 
     @Override
@@ -60,7 +62,28 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.If ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print("if (");
+        visit(ast.getCondition());
+        print(") {");
+        if(!ast.getThenStatements().isEmpty()) {
+            for(Ast.Statement statements : ast.getThenStatements()) {
+                newline(1);
+                visit(statements);
+            }
+            newline(0);
+            print("}");
+        }
+        if(!ast.getElseStatements().isEmpty()) {
+            print(" else {");
+            for(Ast.Statement statements : ast.getElseStatements()) {
+                newline(1);
+                visit(statements);
+            }
+            newline(0);
+            print("}");
+        }
+
+        return null;
     }
 
     @Override
@@ -105,12 +128,19 @@ public final class Generator implements Ast.Visitor<Void> {
             String literal = ast.getLiteral().toString();
             print(literal);
         }
+        else if(ast.getType().equals(Environment.Type.NIL))
+            print("null");
+
         return null; //TODO, in progress
     }
 
     @Override
     public Void visit(Ast.Expression.Group ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print("(");
+        visit(ast.getExpression());
+        print(")");
+
+        return null;
     }
 
     @Override
@@ -127,7 +157,15 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Expression.Access ast) {
-        throw new UnsupportedOperationException(); //TODO
+        if(ast.getOffset().isPresent()) {   // LIST ACCESS
+            String listAccess = ast.getVariable().getJvmName() + "[" + ast.getOffset().toString() + "]";
+            print(listAccess);
+        }
+        else {  // VARIABLE ACCESS
+            print(ast.getVariable().getJvmName());
+        }
+
+        return null;
     }
 
     @Override
