@@ -85,7 +85,27 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Expression.Literal ast) {
-        throw new UnsupportedOperationException(); //TODO
+        if(ast.getLiteral().equals(true))
+            print("true");
+        else if(ast.getLiteral().equals(false))
+            print("false");
+        else if(ast.getType().equals(Environment.Type.STRING)) {
+            String literal = "\"" + ast.getLiteral().toString() + "\"";
+            print(literal);
+        }
+        else if(ast.getType().equals(Environment.Type.CHARACTER)) {
+            String literal = "'" + ast.getLiteral().toString() + "'";
+            print(literal);
+        }
+        else if(ast.getType().equals(Environment.Type.INTEGER)) {//TODO USE BIG INTEGER CLASS
+            String literal = ast.getLiteral().toString();
+            print(literal);
+        }
+        else if(ast.getType().equals(Environment.Type.DECIMAL)) {//TODO USE BIG DECIMAL CLASS FOR PRECISION
+            String literal = ast.getLiteral().toString();
+            print(literal);
+        }
+        return null; //TODO, in progress
     }
 
     @Override
@@ -95,7 +115,14 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Expression.Binary ast) {
-        throw new UnsupportedOperationException(); //TODO
+        visit(ast.getLeft());
+        print(" ");
+        print(ast.getOperator().toString());
+        print(" ");
+        visit(ast.getRight());
+        System.out.println("LEFT: " + ast.getLeft().toString()+ "RIGHT: " + ast.getRight().toString() + "OPERATOR: " + ast.getOperator().toString());
+
+        return null;
     }
 
     @Override
