@@ -1,6 +1,7 @@
 package plc.project;
 
 import java.io.PrintWriter;
+import java.util.List;
 
 public final class Generator implements Ast.Visitor<Void> {
 
@@ -105,7 +106,18 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.Switch ast) {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression condition= ast.getCondition();
+
+        print("switch "); print("(");
+        visit(condition); print(") {");
+
+        for(Ast.Statement.Case cases : ast.getCases())
+            visit(cases);
+
+        newline(0); print("}");
+
+
+        return null;
     }
 
     @Override
@@ -120,7 +132,10 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.Return ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print("return ");
+        visit(ast.getValue());
+
+        return null;
     }
 
     @Override
@@ -187,12 +202,32 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Expression.Function ast) {
-        throw new UnsupportedOperationException(); //TODO
+        String name = ast.getFunction().getJvmName();
+        List<Ast.Expression> arguments = ast.getArguments();
+        print(name);
+        print("(");
+
+        for(Ast.Expression argument : arguments) {
+            visit(argument);
+            if(arguments.size() != 1)
+                print(", ");
+        }
+        print(")");
+
+        return null;
     }
 
     @Override
     public Void visit(Ast.Expression.PlcList ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print("{");
+
+        for(Ast.Expression vals : ast.getValues()) {
+            visit(vals);
+            print(", ");
+        }
+
+        print("{");
+        return null;
     }
 
 }
