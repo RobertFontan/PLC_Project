@@ -31,18 +31,65 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Source ast) {
+        print("public class Main {");
 
-        throw new UnsupportedOperationException(); //TODO
+        //GLOBALS
+        for(Ast.Global global : ast.getGlobals()) {
+            newline(indent); newline(1);
+            visit(global);
+        }
+
+        // JAVA MAIN METHOD
+        newline(0); newline(1);
+        print("public static void main(String[] args) {");
+        newline(2); print("System.exit(new Main().main());");
+        newline(1); print("}");
+
+        //FUNCTIONS
+        for(Ast.Function function : ast.getFunctions()) {
+            newline(indent); newline(indent + 1);
+            visit(function);
+        }
+
+        indent = 0;
+        newline(indent); newline(indent); print("}");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Global ast) {
+        indent = 1;
         throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
-    public Void visit(Ast.Function ast) {
-        throw new UnsupportedOperationException(); //TODO
+    public Void visit(Ast.Function ast) {   //come back and adjust indentations
+        indent = 1;
+        print(ast.getFunction().getReturnType().getJvmName());
+        print(" "); print(ast.getFunction().getName()); print("(");
+
+        for(int i = 0; i < ast.getParameters().size(); i++) {
+            print(ast.getParameterTypeNames().get(i).toString()); print(" ");
+
+            if(i == ast.getParameters().size() - 1) {
+                print(ast.getParameters().get(i).toString());
+            } else
+                print(ast.getParameters().get(i).toString()); print(", ");
+        }
+        print(")"); print(" {");
+
+        indent = 2;
+        for(Ast.Statement stmt : ast.getStatements()) {
+            newline(indent);
+            visit(stmt);
+
+            if(stmt.equals(ast.getStatements().get(ast.getStatements().size() -1 ))) {
+                indent = 1;
+                newline(indent);
+            }
+        }
+        print("}");
+        return null;
     }
 
     @Override
@@ -64,7 +111,6 @@ public final class Generator implements Ast.Visitor<Void> {
         print(";");
 
         return null;
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
@@ -75,7 +121,6 @@ public final class Generator implements Ast.Visitor<Void> {
         print(";");
 
         return null;
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
@@ -156,18 +201,28 @@ public final class Generator implements Ast.Visitor<Void> {
 
 
         return null;
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
     public Void visit(Ast.Statement.While ast) {
-        throw new UnsupportedOperationException(); //TODO
+
+        print("while"); print ("(");
+        visit(ast.getCondition()); print(")"); print("{");
+
+        for(Ast.Statement statement : ast.getStatements()) {
+            newline(1);
+            visit(statement);
+            //TODO: DO WE NEED TO PRINT THE SEMICOLONS HERE??
+        }
+        newline(0); print("}");
+
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.Return ast) {
         print("return ");
-        visit(ast.getValue());
+        visit(ast.getValue()); print(";");
 
         return null;
     }
