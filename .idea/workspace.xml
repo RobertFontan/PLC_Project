@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="all test cases pass">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="statement declaration and assignment">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" afterDir="false" />
     </list>
@@ -56,19 +56,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/rober/Documents/Code/Programming Language Concepts/PLC_Project/src/test/java/plc/project/GeneratorTests.java",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/rober/Documents/Code/Programming Language Concepts/PLC_Project/src/main/java/plc/project/Generator.java&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
   }
-}]]></component>
-  <component name="RunManager">
+}</component>
+  <component name="RunManager" selected="Gradle.GeneratorTests">
     <configuration name="AnalyzerTests" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -83,6 +83,29 @@
             <option value=":test" />
             <option value="--tests" />
             <option value="&quot;plc.project.AnalyzerTests&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="GeneratorTests" type="GradleRunConfiguration" factoryName="Gradle">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;plc.project.GeneratorTests&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -162,6 +185,7 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Gradle.GeneratorTests" />
       <item itemvalue="Gradle.LexerTests" />
       <item itemvalue="Gradle.ParserTests" />
       <item itemvalue="Gradle.AnalyzerTests" />
@@ -245,7 +269,9 @@
       <workItem from="1669157181239" duration="115000" />
       <workItem from="1669157331161" duration="6060000" />
       <workItem from="1669660200394" duration="430000" />
-      <workItem from="1669864934950" duration="2711000" />
+      <workItem from="1669864934950" duration="3566000" />
+      <workItem from="1670125087922" duration="2125000" />
+      <workItem from="1670127259253" duration="577000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -520,7 +546,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669179000452</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="statement declaration and assignment">
+      <created>1669867917479</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1669867917479</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -538,7 +571,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixed missing semi" />
     <MESSAGE value="fixed missing value and operand" />
     <MESSAGE value="added parserTests file" />
     <MESSAGE value="statement and block added" />
@@ -563,6 +595,7 @@
     <MESSAGE value="switch and case finished" />
     <MESSAGE value="switch fixed" />
     <MESSAGE value="all test cases pass" />
-    <option name="LAST_COMMIT_MESSAGE" value="all test cases pass" />
+    <MESSAGE value="statement declaration and assignment" />
+    <option name="LAST_COMMIT_MESSAGE" value="statement declaration and assignment" />
   </component>
 </project>

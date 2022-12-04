@@ -58,7 +58,7 @@ public final class Generator implements Ast.Visitor<Void> {
         print(ast.getVariable().getType().getJvmName() + " " + ast.getName());
 
         if(ast.getValue().isPresent()){
-            print("  = ");
+            print(" = ");
             visit(ast.getValue().get());
         }
         print(";");
@@ -106,15 +106,20 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.Switch ast) {
-        Ast.Expression condition= ast.getCondition();
+        Ast.Expression condition = ast.getCondition();
 
-        print("switch "); print("(");
-        visit(condition); print(") {");
+        print("switch ");
+        print("(");
+        visit(condition);
+        print(") {");
 
-        for(Ast.Statement.Case cases : ast.getCases())
+        indent++;
+        for (Ast.Statement.Case cases : ast.getCases()){
+            newline(indent);
             visit(cases);
-
+        }
         newline(0); print("}");
+
 
 
         return null;
@@ -122,7 +127,36 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.Case ast) {
-        throw new UnsupportedOperationException(); //TODO
+        if (ast.getValue().isPresent()) {
+            print("case ");
+            visit(ast.getValue().get());
+            print(":");
+            indent++;
+            for (int i = 0; i < ast.getStatements().size(); i++) {
+                newline(indent);
+                visit(ast.getStatements().get(i));
+            }
+            newline(indent);
+            print("break;");
+
+            indent--;
+        }
+        else {
+            print("default:");
+            indent++;
+            for (int i = 0; i < ast.getStatements().size(); i++) {
+                newline(indent);
+                visit(ast.getStatements().get(i));
+            }
+            //newline(indent);
+           // print("break;");
+
+            indent--;
+        }
+
+
+        return null;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
