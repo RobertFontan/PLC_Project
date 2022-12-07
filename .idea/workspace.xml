@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="statement declaration and assignment">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="switch and case done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" afterDir="false" />
     </list>
@@ -271,7 +271,8 @@
       <workItem from="1669660200394" duration="430000" />
       <workItem from="1669864934950" duration="3566000" />
       <workItem from="1670125087922" duration="2125000" />
-      <workItem from="1670127259253" duration="577000" />
+      <workItem from="1670127259253" duration="827000" />
+      <workItem from="1670378027087" duration="3444000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -553,7 +554,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669867917479</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="switch and case done">
+      <created>1670127858650</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1670127858650</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -571,7 +579,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixed missing value and operand" />
     <MESSAGE value="added parserTests file" />
     <MESSAGE value="statement and block added" />
     <MESSAGE value="all statements done" />
@@ -596,6 +603,7 @@
     <MESSAGE value="switch fixed" />
     <MESSAGE value="all test cases pass" />
     <MESSAGE value="statement declaration and assignment" />
-    <option name="LAST_COMMIT_MESSAGE" value="statement declaration and assignment" />
+    <MESSAGE value="switch and case done" />
+    <option name="LAST_COMMIT_MESSAGE" value="switch and case done" />
   </component>
 </project>

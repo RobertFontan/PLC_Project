@@ -14,35 +14,98 @@ public final class Generator implements Ast.Visitor<Void> {
 
     private void print(Object... objects) {
         for (Object object : objects) {
-            if (object instanceof Ast) {
+            if (object instanceof Ast)
                 visit((Ast) object);
-            } else {
+            else
                 writer.write(object.toString());
-            }
         }
     }
 
     private void newline(int indent) {
         writer.println();
-        for (int i = 0; i < indent; i++) {
+        for (int i = 0; i < indent; i++)
             writer.write("    ");
-        }
+
     }
 
     @Override
     public Void visit(Ast.Source ast) {
+        print("public class Main {");
+        newline(indent);
+        indent++;
+        newline(indent);
+        for (Ast.Global global : ast.getGlobals()) {
+            print(global);
+            newline(indent);
+        }
+        print("public static void main(String[] args) {");
+        newline(indent + 1);
+        print("System.exit(new Main().main());");
+        newline(indent);
+        print("}");
 
-        throw new UnsupportedOperationException(); //TODO
+        for (Ast.Function function : ast.getFunctions()) {
+            indent--;
+            newline(indent);
+            indent++;
+            newline(indent);
+            print(function);
+        }
+        indent--;
+        newline(indent);
+        newline(indent);
+        print("}");
+        return null;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
     public Void visit(Ast.Global ast) {
-        throw new UnsupportedOperationException(); //TODO
+        String typeName = Environment.getType(ast.getTypeName()).getJvmName();
+        if (ast.getValue().isPresent() && ast.getValue().get() instanceof Ast.Expression.PlcList)
+            print(typeName, "[] ", ast.getName());
+        else if (ast.getMutable())
+            print(typeName, " ", ast.getName());
+        else
+            print("final ", typeName, " ", ast.getName());
+
+
+        if (ast.getValue().isPresent())
+            print(" = ", ast.getValue().get());
+
+        print(";");
+
+        return null;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
     public Void visit(Ast.Function ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print(ast.getFunction().getReturnType().getJvmName() + " " + ast.getName() + "(");
+        for (int i = 0; i < ast.getParameters().size(); i++) {
+            print(Environment.getType(ast.getParameterTypeNames().get(i)).getJvmName() + " ");
+            print(ast.getParameters().get(i));
+            if (i != ast.getParameters().size() - 1)
+                print(", ");
+        }
+        print(") {");
+        if (ast.getStatements().size() == 0)
+            print("}");
+        else {
+            indent++;
+            for (int i = 0; i < ast.getStatements().size(); i++) {
+                newline(indent);
+                visit(ast.getStatements().get(i));
+                //print(";");
+            }
+            print(";");
+            indent--;
+            newline(indent);
+            print("}");
+        }
+
+        return null;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
@@ -106,11 +169,9 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.Switch ast) {
-        Ast.Expression condition = ast.getCondition();
-
         print("switch ");
         print("(");
-        visit(condition);
+        visit(ast.getCondition());
         print(") {");
 
         indent++;
@@ -118,7 +179,8 @@ public final class Generator implements Ast.Visitor<Void> {
             newline(indent);
             visit(cases);
         }
-        newline(0); print("}");
+        newline(0);
+        print("}");
 
 
 
@@ -197,7 +259,7 @@ public final class Generator implements Ast.Visitor<Void> {
         else if(ast.getType().equals(Environment.Type.NIL))
             print("null");
 
-        return null; //TODO, in progress
+        return null;
     }
 
     @Override
@@ -255,12 +317,14 @@ public final class Generator implements Ast.Visitor<Void> {
     public Void visit(Ast.Expression.PlcList ast) {
         print("{");
 
-        for(Ast.Expression vals : ast.getValues()) {
-            visit(vals);
-            print(", ");
+        for (int i = 0; i < ast.getValues().size(); i++) {
+            visit(ast.getValues().get(i));
+            if (i != ast.getValues().size() - 1) {
+                print(", ");
+            }
         }
 
-        print("{");
+        print("}");
         return null;
     }
 
