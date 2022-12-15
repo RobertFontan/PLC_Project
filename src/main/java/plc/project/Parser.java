@@ -576,7 +576,7 @@ public final class Parser {
                 return new Ast.Expression.Group(expr);
             else {
                 String temp = tokens.get(-1).getLiteral();
-                throw new ParseException("No closing Parenthesis" + (tokens.get(temp.length() - 1).getIndex()), tokens.get(temp.length() - 1).getIndex());
+                throw new ParseException("No closing parenthesis: " + (tokens.get(-1).getIndex()), tokens.get(-1).getIndex());
             }
         }
         throw new ParseException("Invalid Expression", tokens.get(0).getIndex());
