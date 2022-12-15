@@ -96,9 +96,8 @@ public final class Generator implements Ast.Visitor<Void> {
             for (int i = 0; i < ast.getStatements().size(); i++) {
                 newline(indent);
                 visit(ast.getStatements().get(i));
-                //print(";");
             }
-            print(";");
+
             indent--;
             newline(indent);
             print("}");
@@ -127,18 +126,14 @@ public final class Generator implements Ast.Visitor<Void> {
         print(";");
 
         return null;
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
     public Void visit(Ast.Statement.Assignment ast) {
-        visit(ast.getReceiver());
-        print(" = ");
-        visit(ast.getValue());
-        print(";");
+        visit(ast.getReceiver()); print(" = ");
+        visit(ast.getValue()); print(";");
 
         return null;
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
@@ -146,21 +141,23 @@ public final class Generator implements Ast.Visitor<Void> {
         print("if (");
         visit(ast.getCondition());
         print(") {");
+        indent++;
         if(!ast.getThenStatements().isEmpty()) {
             for(Ast.Statement statements : ast.getThenStatements()) {
-                newline(1);
+                newline(indent);
                 visit(statements);
             }
-            newline(0);
+            newline(--indent);
             print("}");
         }
         if(!ast.getElseStatements().isEmpty()) {
+            indent++;
             print(" else {");
             for(Ast.Statement statements : ast.getElseStatements()) {
-                newline(1);
+                newline(indent);
                 visit(statements);
             }
-            newline(0);
+            newline(--indent);
             print("}");
         }
 
@@ -179,7 +176,7 @@ public final class Generator implements Ast.Visitor<Void> {
             newline(indent);
             visit(cases);
         }
-        newline(0);
+        newline(--indent);
         print("}");
 
 
@@ -223,20 +220,33 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.While ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print("while ("); visit(ast.getCondition()); print(") {");
+        indent++;
+
+        for(Ast.Statement stmt : ast.getStatements()) {
+            newline(indent);
+            visit(stmt);
+        }
+
+        indent--; newline(indent);
+        print("}");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.Return ast) {
         print("return ");
         visit(ast.getValue());
+        print(";");
 
         return null;
     }
 
     @Override
     public Void visit(Ast.Expression.Literal ast) {
-        if(ast.getLiteral().equals(true))
+        if(ast.getType().equals(Environment.Type.NIL))
+            print("null");
+        else if(ast.getLiteral().equals(true))
             print("true");
         else if(ast.getLiteral().equals(false))
             print("false");
@@ -248,16 +258,14 @@ public final class Generator implements Ast.Visitor<Void> {
             String literal = "'" + ast.getLiteral().toString() + "'";
             print(literal);
         }
-        else if(ast.getType().equals(Environment.Type.INTEGER)) {//TODO USE BIG INTEGER CLASS
+        else if(ast.getType().equals(Environment.Type.INTEGER)) {
             String literal = ast.getLiteral().toString();
             print(literal);
         }
-        else if(ast.getType().equals(Environment.Type.DECIMAL)) {//TODO USE BIG DECIMAL CLASS FOR PRECISION
+        else if(ast.getType().equals(Environment.Type.DECIMAL)) {
             String literal = ast.getLiteral().toString();
             print(literal);
         }
-        else if(ast.getType().equals(Environment.Type.NIL))
-            print("null");
 
         return null;
     }
@@ -273,12 +281,19 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Expression.Binary ast) {
-        visit(ast.getLeft());
-        print(" ");
-        print(ast.getOperator().toString());
-        print(" ");
-        visit(ast.getRight());
-        System.out.println("LEFT: " + ast.getLeft().toString()+ "RIGHT: " + ast.getRight().toString() + "OPERATOR: " + ast.getOperator().toString());
+        String operator = ast.getOperator().toString();
+
+
+        if(operator.equals("^")) {
+            print("Math.pow(");
+            visit(ast.getLeft()); print(", ");
+            visit(ast.getRight()); print(")");
+        }
+        else {
+            visit(ast.getLeft()); print(" ");
+            print(ast.getOperator().toString()); print(" ");
+            visit(ast.getRight());
+        }
 
         return null;
     }
@@ -286,8 +301,8 @@ public final class Generator implements Ast.Visitor<Void> {
     @Override
     public Void visit(Ast.Expression.Access ast) {
         if(ast.getOffset().isPresent()) {   // LIST ACCESS
-            String listAccess = ast.getVariable().getJvmName() + "[" + ast.getOffset().toString() + "]";
-            print(listAccess);
+            print(ast.getVariable().getJvmName()); print("[");
+            visit(ast.getOffset().get()); print("]");
         }
         else {  // VARIABLE ACCESS
             print(ast.getVariable().getJvmName());

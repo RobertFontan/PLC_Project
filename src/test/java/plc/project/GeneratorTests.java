@@ -122,6 +122,29 @@ public class GeneratorTests {
                                 "}"
                         )
                 ),
+                Arguments.of("nested if",
+                        // IF expr DO
+                        //     IF expr DO
+                        //         stmt;
+                        //         END
+                        // END
+                        new Ast.Statement.If(
+                                init(new Ast.Expression.Access(Optional.empty(), "expr"), ast -> ast.setVariable(new Environment.Variable("expr", "expr", Environment.Type.BOOLEAN, true, Environment.NIL))),
+                                Arrays.asList(new Ast.Statement.If(
+                                        init(new Ast.Expression.Access(Optional.empty(), "expr"), ast -> ast.setVariable(new Environment.Variable("expr", "expr", Environment.Type.BOOLEAN, true, Environment.NIL))),
+                                        Arrays.asList(new Ast.Statement.Expression(init(new Ast.Expression.Access(Optional.empty(), "stmt"), ast -> ast.setVariable(new Environment.Variable("stmt", "stmt", Environment.Type.NIL, true, Environment.NIL))))),
+                                        Arrays.asList()
+                                )),
+                                Arrays.asList()
+                        ),
+                        String.join(System.lineSeparator(),
+                                "if (expr) {",
+                                "    if (expr) {",
+                                "        stmt;",
+                                "    }",
+                                "}"
+                        )
+                ),
                 Arguments.of("Else",
                         // IF expr DO
                         //     stmt1;
@@ -200,6 +223,100 @@ public class GeneratorTests {
                                 "        System.out.println(\"no\");",
                                 "}"
                         )
+                ),
+                Arguments.of("Nested Switch",
+                        // SWITCH letter
+                        //     CASE 'y':
+                        //         print("yes");
+                        //         letter = 'n';
+                        //         SWITCH letter
+                        //             CASE 'y':
+                        //                 print("yes");
+                        //                 letter = 'n';
+                        //                 break;
+                        //             DEFAULT
+                        //                 print("no:);
+                        //         END
+                        //         break;
+                        //     DEFAULT
+                        //         print("no");
+                        // END
+                        new Ast.Statement.Switch(
+                                init(new Ast.Expression.Access(Optional.empty(), "letter"), ast -> ast.setVariable(new Environment.Variable("letter", "letter", Environment.Type.CHARACTER, true, Environment.create('y')))),
+                                Arrays.asList(
+                                        new Ast.Statement.Case(
+                                                Optional.of(init(new Ast.Expression.Literal('y'), ast -> ast.setType(Environment.Type.CHARACTER))),
+                                                Arrays.asList(
+                                                        new Ast.Statement.Expression(
+                                                                init(new Ast.Expression.Function("print", Arrays.asList(init(new Ast.Expression.Literal("yes"), ast -> ast.setType(Environment.Type.STRING)))),
+                                                                        ast -> ast.setFunction(new Environment.Function("print", "System.out.println", Arrays.asList(Environment.Type.ANY), Environment.Type.NIL, args -> Environment.NIL))
+                                                                )
+                                                        ),
+                                                        new Ast.Statement.Assignment(
+                                                                init(new Ast.Expression.Access(Optional.empty(), "letter"), ast -> ast.setVariable(new Environment.Variable("letter", "letter", Environment.Type.CHARACTER, true, Environment.create('y')))),
+                                                                init(new Ast.Expression.Literal('n'), ast -> ast.setType(Environment.Type.CHARACTER))
+                                                        ),
+                                                        new Ast.Statement.Switch(
+                                                                init(new Ast.Expression.Access(Optional.empty(), "letter"), ast -> ast.setVariable(new Environment.Variable("letter", "letter", Environment.Type.CHARACTER, true, Environment.create('y')))),
+                                                                Arrays.asList(
+                                                                        new Ast.Statement.Case(
+                                                                                Optional.of(init(new Ast.Expression.Literal('y'), ast -> ast.setType(Environment.Type.CHARACTER))),
+                                                                                Arrays.asList(
+                                                                                        new Ast.Statement.Expression(
+                                                                                                init(new Ast.Expression.Function("print", Arrays.asList(init(new Ast.Expression.Literal("yes"), ast -> ast.setType(Environment.Type.STRING)))),
+                                                                                                        ast -> ast.setFunction(new Environment.Function("print", "System.out.println", Arrays.asList(Environment.Type.ANY), Environment.Type.NIL, args -> Environment.NIL))
+                                                                                                )
+                                                                                        ),
+                                                                                        new Ast.Statement.Assignment(
+                                                                                                init(new Ast.Expression.Access(Optional.empty(), "letter"), ast -> ast.setVariable(new Environment.Variable("letter", "letter", Environment.Type.CHARACTER, true, Environment.create('y')))),
+                                                                                                init(new Ast.Expression.Literal('n'), ast -> ast.setType(Environment.Type.CHARACTER))
+                                                                                        )
+                                                                                )
+                                                                        ),
+                                                                        new Ast.Statement.Case(
+                                                                                Optional.empty(),
+                                                                                Arrays.asList(
+                                                                                        new Ast.Statement.Expression(
+                                                                                                init(new Ast.Expression.Function("print", Arrays.asList(init(new Ast.Expression.Literal("no"), ast -> ast.setType(Environment.Type.STRING)))),
+                                                                                                        ast -> ast.setFunction(new Environment.Function("print", "System.out.println", Arrays.asList(Environment.Type.ANY), Environment.Type.NIL, args -> Environment.NIL))
+                                                                                                )
+                                                                                        )
+                                                                                )
+                                                                        )
+                                                                )
+                                                        )
+                                                )
+                                        ),
+                                        new Ast.Statement.Case(
+                                                Optional.empty(),
+                                                Arrays.asList(
+                                                        new Ast.Statement.Expression(
+                                                                init(new Ast.Expression.Function("print", Arrays.asList(init(new Ast.Expression.Literal("no"), ast -> ast.setType(Environment.Type.STRING)))),
+                                                                        ast -> ast.setFunction(new Environment.Function("print", "System.out.println", Arrays.asList(Environment.Type.ANY), Environment.Type.NIL, args -> Environment.NIL))
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        ),
+                        String.join(System.lineSeparator(),
+                                "switch (letter) {",
+                                "    case 'y':",
+                                "        System.out.println(\"yes\");",
+                                "        letter = 'n';",
+                                "        switch (letter) {",
+                                "            case 'y':",
+                                "                System.out.println(\"yes\");",
+                                "                letter = 'n';",
+                                "                break;",
+                                "            default:",
+                                "                System.out.println(\"no\");",
+                                "        }",
+                                "        break;",
+                                "    default:",
+                                "        System.out.println(\"no\");",
+                                "}"
+                        )
                 )
         );
     }
@@ -227,6 +344,24 @@ public class GeneratorTests {
                                 init(new Ast.Expression.Literal(BigInteger.TEN), ast -> ast.setType(Environment.Type.INTEGER))
                         ), ast -> ast.setType(Environment.Type.STRING)),
                         "\"Ben\" + 10"
+                ),
+                Arguments.of("Power",
+                        // 4 ^ 7
+                        init(new Ast.Expression.Binary("^",
+                                init(new Ast.Expression.Literal(BigInteger.valueOf(4)), ast -> ast.setType(Environment.Type.INTEGER)),
+                                init(new Ast.Expression.Literal(BigInteger.valueOf(7)), ast -> ast.setType(Environment.Type.INTEGER))
+                        ), ast -> ast.setType(Environment.Type.STRING)),
+                        "Math.pow(4, 7)"
+                ),
+                Arguments.of("Power and addition",
+                        // 4 ^ 7 + 1
+                        init(new Ast.Expression.Binary("+",
+                                new Ast.Expression.Binary("^",
+                                        init(new Ast.Expression.Literal(BigInteger.valueOf(4)), ast -> ast.setType(Environment.Type.INTEGER)),
+                                        init(new Ast.Expression.Literal(BigInteger.valueOf(7)), ast -> ast.setType(Environment.Type.INTEGER))
+                                    ),
+                                init(new Ast.Expression.Literal(BigInteger.valueOf(1)), ast -> ast.setType(Environment.Type.INTEGER))), ast -> ast.setType(Environment.Type.STRING)),
+                        "Math.pow(4, 7) + 1"
                 )
         );
     }
@@ -245,6 +380,172 @@ public class GeneratorTests {
                                 init(new Ast.Expression.Literal("Hello, World!"), ast -> ast.setType(Environment.Type.STRING))
                         )), ast -> ast.setFunction(new Environment.Function("print", "System.out.println", Arrays.asList(Environment.Type.ANY), Environment.Type.NIL, args -> Environment.NIL))),
                         "System.out.println(\"Hello, World!\")"
+                )
+        );
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource
+    void testWhileLoop(String test, Ast.Statement.While ast, String expected) { test(ast, expected);}
+
+    private static Stream<Arguments> testWhileLoop() {
+        return Stream.of(
+                Arguments.of("Basic Loop",
+                        //WHILE true DO
+                        //    stmt;
+                        //    LET name: Integer;
+                        //END
+
+                            new Ast.Statement.While(
+                                    init(new Ast.Expression.Literal(true), ast -> ast.setType(Environment.Type.BOOLEAN)),
+                                    Arrays.asList(new Ast.Statement.Expression(init(new Ast.Expression.Access(Optional.empty(), "stmt"), ast -> ast.setVariable(new Environment.Variable("stmt", "stmt", Environment.Type.NIL, true, Environment.NIL)))),
+                                            init(new Ast.Statement.Declaration("name", Optional.of("Integer"), Optional.empty()), ast -> ast.setVariable(new Environment.Variable("name", "name", Environment.Type.INTEGER, true, Environment.NIL))))
+                                    ),
+                                    String.join(System.lineSeparator(),
+                                    "while (true) {",
+                                            "    stmt;",
+                                            "    int name;",
+                                            "}"
+                                    )
+                ),
+                Arguments.of("No Statements",
+                        //WHILE true DO
+                        //END
+
+                        new Ast.Statement.While(
+                                init(new Ast.Expression.Literal(true), ast -> ast.setType(Environment.Type.BOOLEAN)),
+                                Arrays.asList()
+                        ),
+                        String.join(System.lineSeparator(),
+                                "while (true) {",
+                                "}"
+                        )
+                ),
+                Arguments.of("Nested Loop",
+                        //WHILE true DO
+                        //    stmt;
+                        //    LET name: Integer;
+                        //END
+
+                        new Ast.Statement.While(
+                                init(new Ast.Expression.Literal(true), ast -> ast.setType(Environment.Type.BOOLEAN)),
+                                Arrays.asList(new Ast.Statement.While(
+                                        init(new Ast.Expression.Literal(true), ast -> ast.setType(Environment.Type.BOOLEAN)),
+                                        Arrays.asList(new Ast.Statement.Expression(init(new Ast.Expression.Access(Optional.empty(), "stmt"), ast -> ast.setVariable(new Environment.Variable("stmt", "stmt", Environment.Type.NIL, true, Environment.NIL)))),
+                                                init(new Ast.Statement.Declaration("name", Optional.of("Integer"), Optional.empty()), ast -> ast.setVariable(new Environment.Variable("name", "name", Environment.Type.INTEGER, true, Environment.NIL))))
+                                ))
+                        ),
+                        String.join(System.lineSeparator(),
+                                "while (true) {",
+                                "    while (true) {",
+                                "        stmt;",
+                                "        int name;",
+                                "    }",
+                                "}"
+                        )
+                )
+        );
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource
+    void testAccessExpression(String test, Ast.Expression.Access ast, String expected) { test(ast, expected);}
+
+    private static Stream<Arguments> testAccessExpression() {
+        return Stream.of(
+                Arguments.of("list access",
+                        //list[1]
+                        init(new Ast.Expression.Access(Optional.of(init(new Ast.Expression.Literal(BigInteger.ONE), ast -> ast.setType(Environment.Type.INTEGER))), "list"), ast -> ast.setVariable(new Environment.Variable("list", "list", Environment.Type.CHARACTER, true, Environment.create('y')))),
+                        "list[1]"
+                ),
+                Arguments.of("list access",
+                        //variable
+                        init(new Ast.Expression.Access(Optional.empty(), "list"), ast -> ast.setVariable(new Environment.Variable("variable", "variable", Environment.Type.INTEGER, true, Environment.create(BigInteger.ONE)))),
+                        "variable"
+                )
+        );
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource
+    void testAssignment(String test, Ast.Statement.Assignment ast, String expected) { test(ast, expected);}
+    private static Stream<Arguments> testAssignment() {
+        return Stream.of(
+                Arguments.of("variable assignment",
+                        //letter = 'n';
+
+                        new Ast.Statement.Assignment(
+                                init(new Ast.Expression.Access(Optional.empty(), "letter"), ast -> ast.setVariable(new Environment.Variable("letter", "letter", Environment.Type.CHARACTER, true, Environment.create('y')))),
+                                init(new Ast.Expression.Literal('n'), ast -> ast.setType(Environment.Type.CHARACTER))
+                        ),
+                        "letter = 'n';"
+                ),
+                Arguments.of("variable assignment",
+                        //letter = 'n';
+
+                        new Ast.Statement.Assignment(
+                                init(new Ast.Expression.Access(Optional.empty(), "letter"), ast -> ast.setVariable(new Environment.Variable("letter", "letter", Environment.Type.CHARACTER, true, Environment.create('y')))),
+                                init(new Ast.Expression.Literal('n'), ast -> ast.setType(Environment.Type.CHARACTER))
+                        ),
+                        "letter = 'n';"
+                )
+        );
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource
+    void testLiteralExpression(String test, Ast.Expression.Literal ast, String expected) {test(ast, expected);}
+
+    private static Stream<Arguments> testLiteralExpression() {
+        return Stream.of(
+                Arguments.of("NIL",
+                        init(new Ast.Expression.Literal(null), ast -> ast.setType(Environment.Type.NIL)),
+                        "null"
+                        ),
+                Arguments.of("TRUE",
+                        init(new Ast.Expression.Literal(true), ast -> ast.setType(Environment.Type.BOOLEAN)),
+                        "true"
+                ),
+                Arguments.of("FALSE",
+                        init(new Ast.Expression.Literal(false), ast -> ast.setType(Environment.Type.BOOLEAN)),
+                        "false"
+                ),
+                Arguments.of("1",
+                        init(new Ast.Expression.Literal(BigInteger.ONE), ast -> ast.setType(Environment.Type.INTEGER)),
+                        "1"
+                ),
+                Arguments.of("Hello World",
+                        init(new Ast.Expression.Literal("Hello World"), ast -> ast.setType(Environment.Type.STRING)),
+                        "\"Hello World\""
+                )
+        );
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource
+    void testFunction(String test, Ast.Function ast, String expected) { test(ast, expected);}
+
+    private static Stream<Arguments> testFunction() {
+        return Stream.of(
+                Arguments.of("Hello, World!",
+                        // FUN main(): Integer DO
+                        //     print("Hello, World!");
+                        //     RETURN 0;
+                        // END
+
+                              init(new Ast.Function("main", Arrays.asList(), Arrays.asList(), Optional.of("Integer"), Arrays.asList(
+                                        new Ast.Statement.Expression(init(new Ast.Expression.Function("print", Arrays.asList(
+                                                init(new Ast.Expression.Literal("Hello, World!"), ast -> ast.setType(Environment.Type.STRING))
+                                        )), ast -> ast.setFunction(new Environment.Function("print", "System.out.println", Arrays.asList(Environment.Type.ANY), Environment.Type.NIL, args -> Environment.NIL)))),
+                                        new Ast.Statement.Return(init(new Ast.Expression.Literal(BigInteger.ZERO), ast -> ast.setType(Environment.Type.INTEGER)))
+                                )), ast -> ast.setFunction(new Environment.Function("main", "main", Arrays.asList(), Environment.Type.INTEGER, args -> Environment.NIL))),
+
+                        String.join(System.lineSeparator(),
+                                "int main() {",
+                                "    System.out.println(\"Hello, World!\");",
+                                "    return 0;",
+                                "}"
+                        )
                 )
         );
     }
