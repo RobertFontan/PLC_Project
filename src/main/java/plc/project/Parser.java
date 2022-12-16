@@ -33,15 +33,22 @@ public final class Parser {
     /**
      * Parses the {@code source} rule.
      */
-    public Ast.Source parseSource() throws ParseException {
+    public Ast.Source parseSource() throws ParseException{
             List<Ast.Global> global = new ArrayList<>();
             List<Ast.Function> function = new ArrayList<>();
 
-            while (peek("LIST") || peek("VAR") || peek("VAL")) {
-                    global.add(parseGlobal());
-            }
-            while (peek("FUN")) {
-                function.add(parseFunction());
+            while (tokens.has(0))
+            {
+                if (peek("LIST") || peek("VAR") || peek("VAL"))
+                {
+                    Ast.Global globalToken = parseGlobal();
+                    global.add(globalToken);
+                }
+                else if (peek("FUN"))
+                {
+                    Ast.Function functionToken = parseFunction();
+                    function.add(functionToken);
+                }
             }
             return new Ast.Source(global, function);
 

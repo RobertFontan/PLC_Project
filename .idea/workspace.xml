@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="switch and case done">
+    <list default="true" id="8f69a869-f310-4864-9489-16991fc37ceb" name="Changes" comment="generator done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,19 +57,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/rober/Documents/Code/Programming Language Concepts/PLC_Project/src/main/java/plc/project/Generator.java&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/rober/Documents/Code/Programming Language Concepts/PLC_Project/src/test/java/plc/project/ParserTests.java",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)"
   }
-}</component>
-  <component name="RunManager" selected="Gradle.GeneratorTests">
+}]]></component>
+  <component name="RunManager" selected="Gradle.ParserTests">
     <configuration name="AnalyzerTests" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -272,7 +273,10 @@
       <workItem from="1669864934950" duration="3566000" />
       <workItem from="1670125087922" duration="2125000" />
       <workItem from="1670127259253" duration="827000" />
-      <workItem from="1670378027087" duration="3444000" />
+      <workItem from="1670378027087" duration="3904000" />
+      <workItem from="1670624369799" duration="645000" />
+      <workItem from="1670835157646" duration="7000" />
+      <workItem from="1671124944687" duration="10134000" />
     </task>
     <task id="LOCAL-00001" summary="Added the peek/match methods">
       <created>1663436218162</created>
@@ -561,7 +565,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670127858650</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="generator done">
+      <created>1670385467643</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1670385467643</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -579,7 +590,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added parserTests file" />
     <MESSAGE value="statement and block added" />
     <MESSAGE value="all statements done" />
     <MESSAGE value="switch statement finished" />
@@ -604,6 +614,7 @@
     <MESSAGE value="all test cases pass" />
     <MESSAGE value="statement declaration and assignment" />
     <MESSAGE value="switch and case done" />
-    <option name="LAST_COMMIT_MESSAGE" value="switch and case done" />
+    <MESSAGE value="generator done" />
+    <option name="LAST_COMMIT_MESSAGE" value="generator done" />
   </component>
 </project>

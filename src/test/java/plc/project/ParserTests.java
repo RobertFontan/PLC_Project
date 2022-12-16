@@ -50,6 +50,29 @@ final class ParserTests {
                                 Arrays.asList()
                         )
                 ),
+
+                Arguments.of("List - Singular",
+                        Arrays.asList(
+                                //List list: Type = [expr];
+                                new Token(Token.Type.IDENTIFIER, "LIST", 0),
+                                new Token(Token.Type.IDENTIFIER, "list", 5),
+                                new Token(Token.Type.OPERATOR, ":", 6),
+                                new Token(Token.Type.IDENTIFIER ,"Type", 11),
+                                new Token(Token.Type.OPERATOR, "=", 15),
+                                new Token(Token.Type.OPERATOR, "[", 17),
+                                new Token(Token.Type.IDENTIFIER, "expr", 18),
+                                new Token(Token.Type.OPERATOR, "]", 22),
+                                new Token(Token.Type.OPERATOR, ";", 24)
+
+
+                        ), new Ast.Source(
+                                Arrays.asList(new Ast.Global("list", "List", false, Optional.of(new Ast.Expression.Access(Optional.empty(), "expr")))),
+                                Arrays.asList()
+                        )
+
+                )
+
+                ,
                 Arguments.of("Function",
                         Arrays.asList(
                                 //FUN name(): Type DO stmt; END
@@ -63,8 +86,7 @@ final class ParserTests {
                                 new Token(Token.Type.IDENTIFIER, "stmt", 20),
                                 new Token(Token.Type.OPERATOR, ";", 24),
                                 new Token(Token.Type.IDENTIFIER, "END", 26)
-                        ),
-                        new Ast.Source(
+                        ), new Ast.Source(
                                 Arrays.asList(),
                                 Arrays.asList(new Ast.Function("name", Arrays.asList(), Arrays.asList(), Optional.of("Type"), Arrays.asList(
                                         new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "stmt"))
